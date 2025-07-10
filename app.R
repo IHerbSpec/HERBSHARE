@@ -30,23 +30,23 @@ library(shinythemes)
 library(bslib)
 library(leaflet)
 library(leaflet.extras)
-library(tidyverse)
-library(sf)
-library(shinyjqui)
-library(shinyWidgets)
-library(shinyjs)
-library(s2)
-library(magrittr)
-library(shinycssloaders)
-library(jsonlite)
-library(geojsonio)
-library(plotly)
-library(ggplot2)
-library(kableExtra)
-library(shinyBS)
-library(nominatim)
-library(leafgl)
-library(shinybusy)
+# library(tidyverse)
+# library(sf)
+# library(shinyjqui)
+# library(shinyWidgets)
+# library(shinyjs)
+# library(s2)
+# library(magrittr)
+# library(shinycssloaders)
+# library(jsonlite)
+# library(geojsonio)
+# library(plotly)
+# library(ggplot2)
+# library(kableExtra)
+# library(shinyBS)
+# library(nominatim)
+# library(leafgl)
+# library(shinybusy)
 
 # # 
 # remotes::install_github("bhaskarvk/leaflet.extras", ref = remotes::github_pull("184")) 
@@ -74,7 +74,7 @@ source("modules/explorer/map.R")
 # source("trait_selector_input.R")
 
 # Potential color palette
- # "#344e41", "#3a5a40", "#588157", "#a3b18a", "#dad7cd"
+# "#344e41", "#3a5a40", "#588157", "#a3b18a", "#dad7cd"
 
 ################################################################################
 # App---------------------------------------------------------------------------
@@ -123,28 +123,64 @@ ui <- page_navbar(
     # predict_panel_ui("predict")
   ),
   
-  tags$footer(title="",  align = "center", style = "
-                      position:fixed;
-                      bottom:0;
-                      width:100%;
-                      height:70px; /* Height of the footer */
-                      color: black;
-                      padding: 0px;
-                      background-color: rgba(255, 255, 255, 1);
-                      z-index: 1000;
-                      display: inline-block;
-                      font-size: 12px !important;
-                    ",
-              tags$a(div(
-                # a(href = "https://www.woodwellclimate.org/", target="_blank", img(src = "woodwell_climate_logo.png", style = "align: left; height:70px;")), 
-                # a(href = "https://www.ufl.edu/", target="_blank", img(src = "uflorida_logo.png", style = "align: left; height:70px;")), 
-                # a(href = "https://opengeohub.org/", target="_blank", img(src = "opengeohub_logo.png", style = "align: left; height:70px;")),
-                style="height:70px;  text-align: left;  float:left;  align: left; padding: 0px; padding-left: 20px; bottom:0; display: inline-block;"),
-                div(
-                  a("Funding provided by the Harvard Data Science Iniciative" , style = "text-align: right; align: right; height:70px; text-decoration: none; color: black; font-size: 13px !important;"), 
-                  style="height:70px;  text-align: right; float:right; align: right; padding: 0px; padding-right: 20px; bottom:0; display: inline-block; line-height: 70px")
-                )
-              )
+  # tags$footer(title="",  align = "center", style = "
+  #                     position:fixed;
+  #                     bottom:0;
+  #                     width:100%;
+  #                     height:70px; /* Height of the footer */
+  #                     color: black;
+  #                     padding: 0px;
+  #                     background-color: rgba(255, 255, 255, 1);
+  #                     z-index: 1000;
+  #                     display: inline-block;
+  #                     font-size: 12px !important;
+  #                   ",
+  #             tags$a(div(
+  #               a(href = "https://www.huh.harvard.edu/", img(src = "HUH_black.png", style = "align: left; height:60px;")), 
+  #               # a(href = "https://www.ufl.edu/", target="_blank", img(src = "uflorida_logo.png", style = "align: left; height:70px;")), 
+  #               # a(href = "https://opengeohub.org/", target="_blank", img(src = "opengeohub_logo.png", style = "align: left; height:70px;")),
+  #               style="height:70px;  text-align: left;  float:left;  align: left; padding: 0px; padding-left: 20px; bottom:0; display: inline-block;"),
+  #               div(
+  #                 a("Funding provided by the Harvard Data Science Iniciative" , style = "text-align: right; align: right; height:70px; text-decoration: none; color: black; font-size: 13px !important;"), 
+  #                 style="height:70px;  text-align: right; float:right; align: right; padding: 0px; padding-right: 20px; bottom:0; display: inline-block; line-height: 70px")
+  #               )
+  #             )
+  
+  
+  tags$footer(
+    align = "center",
+    style = "
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 100px;
+    color: black;
+    padding: 0px;
+    background-color: rgba(255, 255, 255, 1);
+    z-index: 1000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px !important;
+  ",
+    div(
+      a(
+        href = "https://www.huh.harvard.edu/",
+        target = "_blank",
+        img(src = "HUH_black.png", style = "height: 80px;")
+      ),
+      style = "padding-left: 20px;"
+    ),
+    div(
+      "Funding provided by:   ", 
+      a(
+        href = "https://datascience.harvard.edu/",
+        target = "_blank",
+        img(src = "HDSI_black.png", style = "height: 30px;")
+      ),
+      style = "padding-right: 20px; font-size: 13px !important;"
+    )
+  )
   
   
 )
