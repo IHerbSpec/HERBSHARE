@@ -85,89 +85,102 @@ source("modules/explorer/map.R")
 ui <- page_navbar(
   title = "HERBSPHERE",
   id = "main_tabs",
-  #nav_spacer(),
-  theme = bs_theme(bootswatch = "lux",
-                   bg = "#dad7cd",
-                   fg = "#344e41", #"#7D8764",
-                   primary = "#588157", #"#708A57"
-                   secondary = "#a3b18a",
-                   success = "#38b000",
-                   info = "#14746f",
-                   warning = "#d16014",
-                   danger = "#931f1d",
-                   # base_font = c("Grandstander", "sans-serif"),
-                   # code_font = c("Courier", "monospace"),
-                   # heading_font = "'Helvetica Neue', Helvetica, sans-serif"
-                   ),
+  theme = bs_theme(
+    bootswatch = "lux",
+    bg = "#dad7cd",
+    fg = "#344e41", 
+    primary = "#588157",
+    secondary = "#a3b18a",
+    success = "#38b000",
+    info = "#14746f",
+    warning = "#d16014",
+    danger = "#931f1d"
+  ),
   
-  header = tags$style(HTML("
-    .navbar {
-      background-color: #344e41 !important;
-    }
+  tags$head(
+    # Load Font Awesome for icons
+    tags$link(rel = "stylesheet", href = "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css")
+  ),
+  
+  header = tagList(
+    # Custom styles for navbar and icon placement
+    tags$style(HTML("
+      .navbar {
+        background-color: #344e41 !important;
+      }
+      
+      .navbar .navbar-brand,
+      .navbar-nav .nav-link {
+        color: #dad7cd !important;
+      }
+      
+      .navbar-nav .nav-link.active {
+        color: #a3b18a !important;
+      }
+
+      .custom-navbar-icons {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-right: 20px;
+      }
+
+      .custom-navbar-icons a {
+        color: #dad7cd !important;
+        font-size: 1.5rem;
+      }
+
+      .custom-navbar-icons a:hover {
+        color: #a3b18a !important;
+      }
+    ")),
     
-    .navbar .navbar-brand,
-    .navbar-nav .nav-link {
-    color: #dad7cd !important;
-    }
-    
-    .navbar-nav .nav-link.active {
-    color: #a3b18a !important;
-    }
-  ")),
+    # JavaScript to inject icons after navbar-nav
+    tags$script(HTML("
+      $(document).ready(function() {
+        const icons = `
+          <div class='custom-navbar-icons ms-auto'>
+            <a href='https://https://github.com/IHerbSpec/HERBSPHERE' target='_blank' title='GitHub'>
+              <i class='fab fa-github'></i>
+            </a>
+            <a href='https://iherbspec.github.io' target='_blank' title='Documentation'>
+              <i class='fas fa-book'></i>
+            </a>
+          </div>
+        `;
+        $('.navbar-nav').after(icons);
+      });
+    "))
+  ),
   
   explorer_panel_ui("explorer"),
   
-  
   nav_panel(
-    "Engine",
+    "Engine"
     # predict_panel_ui("predict")
   ),
-  
-  # tags$footer(title="",  align = "center", style = "
-  #                     position:fixed;
-  #                     bottom:0;
-  #                     width:100%;
-  #                     height:70px; /* Height of the footer */
-  #                     color: black;
-  #                     padding: 0px;
-  #                     background-color: rgba(255, 255, 255, 1);
-  #                     z-index: 1000;
-  #                     display: inline-block;
-  #                     font-size: 12px !important;
-  #                   ",
-  #             tags$a(div(
-  #               a(href = "https://www.huh.harvard.edu/", img(src = "HUH_black.png", style = "align: left; height:60px;")), 
-  #               # a(href = "https://www.ufl.edu/", target="_blank", img(src = "uflorida_logo.png", style = "align: left; height:70px;")), 
-  #               # a(href = "https://opengeohub.org/", target="_blank", img(src = "opengeohub_logo.png", style = "align: left; height:70px;")),
-  #               style="height:70px;  text-align: left;  float:left;  align: left; padding: 0px; padding-left: 20px; bottom:0; display: inline-block;"),
-  #               div(
-  #                 a("Funding provided by the Harvard Data Science Iniciative" , style = "text-align: right; align: right; height:70px; text-decoration: none; color: black; font-size: 13px !important;"), 
-  #                 style="height:70px;  text-align: right; float:right; align: right; padding: 0px; padding-right: 20px; bottom:0; display: inline-block; line-height: 70px")
-  #               )
-  #             )
-  
   
   tags$footer(
     align = "center",
     style = "
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    height: 100px;
-    color: black;
-    padding: 0px;
-    background-color: rgba(255, 255, 255, 1);
-    z-index: 1000;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 12px !important;
-  ",
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      height: 100px;
+      color: black;
+      padding: 0px;
+      background-color: rgba(255, 255, 255, 1);
+      z-index: 1000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px !important;
+    ",
     div(
       a(
         href = "https://www.huh.harvard.edu/",
         target = "_blank",
-        img(src = "HUH_black.png", style = "height: 80px;")
+        img(src = "HUH_black.png", style = "height: 75px;")
       ),
       style = "padding-left: 20px;"
     ),
@@ -181,24 +194,7 @@ ui <- page_navbar(
       style = "padding-right: 20px; font-size: 13px !important;"
     )
   )
-  
-  
 )
-  
-    # busy_start_up(
-    #   loader = spin_kit(spin = "circle", color = "white", style = "width:70px; height:70px;"),
-    #   text = div(
-    #     strong(h2("Loading data...")),
-    #     #img(src = "logos/OSSL_White_1.png", style = "align: center; height:50px;"),
-    #     p("Follow us on ", a(href = "https://github.com/IHerbSpec", target="_blank",
-    #                          img(src = "github.png", style = "align: center; height:40px;")))
-    #   ),
-    #   mode = "auto",
-    #   color = "white",
-    #   background = "#7D8764"
-    # ),
-
-
 
 # ------------------------------------------------------------------------------
 # Define server logic required to draw a histogram
