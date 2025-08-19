@@ -2,12 +2,16 @@
 ##### Function to derive the locations from herbaria
 ################################################################################
 
+# ------------------------------------------------------------------------------
 # Libraries
 
 library(data.table)
 library(rgbif)
 library(httr2)
 library(jsonlite)
+
+# ------------------------------------------------------------------------------
+# Function
 
 # API location
 gbif_base <- "https://api.gbif.org/v1"
