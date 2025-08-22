@@ -31,8 +31,8 @@ library(bslib)
 library(leaflet)
 library(leaflet.extras)
 library(data.table)
+library(sf)
 # library(tidyverse)
-# library(sf)
 # library(shinyjqui)
 # library(shinyWidgets)
 # library(shinyjs)
@@ -76,6 +76,15 @@ source("modules/explorer/map.R")
 
 # Potential color palette
 # "#344e41", "#3a5a40", "#588157", "#a3b18a", "#dad7cd"
+
+################################################################################
+# Load inditial data------------------------------------------------------------
+################################################################################
+
+metadata_and_gbif <- fread("data/02-organized/metadata_and_gbif.csv")
+metadata_sf <- st_as_sf(metadata_and_gbif, 
+                         coords = c("decimalLongitude", "decimalLatitude"), 
+                         crs = 4326, remove = FALSE)
 
 ################################################################################
 # App---------------------------------------------------------------------------
