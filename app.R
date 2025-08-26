@@ -32,10 +32,11 @@ library(leaflet)
 library(leaflet.extras)
 library(data.table)
 library(sf)
+library(dplyr)
 # library(tidyverse)
 # library(shinyjqui)
 # library(shinyWidgets)
-# library(shinyjs)
+library(shinyjs)
 # library(s2)
 # library(magrittr)
 # library(shinycssloaders)
@@ -44,7 +45,8 @@ library(sf)
 # library(plotly)
 # library(ggplot2)
 # library(kableExtra)
-# library(shinyBS)
+library(bslib)
+#library(shinyBS)
 # library(nominatim)
 # library(leafgl)
 # library(shinybusy)
@@ -70,6 +72,7 @@ library(sf)
 # Functions for Explorer
 source("modules/explorer_panel.R")
 source("modules/explorer/map.R")
+source("modules/explorer/specimen_selection.R")
 
 # Functions for Engine
 # source("trait_selector_input.R")
@@ -78,13 +81,10 @@ source("modules/explorer/map.R")
 # "#344e41", "#3a5a40", "#588157", "#a3b18a", "#dad7cd"
 
 ################################################################################
-# Load inditial data------------------------------------------------------------
+# Load initial data------------------------------------------------------------
 ################################################################################
 
 metadata_and_gbif <- fread("data/02-organized/metadata_and_gbif.csv")
-metadata_sf <- st_as_sf(metadata_and_gbif, 
-                         coords = c("decimalLongitude", "decimalLatitude"), 
-                         crs = 4326, remove = FALSE)
 
 ################################################################################
 # App---------------------------------------------------------------------------
@@ -210,10 +210,21 @@ ui <- page_navbar(
 # Define server logic required to draw a histogram
 server <- function(input, output, session) {
   
+  metadata_sf <- st_as_sf(metadata_and_gbif, 
+                          coords = c("decimalLongitude", "decimalLatitude"), 
+                          crs = 4326, 
+                          remove = FALSE)
+  
+  points_sf <- reactive({
+    st_as_sf(metadata_sf,
+             coords = c("decimalLongitude", "decimalLatitude"),
+             crs = 4326)
+  })
+  
   # bs_themer()
   
   # Explorer
-  explorer_panel_server("explorer")
+  explorer_panel_server("explorer", metadata_sf, points_sf)
 
 
 }
