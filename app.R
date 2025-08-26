@@ -33,10 +33,9 @@ library(leaflet.extras)
 library(data.table)
 library(sf)
 library(dplyr)
+library(shinyjs)
 # library(tidyverse)
 # library(shinyjqui)
-# library(shinyWidgets)
-library(shinyjs)
 # library(s2)
 # library(magrittr)
 # library(shinycssloaders)
@@ -45,8 +44,6 @@ library(shinyjs)
 # library(plotly)
 # library(ggplot2)
 # library(kableExtra)
-library(bslib)
-#library(shinyBS)
 # library(nominatim)
 # library(leafgl)
 # library(shinybusy)
@@ -77,87 +74,82 @@ source("modules/explorer/specimen_selection.R")
 # Functions for Engine
 # source("trait_selector_input.R")
 
-# Potential color palette
-# "#344e41", "#3a5a40", "#588157", "#a3b18a", "#dad7cd"
-
 ################################################################################
 # Load initial data------------------------------------------------------------
 ################################################################################
 
-metadata_and_gbif <- fread("data/02-organized/metadata_and_gbif.csv")
+metadata_and_gbif <- data.table::fread("data/02-organized/metadata_and_gbif.csv")
 
 ################################################################################
 # App---------------------------------------------------------------------------
 ################################################################################
 
-# ------------------------------------------------------------------------------
-# Define UI for application
+# # ------------------------------------------------------------------------------
+# # Define UI for application
 ui <- page_navbar(
   title = "HERBSPHERE",
   id = "main_tabs",
+  # theme = bs_theme(
+  #   bootswatch = "lux",
+  #   bg = "#dad7cd",
+  #   fg = "#344e41",
+  #   primary = "#588157",
+  #   secondary = "#a3b18a",
+  #   success = "#38b000",
+  #   info = "#14746f",
+  #   warning = "#d16014",
+  #   danger = "#931f1d"
+  # ),
   theme = bs_theme(
     bootswatch = "lux",
-    bg = "#dad7cd",
-    fg = "#344e41", 
-    primary = "#588157",
-    secondary = "#a3b18a",
-    success = "#38b000",
-    info = "#14746f",
-    warning = "#d16014",
-    danger = "#931f1d"
+    bg = "#000000",   # background black
+    fg = "#ffffff",   # foreground text white
+    primary = "#588157",   # your other colors still work
+    secondary = "#a3b18a"
   ),
   
   tags$head(
-    # Load Font Awesome for icons
-    tags$link(rel = "stylesheet", href = "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css")
+    # Font Awesome
+    tags$link(rel = "stylesheet", href = "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"),
+    # Global spacing rules
+    tags$style(HTML("
+      :root { --footer-h: 100px; --navbar-h: 56px; }   /* defaults (will be updated by JS) */
+
+      /* Remove default padding so content can sit flush to edges */
+      .bslib-page-navbar .nav-panel-content { padding: 0 !important; }
+
+      html, body { height: 100%; margin: 0; padding: 0; }
+    ")),
+    
+    tags$script(HTML("
+      function setNavbarHeightVar(){
+        var nb = document.querySelector('.navbar');
+        var h = nb ? nb.getBoundingClientRect().height : 56;
+        document.documentElement.style.setProperty('--navbar-h', h + 'px');
+      }
+      window.addEventListener('load', setNavbarHeightVar);
+      window.addEventListener('resize', setNavbarHeightVar);
+      // Also observe DOM mutations in case navbar changes height dynamically
+      new MutationObserver(setNavbarHeightVar).observe(document.documentElement,{subtree:true,childList:true,attributes:true});
+    "))
   ),
   
   header = tagList(
-    # Custom styles for navbar and icon placement
     tags$style(HTML("
-      .navbar {
-        background-color: #344e41 !important;
-      }
-      
-      .navbar .navbar-brand,
-      .navbar-nav .nav-link {
-        color: #dad7cd !important;
-      }
-      
-      .navbar-nav .nav-link.active {
-        color: #a3b18a !important;
-      }
-
-      .custom-navbar-icons {
-        display: flex;
-        align-items: center;
-        gap: 15px;
-        margin-right: 20px;
-      }
-
-      .custom-navbar-icons a {
-        color: #dad7cd !important;
-        font-size: 1.5rem;
-      }
-
-      .custom-navbar-icons a:hover {
-        color: #a3b18a !important;
-      }
+      .navbar { background-color: #000000 !important; }
+      .navbar .navbar-brand, .navbar-nav .nav-link { color: #ffffff !important; }
+      .navbar-nav .nav-link.active { color: #cccccc !important; }
+      .custom-navbar-icons { display: flex; align-items: center; gap: 15px; margin-right: 20px; }
+      .custom-navbar-icons a { color: #ffffff !important; font-size: 1.5rem; }
+      .custom-navbar-icons a:hover { color: #cccccc !important; }
     ")),
-    
-    # JavaScript to inject icons after navbar-nav
     tags$script(HTML("
-      $(document).ready(function() {
+      $(function() {
         const icons = `
           <div class='custom-navbar-icons ms-auto'>
-            <a href='https://https://github.com/IHerbSpec/HERBSPHERE' target='_blank' title='GitHub'>
-              <i class='fab fa-github'></i>
-            </a>
-            <a href='https://iherbspec.github.io' target='_blank' title='Documentation'>
-              <i class='fas fa-book'></i>
-            </a>
-          </div>
-        `;
+            <a href='https://https://github.com/IHerbSpec/HERBSPHERE' target='_blank' title='GitHub'><i class='fab fa-github'></i></a>
+            <a href='https://iherbspec.github.io' target='_blank' title='Documentation'><i class='fas fa-book'></i></a>
+          </div>`;
         $('.navbar-nav').after(icons);
       });
     "))
@@ -165,51 +157,38 @@ ui <- page_navbar(
   
   explorer_panel_ui("explorer"),
   
-  nav_panel(
-    "Engine"
-    # predict_panel_ui("predict")
-  ),
+  nav_panel("Engine"),
   
+  # your fixed footer (keep height in sync with --footer-h above!)
   tags$footer(
     align = "center",
     style = "
-      position: fixed;
-      bottom: 0;
-      width: 100%;
-      height: 100px;
-      color: black;
-      padding: 0px;
-      background-color: rgba(255, 255, 255, 1);
-      z-index: 1000;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 12px !important;
-    ",
+      position: fixed; bottom: 0; width: 100%; height: 100px;
+      color: black; padding: 0; background-color: rgba(255,255,255,1);
+      z-index: 1000; display: flex; justify-content: space-between; align-items: center;
+      font-size: 12px !important;",
     div(
-      a(
-        href = "https://www.huh.harvard.edu/",
-        target = "_blank",
-        img(src = "HUH_black.png", style = "height: 75px;")
+      a(href = 'https://www.huh.harvard.edu/', target = '_blank',
+        img(src = 'HUH_black.png', style = 'height: 75px;')
       ),
-      style = "padding-left: 20px;"
+      style = 'padding-left: 20px;'
     ),
     div(
-      "Funding provided by:   ", 
-      a(
-        href = "https://datascience.harvard.edu/",
-        target = "_blank",
-        img(src = "HDSI_black.png", style = "height: 30px;")
+      'Funding provided by:   ',
+      a(href = 'https://datascience.harvard.edu/', target = '_blank',
+        img(src = 'HDSI_black.png', style = 'height: 30px;')
       ),
-      style = "padding-right: 20px; font-size: 13px !important;"
+      style = 'padding-right: 20px; font-size: 13px !important;'
     )
   )
 )
+
 
 # ------------------------------------------------------------------------------
 # Define server logic required to draw a histogram
 server <- function(input, output, session) {
   
+  # Load information into the server
   metadata_sf <- st_as_sf(metadata_and_gbif, 
                           coords = c("decimalLongitude", "decimalLatitude"), 
                           crs = 4326, 
@@ -220,9 +199,7 @@ server <- function(input, output, session) {
              coords = c("decimalLongitude", "decimalLatitude"),
              crs = 4326)
   })
-  
-  # bs_themer()
-  
+
   # Explorer
   explorer_panel_server("explorer", metadata_sf, points_sf)
 
