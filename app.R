@@ -33,7 +33,9 @@ library(leaflet.extras)
 library(data.table)
 library(sf)
 library(dplyr)
+library(tidyr)
 library(shinyjs)
+library(plotly)
 # library(tidyverse)
 # library(shinyjqui)
 # library(s2)
@@ -41,8 +43,6 @@ library(shinyjs)
 # library(shinycssloaders)
 # library(jsonlite)
 # library(geojsonio)
-# library(plotly)
-# library(ggplot2)
 # library(kableExtra)
 # library(nominatim)
 # library(leafgl)
@@ -79,6 +79,7 @@ source("modules/explorer/specimen_selection.R")
 ################################################################################
 
 metadata_and_gbif <- data.table::fread("data/02-organized/metadata_and_gbif.csv")
+spectra_compiled <- data.table::fread("data/02-organized/spectra_compiled.csv", header = TRUE)
 
 ################################################################################
 # App---------------------------------------------------------------------------
@@ -89,23 +90,16 @@ metadata_and_gbif <- data.table::fread("data/02-organized/metadata_and_gbif.csv"
 ui <- page_navbar(
   title = "HERBSPHERE",
   id = "main_tabs",
-  # theme = bs_theme(
-  #   bootswatch = "lux",
-  #   bg = "#dad7cd",
-  #   fg = "#344e41",
-  #   primary = "#588157",
-  #   secondary = "#a3b18a",
-  #   success = "#38b000",
-  #   info = "#14746f",
-  #   warning = "#d16014",
-  #   danger = "#931f1d"
-  # ),
   theme = bs_theme(
     bootswatch = "lux",
-    bg = "#000000",   # background black
-    fg = "#ffffff",   # foreground text white
-    primary = "#588157",   # your other colors still work
-    secondary = "#a3b18a"
+    bg = "#000000",
+    fg = "#ffffff",
+    primary = "#588157",
+    secondary = "#a3b18a",
+    success = "#38b000",
+    info = "#14746f",
+    warning = "#d16014",
+    danger = "#931f1d"
   ),
   
   tags$head(
@@ -201,8 +195,7 @@ server <- function(input, output, session) {
   })
 
   # Explorer
-  explorer_panel_server("explorer", metadata_sf, points_sf)
-
+  explorer_panel_server("explorer", metadata_sf, points_sf, spectra_compiled)
 
 }
 

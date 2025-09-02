@@ -38,18 +38,19 @@ explorer_panel_ui <- function(id) {
 }
 
 # Server
-explorer_panel_server <- function(id, metadata_sf, points_sf) {
+explorer_panel_server <- function(id, 
+                                  metadata_sf, 
+                                  points_sf, 
+                                  spectra_compiled) {
+  
   moduleServer(id, function(input, output, session) {
     
     map_out <- map_server(id = "map", metadata_sf = metadata_sf)
     
-    specimen_selection_server(
-      id          = "spec_sel",
-      click_id    = map_out$click_id,
-      metadata_sf = metadata_sf,
-      points_sf   = points_sf
-    )
+    specimen_selection_server(id = "spec_sel",
+                              click_id = map_out$click_id,
+                              metadata_sf = metadata_sf,
+                              points_sf = points_sf,
+                              spectra_compiled = spectra_compiled)
   })
 }
-
-
