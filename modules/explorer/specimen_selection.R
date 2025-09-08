@@ -4,7 +4,7 @@
 # UI
 specimen_selection_ui <- function(id) {
   ns <- NS(id)
-  
+
   absolutePanel(
     id = ns("controls_specimen_selection"),
     class = "panel panel-default",
@@ -12,8 +12,65 @@ specimen_selection_ui <- function(id) {
     draggable = TRUE,
     width = 400,
     top = "20%", left = "auto", right = "5%", bottom = "auto",
-    #style = "z-index: 1001; background: rgba(255,255,255,0.95); padding: 10px;",
-    p(""),
+
+    tags$style(HTML(sprintf("
+      /* Header (collapsed & expanded) */
+      #%s .accordion-button {
+        background-color: #000000 !important;
+        color: #ffffff !important;
+      }
+      #%s .accordion-button:not(.collapsed) {
+        background-color: #000000 !important;
+        color: #ffffff !important;
+        box-shadow: none !important;
+      }
+      /* Remove focus ring & set border color */
+      #%s .accordion-button:focus {
+        box-shadow: none !important;
+        border-color: #333333 !important;
+      }
+      /* Body + item background & border */
+      #%s .accordion-body {
+        background-color: #ffffff !important;
+        color: #ffffff !important;
+      }
+      #%s .accordion-item {
+        background-color: #ffffff !important;
+        border-color: #333333 !important;
+      }
+      /* Chevron icon to light (so it shows on dark header) */
+      #%s .accordion-button::after {
+        filter: invert(1);
+      }
+    ",
+                            ns("collapse"), ns("collapse"), ns("collapse"),
+                            ns("collapse"), ns("collapse"), ns("collapse")
+    ))),
+    
+#     tags$style(HTML(sprintf("
+#   /* Wrapper created by tableOutput(ns('specimen_table')) */
+#   #%s table {
+#     background-color: #ffffff !important;
+#     color: #000000 !important;
+#     border-color: #ffffff !important;
+#   }
+#   #%s thead th {
+#     background-color: #ffffff !important;
+#     color: #000000 !important;
+#     border-color: #ffffff !important;
+#   }
+#   #%s tbody td {
+#     border-color: #ffffff !important;
+#   }
+#   /* Stripes & hover (works with renderTable(striped=TRUE)) */
+#   #%s tbody tr:nth-child(odd)  { background-color: #111111 !important; }
+#   #%s tbody tr:nth-child(even) { background-color: #161616 !important; }
+#   #%s tbody tr:hover           { background-color: #1f1f1f !important; }
+#   /* Optional: link color */
+#   #%s a { color: #a3b18a !important; }
+# ", ns("specimen_table"), ns("specimen_table"), ns("specimen_table"), ns("specimen_table"),
+#                             ns("specimen_table"), ns("specimen_table"), ns("specimen_table")))),
+
     bslib::accordion(id = ns("collapse"),
                      open = NULL,
                      multiple = FALSE,
