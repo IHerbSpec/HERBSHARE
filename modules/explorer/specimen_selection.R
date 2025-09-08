@@ -15,7 +15,8 @@ specimen_selection_ui <- function(id) {
     #style = "z-index: 1001; background: rgba(255,255,255,0.95); padding: 10px;",
     p(""),
     bslib::accordion(id = ns("collapse"),
-                     open = "specimen_info",
+                     open = NULL,
+                     multiple = FALSE,
                      bslib::accordion_panel(title = "Specimen information",
                                             id = "specimen_info",
                                             tableOutput(ns("specimen_table"))
@@ -53,7 +54,7 @@ specimen_selection_server <- function(id,
       req(nrow(rows) > 0)
       
       row <- rows %>% dplyr::slice(1)
-      
+
       data.frame(
         Name  = c("gbifID",
                   "institutionName",
@@ -78,42 +79,67 @@ specimen_selection_server <- function(id,
     }, striped = TRUE, bordered = TRUE, rownames = FALSE)
     
     
-    output$spectra_plot <- renderPlotly({
-
+    output$spectra_plot <- plotly::renderPlotly({
       rows <- clicked_points()
+      shiny::validate(shiny::need(nrow(rows) > 0, "Error"))
       
-      shiny::validate(
-        shiny::need(nrow(rows) > 0, "Error")
-      )
+      md <- sf::st_drop_geometry(rows)
+      filename_selection <- md$filename
       
-      metatada <- st_drop_geometry(rows)
-      filename_selection <- metatada$filename
-      spectra <- dplyr::filter(spectra_compiled, filename %in% filename_selection)
+      # Keep per-file metadata we need
+      meta_small <- md %>%
+        dplyr::select(filename, targetTissueClass, backgroundClass) %>%
+        dplyr::mutate(
+          # fixed mappings via factor levels
+          ttc = factor(targetTissueClass, levels = c("AB", "AD")),
+          bg  = factor(backgroundClass,     levels = c("Black", "Paper"))
+        )
       
-      spectra_long <- tidyr::pivot_longer(data = spectra,
-                                          cols = -filename,
-                                          names_to = "wavelength",
-                                          values_to = "reflectance",
-                                          names_transform = list(wavelength = as.numeric)
-                                          )
+      # Subset spectra and pivot
+      spectra <- dplyr::filter(spectra_compiled, .data$filename %in% filename_selection)
       
-      plot_ly(
-        data = spectra_long, 
+      spectra_long <- tidyr::pivot_longer(
+        data = spectra,
+        cols = -filename,
+        names_to = "wavelength",
+        values_to = "reflectance",
+        names_transform = list(wavelength = as.numeric)
+      ) %>%
+        dplyr::left_join(meta_small, by = "filename")
+      
+      # y-axis rule: fixed [0,1] if all <=1, else flexible
+      ymax <- suppressWarnings(max(spectra_long$reflectance, na.rm = TRUE))
+      yaxis_opts <- if (is.finite(ymax) && ymax <= 1) {
+        list(title = "Reflectance", range = c(0, 1))
+      } else {
+        list(title = "Reflectance", autorange = TRUE)
+      }
+      
+      plotly::plot_ly(
+        data = spectra_long,
         x = ~wavelength,
         y = ~reflectance,
         split = ~filename,
-        color = ~filename,
+        color = ~bg,  colors = c("black", "grey30"),
+        linetype = ~ttc, linetypes = c("solid", "dotted"),
         type = "scatter",
-        mode = "lines"
+        mode = "lines",
+        text = ~paste0(
+          "File: ", filename,
+          "<br>Tissue: ", targetTissueClass,
+          "<br>Background: ", backgroundClass
+        ),
+        hoverinfo = "text+x+y"
       ) %>%
-        layout(
-          showlegend = FALSE,                      # ← hide legend
+        plotly::layout(
+          showlegend = FALSE,
           xaxis = list(title = 'Wavelength (nm)'),
-          yaxis = list(title = 'Reflectance'),
+          yaxis = yaxis_opts,
           autosize = TRUE,
           margin = list(l = 0, r = 0, b = 0, t = 0, pad = 0)
         )
     })
+    
     
   })
 }
