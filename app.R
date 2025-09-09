@@ -70,6 +70,7 @@ library(plotly)
 # Functions for Explorer
 source("modules/explorer_panel.R")
 source("modules/explorer/map.R")
+source("modules/explorer/records_summary.R")
 source("modules/explorer/specimen_selection.R")
 
 # Functions for Engine
@@ -143,7 +144,6 @@ ui <- page_navbar(
     input_dark_mode(id = "dark_mode", mode = "light")
   )
 )
-
 
 # ------------------------------------------------------------------------------
 # Define server logic required to draw a histogram

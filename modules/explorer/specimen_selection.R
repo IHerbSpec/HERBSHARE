@@ -94,7 +94,7 @@ specimen_selection_ui <- function(id) {
   bslib::accordion(id = ns("collapse"),
                    open = NULL,
                    multiple = FALSE,
-                   bslib::accordion_panel(title = "Specimen information",
+                   bslib::accordion_panel(title = "Specimen metadata",
                                           id = "specimen_info",
                                           tableOutput(ns("specimen_table"))
                    ),

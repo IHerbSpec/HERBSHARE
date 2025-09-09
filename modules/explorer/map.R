@@ -3,7 +3,7 @@
 
 # uI
 map_ui <- function(id) {
-
+  
   ns <- NS(id)
   leafletOutput(ns("map"), width = "100%", height = "100%")
   
