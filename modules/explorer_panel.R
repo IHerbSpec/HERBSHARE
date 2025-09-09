@@ -2,38 +2,73 @@
 ### Explorer panel
 
 # UI
-explorer_panel_ui <- function(id) {
-  ns <- NS(id)
-  
-  
-  map_css_id <- paste0("#", ns("map-map"))
-  map_wrap_id <- paste0("#", ns("map-viewport"))
-  
-  bslib::nav_panel(
-    "Explorer",
-    tags$head(
-      tags$style(HTML(paste0(
-        "
-        /* Full-bleed, fixed map that fills between navbar & footer */
-        ", map_wrap_id, " {
-          position: fixed; left: 0; right: 0;
-          top: var(--navbar-h);      /* dynamic navbar height */
-          bottom: var(--footer-h);   /* fixed footer height */
-          z-index: 0;                /* under your floating panel */
-        }
-        ", map_css_id, " { height: 100%; width: 100%; } /* map fills wrapper */
+# explorer_panel_ui <- function(id) {
+#   ns <- NS(id)
+#   
+#   
+#   map_css_id <- paste0("#", ns("map-map"))
+#   map_wrap_id <- paste0("#", ns("map-viewport"))
+#   
+#   bslib::nav_panel(
+#     "Explorer",
+#     tags$head(
+#       tags$style(HTML(paste0(
+#         "
+#         /* Full-bleed, fixed map that fills between navbar & footer */
+#         ", map_wrap_id, " {
+#           position: fixed; left: 0; right: 0;
+#           top: var(--navbar-h);      /* dynamic navbar height */
+#           bottom: var(--footer-h);   /* fixed footer height */
+#           z-index: 0;                /* under your floating panel */
+#         }
+#         ", map_css_id, " { height: 100%; width: 100%; } /* map fills wrapper */
+# 
+#         /* Optional: position your floating specimen panel above the map */
+#         .panel.panel-default { z-index: 1001; }
+#         "
+#       )))
+#     ),
+#     
+#     div(id = ns("map-viewport"),
+#         map_ui(ns("map"))
+#     ),
+#     
+#     specimen_selection_ui(ns("spec_sel"))
+#   )
+# }
 
-        /* Optional: position your floating specimen panel above the map */
-        .panel.panel-default { z-index: 1001; }
-        "
-      )))
+explorer_panel_ui <- function(id) {
+  
+  ns <- NS(id)
+
+  layout_sidebar(
+    
+    # Current records
+    sidebar = sidebar(
+      title = "Records",
+      "Content for the left sidebar"
     ),
     
-    div(id = ns("map-viewport"),
-        map_ui(ns("map"))
-    ),
-    
-    specimen_selection_ui(ns("spec_sel"))
+    layout_sidebar(
+      class = "no-pad-main",
+      fillable = TRUE,
+      gap = 0,
+      
+      # Specimen information
+      sidebar = sidebar(
+        title = "Specimen information",
+        position = "right",
+        width = "30%",
+        specimen_selection_ui(ns("spec_sel"))
+      ),
+      
+      # Main area
+      div(
+        class = "p-0 m-0",
+        style = "height: 100%;",   # container fills available height
+        map_ui(ns("map"))          # inside, make sure map output uses height = '100%'
+      )
+    )
   )
 }
 
