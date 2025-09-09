@@ -149,20 +149,10 @@ ui <- page_navbar(
 # Define server logic required to draw a histogram
 server <- function(input, output, session) {
   
-  # Load information into the server
-  metadata_sf <- st_as_sf(metadata_and_gbif, 
-                          coords = c("decimalLongitude", "decimalLatitude"), 
-                          crs = 4326, 
-                          remove = FALSE)
-  
-  points_sf <- reactive({
-    st_as_sf(metadata_sf,
-             coords = c("decimalLongitude", "decimalLatitude"),
-             crs = 4326)
-  })
-
   # Explorer
-  explorer_panel_server("explorer", metadata_sf, points_sf, spectra_compiled)
+  explorer_panel_server("explorer", 
+                        metadata = metadata_and_gbif,
+                        spectra_compiled = spectra_compiled)
 
 }
 

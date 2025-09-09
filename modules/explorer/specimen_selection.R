@@ -109,8 +109,7 @@ specimen_selection_ui <- function(id) {
 # Server
 specimen_selection_server <- function(id, 
                                       click_id, 
-                                      metadata_sf, 
-                                      points_sf,
+                                      metadata, 
                                       spectra_compiled) {
   moduleServer(id, function(input, output, session) {
     
@@ -122,7 +121,7 @@ specimen_selection_server <- function(id,
     
     clicked_points <- reactive({
       req(click_id())
-      dplyr::filter(metadata_sf, gbifID %in% click_id())
+      dplyr::filter(metadata, gbifID %in% click_id())
     })
     
     output$specimen_table <- renderTable({
@@ -157,14 +156,13 @@ specimen_selection_server <- function(id,
     
     
     output$spectra_plot <- plotly::renderPlotly({
+      
       rows <- clicked_points()
       shiny::validate(shiny::need(nrow(rows) > 0, "Error"))
-      
-      md <- sf::st_drop_geometry(rows)
-      filename_selection <- md$filename
+      filename_selection <- rows$filename
       
       # Keep per-file metadata we need
-      meta_small <- md %>%
+      meta_small <- rows %>%
         dplyr::select(filename, targetTissueClass, backgroundClass) %>%
         dplyr::mutate(
           # fixed mappings via factor levels

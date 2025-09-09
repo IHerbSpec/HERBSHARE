@@ -42,11 +42,23 @@ explorer_panel_ui <- function(id) {
 
 
 # Server
-explorer_panel_server <- function(id, metadata_sf, points_sf, spectra_compiled) {
+explorer_panel_server <- function(id, metadata, spectra_compiled) {
   moduleServer(id, function(input, output, session) {
     
+    # As vector
+    metadata_sf <- st_as_sf(metadata, 
+                            coords = c("decimalLongitude", "decimalLatitude"), 
+                            crs = 4326, 
+                            remove = FALSE)
+    
+    # metadata_sf <- reactive({
+    #   st_as_sf(metadata,
+    #            coords = c("decimalLongitude", "decimalLatitude"),
+    #            crs = 4326)
+    # })
+    
     # Summary records
-    summary_boxes_server("summary_records", metadata = sf::st_drop_geometry(metadata_sf))
+    summary_records_server("summary_records", metadata = metadata)
     
     # Map
     map_out <- map_server(id = "map", metadata_sf = metadata_sf)
@@ -61,8 +73,7 @@ explorer_panel_server <- function(id, metadata_sf, points_sf, spectra_compiled) 
     specimen_selection_server(
       id = "spec_sel",
       click_id = map_out$click_id,
-      metadata_sf = metadata_sf,
-      points_sf = points_sf,
+      metadata = metadata,
       spectra_compiled = spectra_compiled
     )
   })
