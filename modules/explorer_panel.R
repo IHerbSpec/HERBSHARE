@@ -12,6 +12,7 @@ explorer_panel_ui <- function(id) {
       id = ns("left_sb"),
       title = NULL,
       open = TRUE,
+      width  = "25%",
       summary_records_ui(ns("summary_records"))
     ),
     
