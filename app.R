@@ -91,6 +91,13 @@ spectra_compiled <- data.table::fread("data/02-organized/spectra_compiled.csv", 
 # # Define UI for application
 ui <- page_navbar(
   
+  #theme = bs_theme(version = 5),
+  theme = bs_theme(
+    bootswatch = "yeti",
+    #base_font = font_google("Inter"),
+    navbar_bg = "black"
+  ),
+  
   # title = tags$span(
   #   # tags$img(
   #   #   src = "logo.png",
@@ -102,11 +109,9 @@ ui <- page_navbar(
   #   "HERBSPHERE"
   # ),
   
-  
   title = tags$span("HERBSPHERE"),
   lang = "en",
-  theme = bs_theme(version = 5),
-
+  
   nav_panel(
     "Explorer",
     explorer_panel_ui("explorer")
@@ -141,7 +146,11 @@ ui <- page_navbar(
   ),
 
   nav_item(
-    input_dark_mode(id = "dark_mode", mode = "light")
+    input_dark_mode(
+      id = "dark_mode",
+      mode = "light",
+      `data-bs-theme` = "dark"
+      )
   )
 )
 
