@@ -16,7 +16,10 @@ specimen_selection_ui <- function(id) {
                    bslib::accordion_panel(title = "Spectra profile",
                                           id = "spectra_profile",
                                           plotlyOutput(ns("spectra_plot"))
-                   )
+                   ),
+                   bslib::accordion_panel(title = "Specimen image",
+                                          id = "specimen_image",
+                                          uiOutput(ns("specimen_image")))
   )
 
 }
@@ -34,11 +37,15 @@ specimen_selection_server <- function(id,
       shinyjs::show(id = session$ns("controls_specimen_selection"))
     }, ignoreInit = TRUE)
     
+    # Point selected
     clicked_points <- reactive({
       req(click_id())
       dplyr::filter(metadata, gbifID %in% click_id())
     })
     
+    
+    
+    # Table
     output$specimen_table <- renderTable({
       
       rows <- clicked_points()
@@ -70,17 +77,17 @@ specimen_selection_server <- function(id,
     }, striped = TRUE, bordered = TRUE, rownames = FALSE)
     
     
+    
+    # Spectra
     output$spectra_plot <- plotly::renderPlotly({
       
       rows <- clicked_points()
       shiny::validate(shiny::need(nrow(rows) > 0, "Error"))
       filename_selection <- rows$filename
       
-      # Keep per-file metadata we need
       meta_small <- rows %>%
         dplyr::select(filename, targetTissueClass, backgroundClass) %>%
         dplyr::mutate(
-          # fixed mappings via factor levels
           ttc = factor(targetTissueClass, levels = c("AD", "AB")),
           bg  = factor(backgroundClass,     levels = c("BGB", "BGP"))
         )
@@ -130,5 +137,44 @@ specimen_selection_server <- function(id,
     })
     
     
+    # Image
+    output$specimen_image <- shiny::renderUI({
+      rows <- clicked_points()
+      shiny::validate(shiny::need(nrow(rows) > 0, "Select a specimen to view the image."))
+      
+      # Take the first selected row
+      ref <- rows$references[[1]]
+      
+      if (is.null(ref) || is.na(ref) || !nzchar(ref)) {
+        return(shiny::div("No image available."))
+      }
+      
+      m <- regexpr("https?://[^\\s,;|]+", ref, perl = TRUE)
+      url <- if (m[1] != -1) regmatches(ref, m)[[1]] else NA_character_
+      if (is.na(url)) return(shiny::div("No image URL found."))
+      
+      shiny::tags$div(
+        style = "text-align:center;",
+        shiny::tags$a(
+          href = url, target = "_blank", rel = "noopener",
+          shiny::tags$img(
+            src   = url,
+            alt   = "Specimen image (thumbnail)",
+            style = paste(
+              "max-width: 100%;",
+              "max-height: 240px;",
+              "object-fit: contain;",
+              "border: 1px solid #ddd;",
+              "border-radius: 4px;",
+              "padding: 2px;"
+            )
+          )
+        ),
+        shiny::tags$div(
+          style = "font-size: 0.85em; margin-top: 6px;",
+          "Click the image to open full-size in a new tab."
+        )
+      )
+    })
   })
 }
