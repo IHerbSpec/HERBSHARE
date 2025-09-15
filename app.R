@@ -139,7 +139,7 @@ ui <- page_navbar(
 
   nav_item(
     tags$a(
-      tags$span(bsicons::bs_icon("book"), "Documentation"),
+      tags$span(bsicons::bs_icon("book"), "IHerbSpec"),
       href = "https://iherbspec.github.io",
       target = "_blank"
     )

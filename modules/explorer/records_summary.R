@@ -18,21 +18,13 @@ summary_records_server <- function(id, metadata) {
       
       req(metadata)
 
-      #vals <- metadata()
-      
-      #sites <- nrow(unique(metadata[c("latitude", "longitude")]))
-      
-      #sites <- uniqueN(metadata, by = c("latitude", "longitude"))
+      sites <- uniqueN(metadata, by = c("decimalLatitude", "decimalLongitude"))
       countries <- length(unique(metadata$countryCode))
       continent <- length(unique(metadata$continent))
       
-      sites <- 999
-      countries <- 999
-      continent <- 999
-      
       locations_summary <- bslib::value_box(
         "FROM",
-        paste(sites, "sites"),
+        paste(sites, "locations"),
         paste("Across", countries, "countries"),
         tags$p(paste("and", continent, "continent")),
         showcase = bsicons::bs_icon("globe2")
@@ -42,7 +34,7 @@ summary_records_server <- function(id, metadata) {
       collections <- length(unique(metadata$institutionCode))
       
       institutions_summary <- bslib::value_box(
-        "RECORS FROM",  # (typo kept as in your code)
+        "RECORS FROM",
         paste(institutions, "owner institutions"),
         paste("and", collections, "collections"),
         showcase = bsicons::bs_icon("buildings")

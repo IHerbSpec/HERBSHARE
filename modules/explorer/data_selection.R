@@ -59,17 +59,14 @@ dataSelection_ui <- function(id) {
                                selectizeInput(
                                  inputId = 'library_site',
                                  label = "Source dataset: ",
-                                 choices = unique(soilsite.data$dataset.title_utf8_txt), #dataset.code_ascii_c
+                                 choices = unique(soilsite.data$dataset.title_utf8_txt),
                                  multiple = T,
                                  options = list(
                                    placeholder = 'Please select a Source dataset',
                                    onInitialize = I('function() { this.setValue(""); }')
                                  )),
                                style = "success")
-    ), # bsCollapse
-    #p(""),
-    #actionButton(inputId = "jumpToSoil", label= "Soil properties", class = "btn-info btn-block", icon = shiny::icon("arrow-circle-right")),
-    #verbatimTextOutput("id1"),verbatimTextOutput("id2"),verbatimTextOutput("id3"),verbatimTextOutput("id4")
+    )
   )
   
 }
