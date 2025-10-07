@@ -78,7 +78,7 @@ select_by_server <- function(id, metadata) {
     
     # Normalize dataset to reactive data.table
     dt <- reactive({
-      base <- if (shiny::is.reactive(metadata)) metadata() else metadata
+      base <- if(shiny::is.reactive(metadata)) metadata() else metadata
       data.table::as.data.table(base)
     })
     
@@ -89,78 +89,47 @@ select_by_server <- function(id, metadata) {
     # Initialize choices once
     observeEvent(dt(), {
       x <- dt()
-      
-      if (has("countryCode")) {
-        updateSelectizeInput(session, "countryCode",
-                             choices = u_(x$countryCode), server = TRUE)
-      }
-      if (has("stateProvince")) {
-        updateSelectizeInput(session, "stateProvince",
-                             choices = u_(x$stateProvince), server = TRUE)
-      }
-      if (has("family")) {
-        updateSelectizeInput(session, "family",
-                             choices = u_(x$family), server = TRUE)
-      }
-      if (has("genus")) {
-        updateSelectizeInput(session, "genus",
-                             choices = u_(x$genus), server = TRUE)
-      }
-      if (has("species")) {
-        updateSelectizeInput(session, "species",
-                             choices = u_(x$species), server = TRUE)
-      }
-      if (has("institutionName")) {
-        updateSelectizeInput(session, "institutionName",
-                             choices = u_(x$institutionName), server = TRUE)
-      }
+      if(has("countryCode")) updateSelectizeInput(session, "countryCode", choices = u_(x$countryCode), server = TRUE)
+      if(has("stateProvince")) updateSelectizeInput(session, "stateProvince", choices = u_(x$stateProvince), server = TRUE)
+      if(has("family")) updateSelectizeInput(session, "family", choices = u_(x$family), server = TRUE)
+      if(has("genus")) updateSelectizeInput(session, "genus", choices = u_(x$genus), server = TRUE)
+      if(has("species")) updateSelectizeInput(session, "species", choices = u_(x$species), server = TRUE)
+      if(has("institutionName")) updateSelectizeInput(session, "institutionName",choices = u_(x$institutionName), server = TRUE)
     }, ignoreInit = FALSE)
     
-    # ---------- Dependent choice updates ----------
+    # Dependent choice updates
     observeEvent(list(dt(), input$countryCode), {
       if (!has("stateProvince")) return()
       x <- dt()
-      sub <- if (has("countryCode") && length(input$countryCode))
-        x[countryCode %in% input$countryCode] else x
-      updateSelectizeInput(session, "stateProvince",
-                           choices = u_(sub$stateProvince), server = TRUE)
+      sub <- if (has("countryCode") && length(input$countryCode)) x[countryCode %in% input$countryCode] else x
+      updateSelectizeInput(session, "stateProvince", choices = u_(sub$stateProvince), server = TRUE)
     }, ignoreInit = TRUE)
     
     observeEvent(list(dt(), input$family), {
       if (!has("genus")) return()
       x <- dt()
-      sub <- if (has("family") && length(input$family))
-        x[family %in% input$family] else x
-      updateSelectizeInput(session, "genus",
-                           choices = u_(sub$genus), server = TRUE)
+      sub <- if(has("family") && length(input$family)) x[family %in% input$family] else x
+      updateSelectizeInput(session, "genus", choices = u_(sub$genus), server = TRUE)
     }, ignoreInit = TRUE)
     
     observeEvent(list(dt(), input$family, input$genus), {
-      if (!has("species")) return()
+      if(!has("species")) return()
       x <- dt()
       sub <- x
-      if (has("family") && length(input$family)) sub <- sub[family %in% input$family]
-      if (has("genus")  && length(input$genus))  sub <- sub[genus  %in% input$genus]
-      updateSelectizeInput(session, "species",
-                           choices = u_(sub$species), server = TRUE)
+      if(has("family") && length(input$family)) sub <- sub[family %in% input$family]
+      if(has("genus")  && length(input$genus))  sub <- sub[genus  %in% input$genus]
+      updateSelectizeInput(session, "species", choices = u_(sub$species), server = TRUE)
     }, ignoreInit = TRUE)
     
-    # ---------- Filtering logic (live, not yet "applied") ----------
+    # Filtering logic
     data <- reactive({
       x <- data.table::copy(dt())
-      
-      if (has("countryCode")   && length(input$countryCode))
-        x <- x[countryCode %in% input$countryCode]
-      if (has("stateProvince") && length(input$stateProvince))
-        x <- x[stateProvince %in% input$stateProvince]
-      
-      if (has("family")  && length(input$family))  x <- x[family %in% input$family]
-      if (has("genus")   && length(input$genus))   x <- x[genus  %in% input$genus]
-      if (has("species") && length(input$species)) x <- x[species %in% input$species]
-      
-      if (has("institutionName") && length(input$institutionName))
-        x <- x[institutionName %in% input$institutionName]
-      
+      if(has("countryCode") && length(input$countryCode)) x <- x[countryCode %in% input$countryCode]
+      if(has("stateProvince") && length(input$stateProvince)) x <- x[stateProvince %in% input$stateProvince]
+      if(has("family") && length(input$family)) x <- x[family %in% input$family]
+      if(has("genus") && length(input$genus)) x <- x[genus  %in% input$genus]
+      if(has("species") && length(input$species)) x <- x[species %in% input$species]
+      if(has("institutionName") && length(input$institutionName)) x <- x[institutionName %in% input$institutionName]
       x
     })
     
@@ -171,9 +140,25 @@ select_by_server <- function(id, metadata) {
       format(nrow(x), big.mark = ",")
     })
     
+    # Clear all filters when "Show all" is pressed
+    observeEvent(input$show_all, {
+      
+      # Clear selections
+      for (id in c("countryCode","stateProvince","family","genus","species","institutionName")) {
+        if (!is.null(input[[id]])) updateSelectizeInput(session, id, selected = character())
+      }
+      
+      x <- dt()
+      if (has("stateProvince"))  updateSelectizeInput(session, "stateProvince",  choices = u_(x$stateProvince),  server = TRUE)
+      if (has("genus"))          updateSelectizeInput(session, "genus",          choices = u_(x$genus),          server = TRUE)
+      if (has("species"))        updateSelectizeInput(session, "species",        choices = u_(x$species),        server = TRUE)
+      
+    }, ignoreInit = TRUE)
+    
     # Expose button events so the parent can react
     list(data = data,
          apply = reactive(input$apply_selection),
-         show_all = reactive(input$show_all))
+         show_all = reactive(input$show_all)
+         )
   })
 }
