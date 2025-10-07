@@ -44,12 +44,15 @@ explorer_panel_ui <- function(id) {
         specimen_selection_ui(ns("spec_sel"))
       ),
       
-      # Map
-      div(class = "p-0 m-0", style = "height: 100%;", map_ui(ns("map")))
+      # Map and download
+      div(class = "p-0 m-0",
+          style = "height: 100%; position: relative;",
+          map_ui(ns("map")),
+          download_ui(ns("download"))
+      )
     )
   )
 }
-
 
 # Server
 explorer_panel_server <- function(id, metadata, spectra_compiled) {
@@ -109,5 +112,16 @@ explorer_panel_server <- function(id, metadata, spectra_compiled) {
       metadata = reactive(sel$data()),
       spectra_compiled = spectra_compiled
     )
+    
+    # After apply/show_all download
+    download_server(
+      id = "download",
+      applied_data     = reactive(sf::st_drop_geometry(current_sf())),
+      spectra_compiled = spectra_compiled,
+      on_show          = sel$apply,
+      on_hide          = sel$show_all
+    )
+    
   })
+  
 }

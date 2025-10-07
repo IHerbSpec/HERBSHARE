@@ -3,8 +3,7 @@
 #                                   HERBSPHERE                                 #
 #      HERBSPHERE: Herbarium Spectral Hub for Research and Exploration         #
 #                  A Shiny Application for the exploration of spectroscopy     #
-#            data from herbarium specimens prediction leaf traits              #
-#                             and prediction of leaf traits                    #
+#            data from herbarium specimens and prediction of leaf traits       #
 #                             Author: J. Antonio Guzmán Q.                     #
 #               ___________________________________________________            #
 #                                                                              #
@@ -72,6 +71,7 @@ source("modules/explorer/map.R")
 source("modules/explorer/records_summary.R")
 source("modules/explorer/specimen_selection.R")
 source("modules/explorer/select_by.R")
+source("modules/explorer/download.R")
 
 # Functions for Engine
 # source("trait_selector_input.R")
