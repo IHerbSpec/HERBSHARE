@@ -46,12 +46,25 @@ select_by_ui <- function(id) {
         bslib::card(
           class = "shadow-sm",
           bslib::card_body(
-            div(class = "d-flex justify-content-between align-items-center",
-                div(
-                  strong("Matching records: "),
-                  textOutput(ns("n_matches"), inline = TRUE)
+            # Matching records (top)
+            div(class = "mb-2 d-flex align-items-baseline gap-2",
+                span(class = "text-muted", "Matching records:"),
+                textOutput(ns("n_matches"), inline = TRUE)
+            ),
+            # Buttons (below, full width, stacked with a little gap)
+            div(class = "d-grid gap-2",
+                actionButton(
+                  ns("apply_selection"),
+                  "Select",
+                  icon  = shiny::icon("check-circle"),
+                  class = "btn btn-primary btn-lg"
                 ),
-                actionButton(ns("clear_filters"), "Clear filters")
+                actionButton(
+                  ns("show_all"),
+                  "Show all",
+                  icon  = shiny::icon("broom"),
+                  class = "btn btn-outline-secondary"
+                )
             )
           )
         )
@@ -63,9 +76,9 @@ select_by_ui <- function(id) {
 select_by_server <- function(id, metadata) {
   moduleServer(id, function(input, output, session) {
     
-    # Reactive data.table
+    # Normalize dataset to reactive data.table
     dt <- reactive({
-      base <- if(shiny::is.reactive(metadata)) metadata() else metadata
+      base <- if (shiny::is.reactive(metadata)) metadata() else metadata
       data.table::as.data.table(base)
     })
     
@@ -77,38 +90,33 @@ select_by_server <- function(id, metadata) {
     observeEvent(dt(), {
       x <- dt()
       
-      if(has("countryCode")) {
+      if (has("countryCode")) {
         updateSelectizeInput(session, "countryCode",
                              choices = u_(x$countryCode), server = TRUE)
       }
-      
-      if(has("stateProvince")) {
+      if (has("stateProvince")) {
         updateSelectizeInput(session, "stateProvince",
                              choices = u_(x$stateProvince), server = TRUE)
       }
-      
-      if(has("family")) {
+      if (has("family")) {
         updateSelectizeInput(session, "family",
                              choices = u_(x$family), server = TRUE)
       }
-      
-      if(has("genus")) {
+      if (has("genus")) {
         updateSelectizeInput(session, "genus",
                              choices = u_(x$genus), server = TRUE)
       }
-      
-      if(has("species")) {
+      if (has("species")) {
         updateSelectizeInput(session, "species",
                              choices = u_(x$species), server = TRUE)
       }
-      
-      if(has("institutionName")) {
+      if (has("institutionName")) {
         updateSelectizeInput(session, "institutionName",
                              choices = u_(x$institutionName), server = TRUE)
       }
     }, ignoreInit = FALSE)
     
-    # State filtered by countryCode
+    # ---------- Dependent choice updates ----------
     observeEvent(list(dt(), input$countryCode), {
       if (!has("stateProvince")) return()
       x <- dt()
@@ -118,9 +126,8 @@ select_by_server <- function(id, metadata) {
                            choices = u_(sub$stateProvince), server = TRUE)
     }, ignoreInit = TRUE)
     
-    # Genus filtered by Family
     observeEvent(list(dt(), input$family), {
-      if(!has("genus")) return()
+      if (!has("genus")) return()
       x <- dt()
       sub <- if (has("family") && length(input$family))
         x[family %in% input$family] else x
@@ -128,53 +135,45 @@ select_by_server <- function(id, metadata) {
                            choices = u_(sub$genus), server = TRUE)
     }, ignoreInit = TRUE)
     
-    # Species filtered by Family + Genus
     observeEvent(list(dt(), input$family, input$genus), {
-      if(!has("species")) return()
+      if (!has("species")) return()
       x <- dt()
       sub <- x
-      if(has("family") && length(input$family)) sub <- sub[family %in% input$family]
-      if(has("genus")  && length(input$genus))  sub <- sub[genus  %in% input$genus]
+      if (has("family") && length(input$family)) sub <- sub[family %in% input$family]
+      if (has("genus")  && length(input$genus))  sub <- sub[genus  %in% input$genus]
       updateSelectizeInput(session, "species",
                            choices = u_(sub$species), server = TRUE)
     }, ignoreInit = TRUE)
     
-    # Clear filters
-    observeEvent(input$clear_filters, {
-      for (id in c("countryCode","stateProvince","family","genus","species","institutionName")) {
-        if(!is.null(input[[id]])) updateSelectizeInput(session, id, selected = character())
-      }
-    }, ignoreInit = TRUE)
-    
-    # ---------- Filtering logic ----------
+    # ---------- Filtering logic (live, not yet "applied") ----------
     data <- reactive({
       x <- data.table::copy(dt())
       
-      # Geospatial (by codes + state)
-      if(has("countryCode")   && length(input$countryCode))
+      if (has("countryCode")   && length(input$countryCode))
         x <- x[countryCode %in% input$countryCode]
-      if(has("stateProvince") && length(input$stateProvince))
+      if (has("stateProvince") && length(input$stateProvince))
         x <- x[stateProvince %in% input$stateProvince]
       
-      # Taxonomy hierarchy
-      if(has("family")  && length(input$family))  x <- x[family %in% input$family]
-      if(has("genus")   && length(input$genus))   x <- x[genus  %in% input$genus]
-      if(has("species") && length(input$species)) x <- x[species %in% input$species]
+      if (has("family")  && length(input$family))  x <- x[family %in% input$family]
+      if (has("genus")   && length(input$genus))   x <- x[genus  %in% input$genus]
+      if (has("species") && length(input$species)) x <- x[species %in% input$species]
       
-      # Institution
-      if(has("institutionName") && length(input$institutionName))
+      if (has("institutionName") && length(input$institutionName))
         x <- x[institutionName %in% input$institutionName]
       
       x
     })
     
-    # Matching records counter
+    # Counter for "Matching records"
     output$n_matches <- renderText({
       x <- data()
-      if(is.null(x)) return("0")
+      if (is.null(x)) return("0")
       format(nrow(x), big.mark = ",")
     })
     
-    list(data = data)
+    # Expose button events so the parent can react
+    list(data = data,
+         apply = reactive(input$apply_selection),
+         show_all = reactive(input$show_all))
   })
 }

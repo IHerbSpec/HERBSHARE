@@ -28,20 +28,20 @@ map_server <- function(id, metadata_sf) {
             "Esri.WorldTopoMap", "Esri.WorldTerrain"
           )
         ) %>%
-        addDrawToolbar(
-          targetGroup = "x",
-          polygonOptions   = drawPolygonOptions(
-            showArea = TRUE,
-            shapeOptions = drawShapeOptions(fillColor = "#ffba08", color = "#370617", clickable = FALSE)
-          ),
-          rectangleOptions = drawRectangleOptions(
-            showArea = TRUE,
-            shapeOptions = drawShapeOptions(fillColor = "#ffba08", color = "#370617", clickable = FALSE)
-          ),
-          position = "topright",
-          polylineOptions = FALSE, circleOptions = FALSE,
-          circleMarkerOptions = FALSE, markerOptions = FALSE
-        ) %>%
+        # addDrawToolbar(
+        #   targetGroup = "x",
+        #   polygonOptions   = drawPolygonOptions(
+        #     showArea = TRUE,
+        #     shapeOptions = drawShapeOptions(fillColor = "#ffba08", color = "#370617", clickable = FALSE)
+        #   ),
+        #   rectangleOptions = drawRectangleOptions(
+        #     showArea = TRUE,
+        #     shapeOptions = drawShapeOptions(fillColor = "#ffba08", color = "#370617", clickable = FALSE)
+        #   ),
+        #   position = "topright",
+        #   polylineOptions = FALSE, circleOptions = FALSE,
+        #   circleMarkerOptions = FALSE, markerOptions = FALSE
+        # ) %>%
         addResetMapButton()
     })
 
