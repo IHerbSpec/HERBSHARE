@@ -49,7 +49,6 @@ library(plotly)
 # library(leafgl)
 # library(shinybusy)
 
-# # 
 # remotes::install_github("bhaskarvk/leaflet.extras", ref = remotes::github_pull("184")) 
 # remotes::install_github("bhaskarvk/leaflet.extras")
 # _input: all user information that serve as inputremotes::install_github("hrbrmstr/nominatim")
@@ -72,6 +71,7 @@ source("modules/explorer_panel.R")
 source("modules/explorer/map.R")
 source("modules/explorer/records_summary.R")
 source("modules/explorer/specimen_selection.R")
+source("modules/explorer/select_by.R")
 
 # Functions for Engine
 # source("trait_selector_input.R")
