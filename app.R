@@ -9,20 +9,24 @@
 #                                                                              #
 ################################################################################
 
-# Name convention for scripts
-# _panel: all visual panels that display information
-# _input: all user information that serve as input
-# _import: functions to read files
-# _frame: all data.frames created
-# _plot: scripts to render figures in ui
-# _figure: all figures created as outputs
-# _go: names to link between panels
-# _action: name for bottom activation
-# _aux: Auxiliary functions
+### Module guide
+## modules
+#     explorer
+#         map.R
+#         data_selection.R
+#         records_summary.R
+#         specimen_selection.R
+#         select_by.R
+#         download.R
+#     engine
+#     auxiliarity 
+#         read_spectra.R
+#         herbaria_locations.R
+#         gbif.R
 
 ################################################################################
 # Libraries --------------------------------------------------------------------
-################################################################################
+
 
 library(shiny)
 library(shinythemes)
@@ -36,6 +40,7 @@ library(dplyr)
 library(tidyr)
 library(shinyjs)
 library(plotly)
+
 # library(tidyverse)
 # library(shinyjqui)
 # library(s2)
@@ -48,22 +53,15 @@ library(plotly)
 # library(leafgl)
 # library(shinybusy)
 
-# remotes::install_github("bhaskarvk/leaflet.extras", ref = remotes::github_pull("184")) 
-# remotes::install_github("bhaskarvk/leaflet.extras")
-# _input: all user information that serve as inputremotes::install_github("hrbrmstr/nominatim")
-# install.packages("leafgl") # https://github.com/r-spatial/leafgl
-
 ################################################################################
-# Options ----------------------------------------------------------------------
-################################################################################
+# Options 
 
 # # File size upload
 # options(shiny.maxRequestSize= 1000*1024^2)
 # options(shiny.deprecation.messages=FALSE)
 
 ################################################################################
-# Source of helpers ------------------------------------------------------------
-################################################################################
+# Source of helpers 
 
 # Functions for Explorer
 source("modules/explorer_panel.R")
@@ -77,17 +75,15 @@ source("modules/explorer/download.R")
 # source("trait_selector_input.R")
 
 ################################################################################
-# Load initial data------------------------------------------------------------
-################################################################################
+# Load initial data
 
 metadata_and_gbif <- data.table::fread("data/02-organized/metadata_and_gbif.csv")
 spectra_compiled <- data.table::fread("data/02-organized/spectra_compiled.csv", header = TRUE)
 
 ################################################################################
-# App---------------------------------------------------------------------------
-################################################################################
+# App
 
-# # ------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # # Define UI for application
 ui <- page_navbar(
   

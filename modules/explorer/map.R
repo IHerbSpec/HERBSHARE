@@ -8,12 +8,94 @@ map_ui <- function(id) {
 }
 
 # Server
+# map_server <- function(id, metadata_sf) {
+#   moduleServer(id, function(input, output, session) {
+# 
+#     group_name <- "specimens"
+#     draw_group <- "drawsel"
+# 
+#     # Base map once (no data here)
+#     output$map <- renderLeaflet({
+#       leaflet(options = leafletOptions(minZoom = 2)) %>%
+#         addTiles() %>%
+#         setMaxBounds(lng1 = -180, lat1 = -90, lng2 = 180, lat2 = 90) %>%
+#         addProviderTiles("Esri.WorldImagery", group = "Esri.WorldImagery") %>%
+#         addProviderTiles("OpenStreetMap.Mapnik", group = "OpenStreetMap.Mapnik") %>%
+#         addProviderTiles("Esri.WorldTopoMap", group = "Esri.WorldTopoMap") %>%
+#         addProviderTiles("Esri.WorldTerrain", group = "Esri.WorldTerrain") %>%
+#         addLayersControl(
+#           baseGroups = c(
+#             "Esri.WorldImagery", "OpenStreetMap.Mapnik",
+#             "Esri.WorldTopoMap", "Esri.WorldTerrain"
+#           )
+#         ) %>%
+#         # addDrawToolbar(
+#         #   targetGroup = "x",
+#         #   polygonOptions   = drawPolygonOptions(
+#         #     showArea = TRUE,
+#         #     shapeOptions = drawShapeOptions(fillColor = "#ffba08", color = "#370617", clickable = FALSE)
+#         #   ),
+#         #   rectangleOptions = drawRectangleOptions(
+#         #     showArea = TRUE,
+#         #     shapeOptions = drawShapeOptions(fillColor = "#ffba08", color = "#370617", clickable = FALSE)
+#         #   ),
+#         #   position = "topright",
+#         #   polylineOptions = FALSE, circleOptions = FALSE,
+#         #   circleMarkerOptions = FALSE, markerOptions = FALSE
+#         # ) %>%
+#         addResetMapButton()
+#     })
+# 
+#     # Normalize input to a reactive sf
+#     sf_data <- reactive({
+#       if (shiny::is.reactive(metadata_sf)) metadata_sf() else metadata_sf
+#     })
+# 
+#     # Whenever data changes, (re)draw markers only
+#     observe({
+#       x <- sf_data()
+#       proxy <- leafletProxy("map", session = session) %>%
+#         clearGroup(group_name) %>%
+#         clearMarkers()
+# 
+#       if (is.null(x) || nrow(x) == 0) return(invisible())
+# 
+#       proxy <- proxy %>%
+#         addMarkers(
+#           data = x,
+#           clusterOptions = markerClusterOptions(),
+#           group = group_name,
+#           layerId = ~gbifID
+#         )
+# 
+#       # Fit bounds to current data
+#       bx <- sf::st_bbox(x)
+#       if (all(is.finite(bx))) {
+#         proxy %>% fitBounds(
+#           lng1 = unname(bx["xmin"]),
+#           lat1 = unname(bx["ymin"]),
+#           lng2 = unname(bx["xmax"]),
+#           lat2 = unname(bx["ymax"])
+#         )
+#       }
+#     })
+# 
+#     # Click handler
+#     click_id <- reactiveVal(NULL)
+#     observeEvent(input$map_marker_click, {
+#       click_id(input$map_marker_click$id)
+#     })
+# 
+#     list(click_id = click_id)
+#   })
+# }
+
 map_server <- function(id, metadata_sf) {
   moduleServer(id, function(input, output, session) {
-
+    
     group_name <- "specimens"
-
-    # Base map once (no data here)
+    draw_group <- "drawsel"  # <— drawn shapes will be placed here
+    
     output$map <- renderLeaflet({
       leaflet(options = leafletOptions(minZoom = 2)) %>%
         addTiles() %>%
@@ -22,69 +104,63 @@ map_server <- function(id, metadata_sf) {
         addProviderTiles("OpenStreetMap.Mapnik", group = "OpenStreetMap.Mapnik") %>%
         addProviderTiles("Esri.WorldTopoMap", group = "Esri.WorldTopoMap") %>%
         addProviderTiles("Esri.WorldTerrain", group = "Esri.WorldTerrain") %>%
-        addLayersControl(
-          baseGroups = c(
-            "Esri.WorldImagery", "OpenStreetMap.Mapnik",
-            "Esri.WorldTopoMap", "Esri.WorldTerrain"
-          )
+        addLayersControl(baseGroups = c("Esri.WorldImagery", "OpenStreetMap.Mapnik","Esri.WorldTopoMap", "Esri.WorldTerrain")) %>%
+        leaflet.extras::addDrawToolbar(
+          targetGroup = draw_group,
+          polygonOptions   = drawPolygonOptions(showArea = TRUE),
+          rectangleOptions = drawRectangleOptions(showArea = TRUE),
+          polylineOptions = FALSE, circleOptions = FALSE,
+          circleMarkerOptions = FALSE, markerOptions = FALSE,
+          position = "topright"
         ) %>%
-        # addDrawToolbar(
-        #   targetGroup = "x",
-        #   polygonOptions   = drawPolygonOptions(
-        #     showArea = TRUE,
-        #     shapeOptions = drawShapeOptions(fillColor = "#ffba08", color = "#370617", clickable = FALSE)
-        #   ),
-        #   rectangleOptions = drawRectangleOptions(
-        #     showArea = TRUE,
-        #     shapeOptions = drawShapeOptions(fillColor = "#ffba08", color = "#370617", clickable = FALSE)
-        #   ),
-        #   position = "topright",
-        #   polylineOptions = FALSE, circleOptions = FALSE,
-        #   circleMarkerOptions = FALSE, markerOptions = FALSE
-        # ) %>%
-        addResetMapButton()
+        addResetMapButton() %>%
+        # JS: listen for custom messages to start drawing tools
+        htmlwidgets::onRender(
+          sprintf("
+            function(el, x){
+              var map = this, id = el.id;
+              Shiny.addCustomMessageHandler('herb-draw', function(msg){
+                if(msg.id !== id) return;
+                var c = map._controlContainer;
+                function click(sel){ var b = c && c.querySelector(sel); if(b) b.click(); }
+                if(msg.type === 'polygon'){   click('.leaflet-draw-draw-polygon'); }
+                if(msg.type === 'rectangle'){ click('.leaflet-draw-draw-rectangle'); }
+              });
+            }
+          ")
+        )
     })
-
+    
     # Normalize input to a reactive sf
     sf_data <- reactive({
       if (shiny::is.reactive(metadata_sf)) metadata_sf() else metadata_sf
     })
-
-    # Whenever data changes, (re)draw markers only
+    
+    # Update markers when data changes
     observe({
       x <- sf_data()
       proxy <- leafletProxy("map", session = session) %>%
         clearGroup(group_name) %>%
         clearMarkers()
-
+      
       if (is.null(x) || nrow(x) == 0) return(invisible())
-
-      proxy <- proxy %>%
-        addMarkers(
-          data = x,
-          clusterOptions = markerClusterOptions(),
-          group = group_name,
-          layerId = ~gbifID
-        )
-
-      # Fit bounds to current data
-      bx <- sf::st_bbox(x)
-      if (all(is.finite(bx))) {
-        proxy %>% fitBounds(
-          lng1 = unname(bx["xmin"]),
-          lat1 = unname(bx["ymin"]),
-          lng2 = unname(bx["xmax"]),
-          lat2 = unname(bx["ymax"])
-        )
-      }
+      
+      proxy %>% addMarkers(
+        data = x,
+        clusterOptions = markerClusterOptions(),
+        group = group_name,
+        layerId = ~gbifID
+      )
     })
-
+    
     # Click handler
     click_id <- reactiveVal(NULL)
-    observeEvent(input$map_marker_click, {
-      click_id(input$map_marker_click$id)
-    })
-
-    list(click_id = click_id)
+    observeEvent(input$map_marker_click, { click_id(input$map_marker_click$id) })
+    
+    # Expose draw group name (for clearing from parent if desired)
+    list(
+      click_id   = click_id,
+      draw_group = draw_group
+    )
   })
 }

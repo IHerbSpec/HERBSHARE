@@ -11,11 +11,22 @@ select_by_ui <- function(id) {
     bslib::accordion_panel(
       title = "Geospatial",
       div(style = "height: 6px;"),
+      
+      # Spatial draw buttons
+      div(class = "d-flex gap-2 mb-2",
+          actionButton(ns("draw_poly"), "Draw polygon", icon = shiny::icon("draw-polygon"), class = "btn btn-info"),
+          actionButton(ns("draw_rectangle"), "Draw rectangle", icon = shiny::icon("square"), class = "btn btn-info"),
+          actionButton(ns("del_poly"), "Clear", icon = shiny::icon("eraser"), class = "btn btn-outline-secondary")
+      ),
+      
+      # Countries
       selectizeInput(
         ns("countryCode"), "Country code",
         choices = NULL, multiple = TRUE,
         options = list(placeholder = "Any country", closeAfterSelect = TRUE)
       ),
+      
+      # State/Province
       selectizeInput(
         ns("stateProvince"), "State/Province",
         choices = NULL, multiple = TRUE,
@@ -56,13 +67,13 @@ select_by_ui <- function(id) {
                 actionButton(
                   ns("apply_selection"),
                   "Select",
-                  icon  = shiny::icon("check-circle"),
+                  icon = shiny::icon("check-circle"),
                   class = "btn btn-primary btn-lg"
                 ),
                 actionButton(
                   ns("show_all"),
                   "Show all",
-                  icon  = shiny::icon("broom"),
+                  icon = shiny::icon("broom"),
                   class = "btn btn-outline-secondary"
                 )
             )
@@ -73,17 +84,17 @@ select_by_ui <- function(id) {
 }
 
 # Server 
-select_by_server <- function(id, metadata) {
+select_by_server <- function(id, metadata, geom_filter = NULL) {
   moduleServer(id, function(input, output, session) {
     
     # Normalize dataset to reactive data.table
     dt <- reactive({
-      base <- if(shiny::is.reactive(metadata)) metadata() else metadata
+      base <- if (shiny::is.reactive(metadata)) metadata() else metadata
       data.table::as.data.table(base)
     })
     
     # Helpers
-    u_  <- function(x) sort(unique(x[!is.na(x) & x != ""]))
+    u_ <- function(x) sort(unique(x[!is.na(x) & x != ""]))
     has <- function(nm) isTRUE(nm %in% names(dt()))
     
     # Initialize choices once
@@ -94,7 +105,7 @@ select_by_server <- function(id, metadata) {
       if(has("family")) updateSelectizeInput(session, "family", choices = u_(x$family), server = TRUE)
       if(has("genus")) updateSelectizeInput(session, "genus", choices = u_(x$genus), server = TRUE)
       if(has("species")) updateSelectizeInput(session, "species", choices = u_(x$species), server = TRUE)
-      if(has("institutionName")) updateSelectizeInput(session, "institutionName",choices = u_(x$institutionName), server = TRUE)
+      if(has("institutionName")) updateSelectizeInput(session, "institutionName", choices = u_(x$institutionName), server = TRUE)
     }, ignoreInit = FALSE)
     
     # Dependent choice updates
@@ -117,17 +128,34 @@ select_by_server <- function(id, metadata) {
       x <- dt()
       sub <- x
       if(has("family") && length(input$family)) sub <- sub[family %in% input$family]
-      if(has("genus")  && length(input$genus))  sub <- sub[genus  %in% input$genus]
+      if(has("genus") && length(input$genus)) sub <- sub[genus %in% input$genus]
       updateSelectizeInput(session, "species", choices = u_(sub$species), server = TRUE)
     }, ignoreInit = TRUE)
     
     # Filtering logic
     data <- reactive({
       x <- data.table::copy(dt())
+      
+      # Spatial filter
+      if (!is.null(geom_filter)) {
+        geom <- geom_filter()
+        if (!is.null(geom) && inherits(geom, "sfc") &&
+            has("decimalLongitude") && has("decimalLatitude")) {
+          
+          pts <- sf::st_as_sf(x, coords = c("decimalLongitude", "decimalLatitude"),
+                              crs = 4326, remove = FALSE)
+          sf::st_agr(pts) <- "constant"
+          
+          idx <- sf::st_intersects(pts, geom, sparse = TRUE)
+          keep <- lengths(idx) > 0L
+          x <- x[keep]
+        }
+      }
+      
       if(has("countryCode") && length(input$countryCode)) x <- x[countryCode %in% input$countryCode]
       if(has("stateProvince") && length(input$stateProvince)) x <- x[stateProvince %in% input$stateProvince]
       if(has("family") && length(input$family)) x <- x[family %in% input$family]
-      if(has("genus") && length(input$genus)) x <- x[genus  %in% input$genus]
+      if(has("genus") && length(input$genus)) x <- x[genus %in% input$genus]
       if(has("species") && length(input$species)) x <- x[species %in% input$species]
       if(has("institutionName") && length(input$institutionName)) x <- x[institutionName %in% input$institutionName]
       x
@@ -142,23 +170,23 @@ select_by_server <- function(id, metadata) {
     
     # Clear all filters when "Show all" is pressed
     observeEvent(input$show_all, {
-      
-      # Clear selections
       for (id in c("countryCode","stateProvince","family","genus","species","institutionName")) {
         if (!is.null(input[[id]])) updateSelectizeInput(session, id, selected = character())
       }
-      
       x <- dt()
-      if (has("stateProvince"))  updateSelectizeInput(session, "stateProvince",  choices = u_(x$stateProvince),  server = TRUE)
-      if (has("genus"))          updateSelectizeInput(session, "genus",          choices = u_(x$genus),          server = TRUE)
-      if (has("species"))        updateSelectizeInput(session, "species",        choices = u_(x$species),        server = TRUE)
-      
+      if (has("stateProvince")) updateSelectizeInput(session, "stateProvince", choices = u_(x$stateProvince), server = TRUE)
+      if (has("genus")) updateSelectizeInput(session, "genus", choices = u_(x$genus), server = TRUE)
+      if (has("species")) updateSelectizeInput(session, "species", choices = u_(x$species), server = TRUE)
     }, ignoreInit = TRUE)
     
-    # Expose button events so the parent can react
-    list(data = data,
-         apply = reactive(input$apply_selection),
-         show_all = reactive(input$show_all)
-         )
+    # Expose button events so it can react
+    list(
+      data = data,
+      apply = reactive(input$apply_selection),
+      show_all = reactive(input$show_all),
+      draw_poly = reactive(input$draw_poly),
+      draw_rect = reactive(input$draw_rectangle),
+      del_poly = reactive(input$del_poly)
+    )
   })
 }
