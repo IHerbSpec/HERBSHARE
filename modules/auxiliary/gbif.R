@@ -140,7 +140,7 @@ get_coords <- function(gbif_file, herbaria_location) {
 }
 
 # Get locations
-gbif_file <- get_locations(metadata_and_gbif, herbaria_location)
+gbif_file <- get_coords(metadata_and_gbif, herbaria_location)
 
 # Export file
 fwrite(gbif_file, "data/02-organized/metadata_and_gbif.csv")
