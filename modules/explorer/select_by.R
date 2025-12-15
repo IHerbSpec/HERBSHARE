@@ -12,13 +12,6 @@ select_by_ui <- function(id) {
       title = "Geospatial",
       div(style = "height: 6px;"),
       
-      # Spatial draw buttons
-      div(class = "d-flex gap-2 mb-2",
-          actionButton(ns("draw_poly"), "Draw polygon", icon = shiny::icon("draw-polygon"), class = "btn btn-info"),
-          actionButton(ns("draw_rectangle"), "Draw rectangle", icon = shiny::icon("square"), class = "btn btn-info"),
-          actionButton(ns("del_poly"), "Clear", icon = shiny::icon("eraser"), class = "btn btn-outline-secondary")
-      ),
-      
       # Countries
       selectizeInput(
         ns("countryCode"), "Country code",
@@ -64,18 +57,14 @@ select_by_ui <- function(id) {
             ),
             # Buttons (below, full width, stacked with a little gap)
             div(class = "d-grid gap-2",
-                actionButton(
-                  ns("apply_selection"),
-                  "Select",
-                  icon = shiny::icon("check-circle"),
-                  class = "btn btn-primary btn-lg"
-                ),
-                actionButton(
-                  ns("show_all"),
-                  "Show all",
-                  icon = shiny::icon("broom"),
-                  class = "btn btn-outline-secondary"
-                )
+                actionButton(ns("apply_selection"),
+                             "Select",
+                             icon = shiny::icon("check-circle"),
+                             class = "btn btn-primary btn-lg"),
+                actionButton(ns("show_all"),
+                             "Show all",
+                             icon = shiny::icon("broom"),
+                             class = "btn btn-outline-secondary")
             )
           )
         )
@@ -132,15 +121,25 @@ select_by_server <- function(id, metadata, geom_filter = NULL) {
       updateSelectizeInput(session, "species", choices = u_(sub$species), server = TRUE)
     }, ignoreInit = TRUE)
     
-    # Filtering logic
+    # Filtering logic: INCLUDES geometry filter for "Matching records"
     data <- reactive({
       x <- data.table::copy(dt())
       
-      # Spatial filter
+      # Apply attribute filters first
+      if(has("countryCode") && length(input$countryCode)) x <- x[countryCode %in% input$countryCode]
+      if(has("stateProvince") && length(input$stateProvince)) x <- x[stateProvince %in% input$stateProvince]
+      if(has("family") && length(input$family)) x <- x[family %in% input$family]
+      if(has("genus") && length(input$genus)) x <- x[genus %in% input$genus]
+      if(has("species") && length(input$species)) x <- x[species %in% input$species]
+      if(has("institutionName") && length(input$institutionName)) x <- x[institutionName %in% input$institutionName]
+      
+      # Apply spatial filter if geometry exists
       if (!is.null(geom_filter)) {
-        geom <- geom_filter()
-        if (!is.null(geom) && inherits(geom, "sfc") &&
-            has("decimalLongitude") && has("decimalLatitude")) {
+        geom <- if (shiny::is.reactive(geom_filter)) geom_filter() else geom_filter
+        
+        if (!is.null(geom) && length(geom) > 0 &&
+            has("decimalLongitude") && has("decimalLatitude") &&
+            nrow(x) > 0) {
           
           pts <- sf::st_as_sf(x, coords = c("decimalLongitude", "decimalLatitude"),
                               crs = 4326, remove = FALSE)
@@ -151,13 +150,6 @@ select_by_server <- function(id, metadata, geom_filter = NULL) {
           x <- x[keep]
         }
       }
-      
-      if(has("countryCode") && length(input$countryCode)) x <- x[countryCode %in% input$countryCode]
-      if(has("stateProvince") && length(input$stateProvince)) x <- x[stateProvince %in% input$stateProvince]
-      if(has("family") && length(input$family)) x <- x[family %in% input$family]
-      if(has("genus") && length(input$genus)) x <- x[genus %in% input$genus]
-      if(has("species") && length(input$species)) x <- x[species %in% input$species]
-      if(has("institutionName") && length(input$institutionName)) x <- x[institutionName %in% input$institutionName]
       x
     })
     
@@ -179,14 +171,9 @@ select_by_server <- function(id, metadata, geom_filter = NULL) {
       if (has("species")) updateSelectizeInput(session, "species", choices = u_(x$species), server = TRUE)
     }, ignoreInit = TRUE)
     
-    # Expose button events so it can react
-    list(
-      data = data,
-      apply = reactive(input$apply_selection),
-      show_all = reactive(input$show_all),
-      draw_poly = reactive(input$draw_poly),
-      draw_rect = reactive(input$draw_rectangle),
-      del_poly = reactive(input$del_poly)
-    )
+    # Expose button events (no longer exposing draw buttons)
+    list(data = data,
+         apply = reactive(input$apply_selection),
+         show_all = reactive(input$show_all))
   })
 }
