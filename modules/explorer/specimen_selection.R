@@ -137,7 +137,7 @@ specimen_selection_server <- function(id, click_id, metadata, spectra_compiled) 
           shiny::tags$img(
             src = url, alt = "Specimen image (thumbnail)",
             style = paste(
-              "max-width: 100%; max-height: 240px; object-fit: contain;",
+              "max-width: 200%; max-height: 480px; object-fit: contain;",
               "border: 1px solid #ddd; border-radius: 4px; padding: 2px;"
             )
           )
