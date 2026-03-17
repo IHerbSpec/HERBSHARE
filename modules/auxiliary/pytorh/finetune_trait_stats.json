@@ -1,0 +1,110 @@
+{
+    "LMA": {
+        "raw_min": 0.128977203,
+        "raw_max": 302.3725591,
+        "lambda": 0.09792566981188747,
+        "shift": 0.0,
+        "trans_mean": 5.160791484584216,
+        "trans_std": 0.7598654173461135,
+        "used_boxcox": true
+    },
+    "EWT": {
+        "raw_min": 3.0,
+        "raw_max": 597.319661399888,
+        "lambda": -0.08845734663496117,
+        "shift": 0.0,
+        "trans_mean": 3.956395239983288,
+        "trans_std": 0.3040742975390189,
+        "used_boxcox": true
+    },
+    "LDMC": {
+        "raw_min": 0.00329394387,
+        "raw_max": 0.913793103448276,
+        "lambda": 0.9269546025885583,
+        "shift": 0.0,
+        "trans_mean": -0.6582770702384376,
+        "trans_std": 0.1191540314573333,
+        "used_boxcox": true
+    },
+    "Car": {
+        "raw_min": 0.0,
+        "raw_max": 4802.0,
+        "lambda": 0.4628317083003074,
+        "shift": 1e-08,
+        "trans_mean": 56.53520631051041,
+        "trans_std": 14.681872607029579,
+        "used_boxcox": true
+    },
+    "Chla": {
+        "raw_min": 44.1458480601784,
+        "raw_max": 21809.9,
+        "lambda": 0.5175318686072189,
+        "shift": 0.0,
+        "trans_mean": 166.8797399614874,
+        "trans_std": 48.69720641364924,
+        "used_boxcox": true
+    },
+    "Chlb": {
+        "raw_min": 26.3056060510198,
+        "raw_max": 7419.0,
+        "lambda": 0.4442225720961793,
+        "shift": 0.0,
+        "trans_mean": 61.363715553242294,
+        "trans_std": 15.98117180556908,
+        "used_boxcox": true
+    },
+    "Chla+b": {
+        "raw_min": 12.4716964344529,
+        "raw_max": 28048.4,
+        "lambda": 0.3806635095062615,
+        "shift": 0.0,
+        "trans_mean": 72.18237819993935,
+        "trans_std": 18.088995655171676,
+        "used_boxcox": true
+    },
+    "Hemicellulose": {
+        "raw_min": 0.0232538741466885,
+        "raw_max": 0.464,
+        "lambda": -0.2632507714527957,
+        "shift": 0.0,
+        "trans_mean": -2.8919431995299134,
+        "trans_std": 0.8912924540402799,
+        "used_boxcox": true
+    },
+    "Cellulose": {
+        "raw_min": 0.0228,
+        "raw_max": 0.3954,
+        "lambda": -0.008433970441768647,
+        "shift": 0.0,
+        "trans_mean": -2.017620255616029,
+        "trans_std": 0.4033241553056625,
+        "used_boxcox": true
+    },
+    "Lignin": {
+        "raw_min": 0.00421630934,
+        "raw_max": 0.4383,
+        "lambda": 0.3743245987273194,
+        "shift": 0.0,
+        "trans_mean": -1.469398996096809,
+        "trans_std": 0.2982358707372239,
+        "used_boxcox": true
+    },
+    "N": {
+        "raw_min": 0.0025,
+        "raw_max": 0.07295,
+        "lambda": 0.16907164316069428,
+        "shift": 0.0,
+        "trans_mean": -2.7983270369003077,
+        "trans_std": 0.2160749321565698,
+        "used_boxcox": true
+    },
+    "C": {
+        "raw_min": 0.3331,
+        "raw_max": 0.6108,
+        "lambda": 1.8485398152849442,
+        "shift": 0.0,
+        "trans_mean": -0.4046146421826754,
+        "trans_std": 0.0156909790775181,
+        "used_boxcox": true
+    }
+}
