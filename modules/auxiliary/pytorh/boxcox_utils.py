@@ -50,7 +50,8 @@ def _apply_boxcox(x: float, lam: float, shift: float):
         return (np.power(xp, lam) - 1.0) / lam
     
 def _has_boxcox_params(st: dict) -> bool:
-    return all(k in st for k in ("lambda", "shift", "trans_min", "trans_max"))
+    """Check if dictionary has Box-Cox transformation parameters."""
+    return all(k in st for k in ("lambda", "shift", "trans_mean", "trans_std"))
     
 def _inv_boxcox_vec(y: np.ndarray, lam: float) -> np.ndarray:
     y = np.asarray(y, dtype = np.float64)

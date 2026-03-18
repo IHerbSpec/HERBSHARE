@@ -10,9 +10,7 @@ import pywt
 import torch
 from torch.utils.data import Dataset
 
-import os
-SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, SCRIPT_DIR)
+sys.path.append('/media/guzman/antonio/Github/TEST/DELTAS/utils')
 from boxcox_utils import _has_boxcox_params, _inv_boxcox_vec, _apply_boxcox
 
 # %% Dataset definition
@@ -143,17 +141,22 @@ class trait_scalogram_dataset(Dataset):
                     trait_mask.append(False)
                     continue
 
+                # Step 1: Box-Cox transformation
                 lam = float(st["lambda"])
                 shift = float(st["shift"])
-                tmin = float(st["trans_min"])
-                tmax = float(st["trans_max"])
+                v_bc = _apply_boxcox(float(val), lam, shift)
 
-                v_bc = _apply_boxcox(float(val), lam, shift)  # Box–Cox(x + shift)
-                denom = (tmax - tmin) if not np.isclose(tmax, tmin) else 1.0
-                v01 = (v_bc - tmin) / denom
-                v01 = float(np.clip(v01, 0.0, 1.0))
+                # Step 2: Standardization (mean=0, std=1)
+                trans_mean = float(st["trans_mean"])
+                trans_std = float(st["trans_std"])
+                v_standardized = (v_bc - trans_mean) / trans_std
 
-                v_scaled = v01 * 100.0
+                # Step 3: Soft compression using tanh
+                # Maps ±∞ to [-1, 1] smoothly, preserving extreme values
+                v_compressed = np.tanh(v_standardized / 3.0)
+
+                # Step 4: Scale to [0, 100]
+                v_scaled = (v_compressed + 1.0) / 2.0 * 100.0
                 v_scaled = float(max(v_scaled, 1e-5))
 
                 values.append(v_scaled)
@@ -244,18 +247,24 @@ def denormalize_predictions(pred_np: np.ndarray,
         y = pred_np[:, j].astype(np.float64)
 
         if _has_boxcox_params(st):
-            
-            # Box-cox features
+
+            # Reverse Step 4: Map [0, 100] back to [-1, 1]
+            y_clipped = np.clip(y, 0.0, 100.0)
+            y_compressed = (y_clipped / 100.0) * 2.0 - 1.0
+
+            # Reverse Step 3: Apply arctanh (inverse of tanh)
+            # Clip to avoid arctanh domain issues (must be in (-1, 1))
+            y_compressed = np.clip(y_compressed, -0.999999, 0.999999)
+            y_standardized = np.arctanh(y_compressed) * 3.0
+
+            # Reverse Step 2: Unstandardize (multiply by std, add mean)
+            trans_mean = float(st["trans_mean"])
+            trans_std = float(st["trans_std"])
+            y_trans = y_standardized * trans_std + trans_mean
+
+            # Reverse Step 1: Invert Box-Cox, then remove shift
             lam = float(st["lambda"])
             shift = float(st["shift"])
-            tmin = float(st["trans_min"])
-            tmax = float(st["trans_max"])
-
-            # Clamp to [0,100] and map back to transformed domain
-            y01 = np.clip(y / 100.0, 0.0, 1.0)
-            y_trans = y01 * (tmax - tmin) + tmin
-
-            # Invert Box–Cox, then remove shift
             xp = _inv_boxcox_vec(y_trans, lam)  # xp = x + shift
             x_orig = xp - shift
             out[col] = x_orig.astype(np.float64)
