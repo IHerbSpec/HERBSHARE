@@ -8,12 +8,13 @@ predictions_output_ui <- function(id) {
   tagList(div(style = "margin-bottom: 1rem;",
               h4("Trait Predictions"),
               uiOutput(ns("status"))),
-    
-    uiOutput(ns("download_section")),
 
     div(style = "margin-top: 1rem;",
-        DT::dataTableOutput(ns("predictions_table")))
-    
+        DT::dataTableOutput(ns("predictions_table"))),
+
+    div(style = "margin-top: 1rem;",
+        uiOutput(ns("download_section")))
+
   )
 }
 

@@ -32,13 +32,18 @@ engine_panel_ui <- function(id) {
     # Predictions output and visualization
     div(class = "p-3",
         style = "height: 100%; overflow-y: auto;",
-        
+
         navset_card_tab(id = ns("output_tabs"),
+                        nav_panel(title = "Spectra",
+                                  icon = icon("chart-line"),
+                                  spectra_viewer_ui(ns("spectra_viewer"))
+                                  ),
+
                         nav_panel(title = "Predictions Table",
                                   icon = icon("table"),
                                   predictions_output_ui(ns("predictions"))
                                   ),
-                        
+
                         nav_panel(title = "Visualization",
                                   icon = icon("chart-bar"),
                                   trait_visualization_ui(ns("visualization"))
@@ -56,13 +61,17 @@ engine_panel_server <- function(id) {
     uploaded_data <- upload_spectra_server("upload_spectra")
 
     # Trait selector module
-    selected_traits <- trait_selector_server("trait_selector")
+    trait_selector <- trait_selector_server("trait_selector")
+
+    # Spectra viewer module
+    spectra_viewer_server("spectra_viewer",
+                          spectra_data = uploaded_data)
 
     # Predictions output module
     predictions_result <- predictions_output_server("predictions",
-                                                    spectra_data = uploaded_data$data,
-                                                    selected_traits = selected_traits,
-                                                    trigger_predict = uploaded_data$predict_trigger)
+                                                    spectra_data = uploaded_data,
+                                                    selected_traits = trait_selector$traits,
+                                                    trigger_predict = trait_selector$predict_trigger)
 
     # Visualization module
     trait_visualization_server("visualization",

@@ -25,9 +25,8 @@ predict_traits_python <- function(reflectance_path,
     stop("Reflectance file not found: ", reflectance_path)
   }
 
-  # Get project root
-  script_dir <- system.file(package = "base")
-  project_root <- normalizePath(file.path(dirname(sys.frame(1)$ofile), "../.."))
+  # Get project root (use working directory for Shiny apps)
+  project_root <- getwd()
 
   # Python script path
   python_script <- file.path(
@@ -44,17 +43,18 @@ predict_traits_python <- function(reflectance_path,
 
   # Build command
   if (is.null(python_path)) {
-    python_cmd <- "python3"
+    # Default to Windows Python installation
+    python_cmd <- "C:/Users/jog4076/AppData/Local/Python/pythoncore-3.14-64/python.exe"
   } else {
     python_cmd <- python_path
   }
 
   # Prepare arguments
   args <- c(
-    python_script,
+    shQuote(python_script),
     "--input", shQuote(reflectance_path),
     "--output", shQuote(temp_output),
-    "--traits", paste(target_traits, collapse = ",")
+    "--traits", shQuote(paste(target_traits, collapse = ","))
   )
 
   if (use_uncertainty) {
@@ -65,10 +65,20 @@ predict_traits_python <- function(reflectance_path,
   cmd <- paste(c(python_cmd, args), collapse = " ")
 
   message("Running prediction model...")
-  exit_code <- system(cmd, intern = FALSE)
+  message("Command: ", cmd)
+
+  # Capture both stdout and stderr
+  result <- system(cmd, intern = TRUE, ignore.stderr = FALSE)
+  exit_code <- attr(result, "status")
+
+  if (is.null(exit_code)) {
+    exit_code <- 0  # Success if no status attribute
+  }
 
   if (exit_code != 0) {
-    stop("Python prediction script failed with exit code: ", exit_code)
+    error_msg <- paste(result, collapse = "\n")
+    stop("Python prediction script failed with exit code: ", exit_code,
+         "\nError output: ", error_msg)
   }
 
   # Check if output file was created

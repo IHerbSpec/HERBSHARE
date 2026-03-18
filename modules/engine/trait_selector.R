@@ -1,20 +1,20 @@
 ################################################################################
 ### Trait selector module
 
-# Available traits
+# Available traits (display name = value returned)
 AVAILABLE_TRAITS <- c(
-  "LMA" = "Leaf Mass per Area (LMA)",
-  "EWT" = "Equivalent Water Thickness (EWT)",
-  "LDMC" = "Leaf Dry Matter Content (LDMC)",
-  "Car" = "Carotenoids (Car)",
-  "Chla" = "Chlorophyll a (Chla)",
-  "Chlb" = "Chlorophyll b (Chlb)",
-  "Chla+b" = "Chlorophyll a+b (Chla+b)",
+  "Leaf Mass per Area (LMA)" = "LMA",
+  "Equivalent Water Thickness (EWT)" = "EWT",
+  "Leaf Dry Matter Content (LDMC)" = "LDMC",
+  "Carotenoids (Car)" = "Car",
+  "Chlorophyll a (Chla)" = "Chla",
+  "Chlorophyll b (Chlb)" = "Chlb",
+  "Chlorophyll a+b (Chla+b)" = "Chla+b",
   "Hemicellulose" = "Hemicellulose",
   "Cellulose" = "Cellulose",
   "Lignin" = "Lignin",
-  "N" = "Nitrogen (N)",
-  "C" = "Carbon (C)"
+  "Nitrogen (N)" = "N",
+  "Carbon (C)" = "C"
 )
 
 # UI
@@ -43,8 +43,15 @@ trait_selector_ui <- function(id) {
       ns("traits"),
       label = NULL,
       choices = AVAILABLE_TRAITS,
-      selected = names(AVAILABLE_TRAITS)
-    )
+      selected = unname(AVAILABLE_TRAITS)
+    ),
+
+    actionButton(ns("predict_btn"),
+                 "Predict traits",
+                 icon = icon("brain"),
+                 class = "btn-primary btn-block",
+                 style = "margin-top: 1rem;"
+                 )
   )
 }
 
@@ -52,11 +59,14 @@ trait_selector_ui <- function(id) {
 trait_selector_server <- function(id) {
   moduleServer(id, function(input, output, session) {
 
+    # Trigger for prediction
+    predict_trigger <- reactiveVal(0)
+
     # Select all traits
     observeEvent(input$select_all, {
       updateCheckboxGroupInput(session,
                                "traits",
-                               selected = names(AVAILABLE_TRAITS)
+                               selected = unname(AVAILABLE_TRAITS)
                                )
       })
 
@@ -68,8 +78,16 @@ trait_selector_server <- function(id) {
                                )
       })
 
-    # Return selected traits
-    return(reactive(input$traits))
-    
+    # Predict button
+    observeEvent(input$predict_btn, {
+      predict_trigger(predict_trigger() + 1)
+    })
+
+    # Return selected traits and trigger
+    return(list(traits = reactive(input$traits),
+                predict_trigger = predict_trigger
+                )
+           )
+
   })
 }

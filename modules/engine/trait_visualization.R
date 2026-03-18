@@ -6,13 +6,13 @@ trait_visualization_ui <- function(id) {
   ns <- NS(id)
 
   tagList(div(style = "margin-bottom: 1rem;",
-              h4("Trait Distribution"),
-              
-              div(style = "display: flex; gap: 0.5rem; margin-top: 0.5rem;",
-                  uiOutput(ns("download_section"))
-                  )),
-          
-          uiOutput(ns("histogram_grid"))
+              h4("Trait Distribution")),
+
+          uiOutput(ns("histogram_grid")),
+
+          div(style = "margin-top: 1rem;",
+              uiOutput(ns("download_section"))
+              )
   )
 }
 
@@ -45,17 +45,10 @@ trait_visualization_server <- function(id, predictions_data) {
     output$download_section <- renderUI({
       req(has_predictions())
 
-      tagList(
-        downloadButton(
-          ns("download_plots_png"),
-          "Download plots (PNG)",
-          class = "btn-sm btn-outline-primary"
-        ),
-        downloadButton(
-          ns("download_plots_pdf"),
-          "Download plots (PDF)",
-          class = "btn-sm btn-outline-primary"
-        )
+      downloadButton(
+        ns("download_plots_png"),
+        "Download plots (PNG)",
+        class = "btn-success"
       )
     })
 
@@ -123,40 +116,6 @@ trait_visualization_server <- function(id, predictions_data) {
 
         # Save as PNG
         png(file, width = 1200, height = 400 * n_rows, res = 100)
-        par(mfrow = c(n_rows, n_cols), mar = c(4, 4, 2, 1))
-
-        for (i in seq_along(plots)) {
-          plots[[i]]()
-        }
-
-        dev.off()
-      }
-    )
-
-    # Download PDF
-    output$download_plots_pdf <- downloadHandler(
-      filename = function() {
-        paste0("herbsphere_trait_histograms_", format(Sys.time(), "%Y%m%d_%H%M%S"), ".pdf")
-      },
-      
-      content = function(file) {
-        req(has_predictions())
-
-        pred_df <- predictions_data()
-        traits <- trait_columns()
-
-        # Create static plots for export
-        plots <- lapply(traits, function(trait) {
-          create_static_histogram(pred_df, trait)
-        })
-
-        # Arrange in grid
-        n_plots <- length(plots)
-        n_cols <- min(3, n_plots)
-        n_rows <- ceiling(n_plots / n_cols)
-
-        # Save as PDF
-        pdf(file, width = 12, height = 4 * n_rows)
         par(mfrow = c(n_rows, n_cols), mar = c(4, 4, 2, 1))
 
         for (i in seq_along(plots)) {

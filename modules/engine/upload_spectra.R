@@ -22,14 +22,7 @@ upload_spectra_ui <- function(id) {
                )
              ),
 
-    uiOutput(ns("file_status")),
-
-    actionButton(ns("predict_btn"),
-                 "Predict traits",
-                 icon = icon("brain"),
-                 class = "btn-primary btn-block",
-                 style = "margin-top: 1rem;"
-                 )
+    uiOutput(ns("file_status"))
     )
 }
 
@@ -39,9 +32,6 @@ upload_spectra_server <- function(id) {
 
     # Store uploaded data
     uploaded_data <- reactiveVal(NULL)
-
-    # Trigger for prediction
-    predict_trigger <- reactiveVal(0)
 
     # Process uploaded file
     observeEvent(input$file_upload, {
@@ -88,14 +78,14 @@ upload_spectra_server <- function(id) {
     # Display file status
     output$file_status <- renderUI({
       if (is.null(uploaded_data())) {
-        
+
         tags$div(class = "alert alert-info",
                  style = "font-size: 0.9em;",
                  icon("info-circle"),
                  "No file uploaded")
-        
+
       } else {
-        
+
         df <- uploaded_data()
         tags$div(class = "alert alert-success",
                  style = "font-size: 0.9em;",
@@ -104,16 +94,7 @@ upload_spectra_server <- function(id) {
       }
     })
 
-    # Predict button
-    observeEvent(input$predict_btn, {
-      req(uploaded_data())
-      predict_trigger(predict_trigger() + 1)
-    })
-
-    # Return data and trigger
-    return(list(data = uploaded_data,
-                predict_trigger = predict_trigger
-                )
-           )
+    # Return uploaded data
+    return(uploaded_data)
   })
 }
