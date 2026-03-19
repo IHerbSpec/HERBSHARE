@@ -30,6 +30,7 @@
 
 library(shiny)
 library(shinythemes)
+library(shinycssloaders)
 library(bslib)
 library(bsicons)
 library(leaflet)
@@ -94,22 +95,17 @@ spectra_compiled <- data.table::fread("data/02-organized/spectra_compiled.csv", 
 # # Define UI for application
 ui <- page_navbar(
   
-  #theme = bs_theme(version = 5),
   theme = bs_theme(bootswatch = "yeti",
-                   #base_font = font_google("Inter"),
-                   navbar_bg = "black"),
-  
-  # title = tags$span(
-  #   # tags$img(
-  #   #   src = "logo.png",
-  #   #   width = "46px",
-  #   #   height = "auto",
-  #   #   class = "me-3",
-  #   #   alt = "Shiny hex logo"
-  #   # ),
-  #   "HERBSPHERE"
-  # ),
-  
+                   navbar_bg = "black",
+                   bg = "#ffffff",
+                   fg = "#03120E",
+                   primary = "#26413C",
+                   secondary = "#3E505B",
+                   success = "#8AB0AB",
+                   info = "#8AB0AB",
+                   warning = "yellow",
+                   danger = "red"),
+
   title = tags$span("HERBSPHERE"),
   lang = "en",
   
