@@ -8,9 +8,9 @@ upload_spectra_ui <- function(id) {
   tagList(
     fileInput(ns("file_upload"),
               "Upload CSV file",
-              accept = c(".csv", "text/csv", "text/comma-separated-values"),
+              accept = c(".csv"),
               buttonLabel = "Browse...",
-              placeholder = "No file selected"
+              placeholder = "No file selected",
               ),
 
     tags$div(style = "font-size: 0.9em; color: #666; margin-bottom: 1rem;",

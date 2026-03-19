@@ -8,16 +8,12 @@ trait_visualization_ui <- function(id) {
   tagList(div(style = "margin-bottom: 1rem;",
               h4("Trait Distribution")),
 
-          uiOutput(ns("histogram_grid")),
-
-          div(style = "margin-top: 1rem;",
-              uiOutput(ns("download_section"))
-              )
+          uiOutput(ns("histogram_grid"))
   )
 }
 
 # Server
-trait_visualization_server <- function(id, predictions_data) {
+trait_visualization_server <- function(id, predictions_data, primary_color = "#26413C") {
   moduleServer(id, function(input, output, session) {
 
     ns <- session$ns
@@ -29,7 +25,7 @@ trait_visualization_server <- function(id, predictions_data) {
 
     # Get trait columns (exclude rowID)
     trait_columns <- reactive({
-      
+
       req(has_predictions())
       pred_df <- predictions_data()
       cols <- names(pred_df)
@@ -38,19 +34,8 @@ trait_visualization_server <- function(id, predictions_data) {
       trait_cols <- cols[cols != "rowID" &
                          !grepl("_q0025$|_q0975$|_uncertainty$", cols)]
       trait_cols
-      
+
       })
-
-    # Download section
-    output$download_section <- renderUI({
-      req(has_predictions())
-
-      downloadButton(
-        ns("download_plots_png"),
-        "Download plots (PNG)",
-        class = "btn-success"
-      )
-    })
 
     # Generate histogram grid
     output$histogram_grid <- renderUI({
@@ -88,48 +73,16 @@ trait_visualization_server <- function(id, predictions_data) {
 
       lapply(traits, function(trait) {
         output[[paste0("hist_", trait)]] <- plotly::renderPlotly({
-          create_trait_histogram(pred_df, trait)
+          create_trait_histogram(pred_df, trait, primary_color)
         })
       })
     })
 
-    # Download PNG
-    output$download_plots_png <- downloadHandler(
-      filename = function() {
-        paste0("herbsphere_trait_histograms_", format(Sys.time(), "%Y%m%d_%H%M%S"), ".png")
-      },
-      content = function(file) {
-        req(has_predictions())
-
-        pred_df <- predictions_data()
-        traits <- trait_columns()
-
-        # Create static plots for export
-        plots <- lapply(traits, function(trait) {
-          create_static_histogram(pred_df, trait)
-        })
-
-        # Arrange in grid
-        n_plots <- length(plots)
-        n_cols <- min(3, n_plots)
-        n_rows <- ceiling(n_plots / n_cols)
-
-        # Save as PNG
-        png(file, width = 1200, height = 400 * n_rows, res = 100)
-        par(mfrow = c(n_rows, n_cols), mar = c(4, 4, 2, 1))
-
-        for (i in seq_along(plots)) {
-          plots[[i]]()
-        }
-
-        dev.off()
-      }
-    )
   })
 }
 
 # Helper function to create interactive histogram
-create_trait_histogram <- function(data, trait_name) {
+create_trait_histogram <- function(data, trait_name, primary_color = "#26413C") {
 
   # Get values
   values <- data[[trait_name]]
@@ -152,8 +105,8 @@ create_trait_histogram <- function(data, trait_name) {
     x = values,
     type = "histogram",
     marker = list(
-      color = "#3498db",
-      line = list(color = "#2c3e50", width = 1)
+      color = primary_color,
+      line = list(color = "white", width = 1)
     ),
     hovertemplate = paste0(
       "Range: %{x}<br>",
@@ -162,17 +115,26 @@ create_trait_histogram <- function(data, trait_name) {
     )
   ) %>%
     plotly::layout(
-      title = list(
-        text = paste0("<b>", trait_info$label, "</b>"),
-        font = list(size = 14)
-      ),
+      # title = list(
+      #   text = paste0("<b>", trait_info$label, "</b>"),
+      #   font = list(size = 14)
+      # ),
       xaxis = list(
         title = trait_info$unit,
-        showgrid = TRUE
+        showgrid = FALSE,
+        linecolor = "black",
+        linewidth = 0.5,
+        mirror = T,
+        ticks = "outside"
       ),
       yaxis = list(
         title = "Count",
-        showgrid = TRUE
+        showgrid = FALSE,
+        zeroline = TRUE,
+        linecolor = "black",
+        linewidth = 0.5,
+        mirror = T,
+        ticks = "outside"
       ),
       shapes = list(
         # Mean line
@@ -184,7 +146,7 @@ create_trait_histogram <- function(data, trait_name) {
           line = list(
             color = "#e74c3c",
             width = 2,
-            dash = "dash"
+            dash = "dotted"
           )
         )
       ),
@@ -203,64 +165,16 @@ create_trait_histogram <- function(data, trait_name) {
           yanchor = "top",
           font = list(size = 10),
           bgcolor = "rgba(255, 255, 255, 0.8)",
-          bordercolor = "#cccccc",
+          bordercolor = NULL,
           borderwidth = 1
         )
       ),
       hovermode = "closest",
-      margin = list(t = 40, b = 40, l = 50, r = 10)
+      margin = list(l = 60, r = 10, b = 50, t = 40, pad = 4)
     ) %>%
     plotly::config(displayModeBar = TRUE, displaylogo = FALSE)
 
   return(p)
-}
-
-# Helper function to create static histogram for export
-create_static_histogram <- function(data, trait_name) {
-
-  function() {
-    values <- data[[trait_name]]
-    values <- values[is.finite(values)]
-
-    if (length(values) == 0) {
-      plot.new()
-      text(0.5, 0.5, "No data", cex = 1.5)
-      return(invisible())
-    }
-
-    # Get trait info
-    trait_info <- get_trait_info(trait_name)
-
-    # Calculate statistics
-    mean_val <- mean(values, na.rm = TRUE)
-    median_val <- median(values, na.rm = TRUE)
-    sd_val <- sd(values, na.rm = TRUE)
-
-    # Create histogram
-    hist(
-      values,
-      main = trait_info$label,
-      xlab = trait_info$unit,
-      ylab = "Count",
-      col = "#3498db",
-      border = "#2c3e50",
-      las = 1
-    )
-
-    # Add mean line
-    abline(v = mean_val, col = "#e74c3c", lwd = 2, lty = 2)
-
-    # Add statistics
-    legend(
-      "topright",
-      legend = sprintf(
-        "Mean: %.2f\nMedian: %.2f\nSD: %.2f\nn: %d",
-        mean_val, median_val, sd_val, length(values)
-      ),
-      bty = "n",
-      cex = 0.8
-    )
-  }
 }
 
 # Helper function to get trait information

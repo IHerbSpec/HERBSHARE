@@ -91,20 +91,32 @@ spectra_compiled <- data.table::fread("data/02-organized/spectra_compiled.csv", 
 ################################################################################
 # App
 
+# Define theme
+app_theme <- bs_theme(bootswatch = "yeti",
+                      navbar_bg = "black",
+                      bg = "#ffffff",
+                      fg = "#03120E",
+                      primary = "#26413C",
+                      secondary = "#26413C",
+                      success = "#26413C",
+                      info = "#26413C",
+                      warning = "yellow",
+                      danger = "red")
+
+# Extract primary color from theme
+theme_colors <- bs_get_variables(app_theme, c("primary"))
+primary_color <- theme_colors["primary"]
+
 # ------------------------------------------------------------------------------
 # # Define UI for application
 ui <- page_navbar(
-  
-  theme = bs_theme(bootswatch = "yeti",
-                   navbar_bg = "black",
-                   bg = "#ffffff",
-                   fg = "#03120E",
-                   primary = "#26413C",
-                   secondary = "#3E505B",
-                   success = "#8AB0AB",
-                   info = "#8AB0AB",
-                   warning = "yellow",
-                   danger = "red"),
+
+  theme = app_theme,
+
+  # Custom CSS for button colors
+  tags$head(
+    tags$link(rel = "stylesheet", type = "text/css", href = "styles.css")
+  ),
 
   title = tags$span("HERBSPHERE"),
   lang = "en",
@@ -151,7 +163,7 @@ server <- function(input, output, session) {
                         spectra_compiled = spectra_compiled)
 
   # Engine
-  engine_panel_server("engine")
+  engine_panel_server("engine", primary_color = primary_color)
 
 }
 

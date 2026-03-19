@@ -89,17 +89,31 @@ specimen_selection_server <- function(id, click_id, metadata, spectra_compiled) 
       
       ymax <- suppressWarnings(max(spectra_long$reflectance, na.rm = TRUE))
       yaxis_opts <- if (is.finite(ymax) && ymax <= 1) {
-        list(title = "Reflectance", range = c(0, 1))
+        list(title = "Reflectance",
+             range = c(0, 1),
+             showgrid = TRUE,
+             zeroline = FALSE,
+             linecolor = "grey30",
+             linewidth = 0.5,
+             ticks = "outside",
+             mirror = T)
       } else {
-        list(title = "Reflectance", autorange = TRUE)
+        list(title = "Reflectance",
+             autorange = TRUE,
+             showgrid = TRUE,
+             zeroline = FALSE,
+             linecolor = "grey30",
+             linewidth = 0.5,
+             ticks = "outside",
+             mirror = T)
       }
-      
+
       plotly::plot_ly(data = spectra_long,
                       x = ~wavelength,
                       y = ~reflectance,
                       split = ~filename,
                       color = ~bg, colors = c("black", "grey30"),
-                      linetype = ~ttc, 
+                      linetype = ~ttc,
                       linetypes = c("solid", "dot"),
                       type = "scatter",
                       mode = "lines",
@@ -109,11 +123,18 @@ specimen_selection_server <- function(id, click_id, metadata, spectra_compiled) 
                                      ),
                       hoverinfo = "text+x+y") %>%
         plotly::layout(showlegend = FALSE,
-                       xaxis = list(title = 'Wavelength (nm)'),
+                       xaxis = list(title = 'Wavelength (nm)',
+                                    showgrid = TRUE,
+                                    linecolor = "grey30",
+                                    linewidth = 0.5,
+                                    mirror = T,
+                                    ticks = "outside"),
                        yaxis = yaxis_opts,
+                       hovermode = "closest",
                        autosize = TRUE,
-                       margin = list(l = 0, r = 0, b = 0, t = 0, pad = 0)
-                       )
+                       margin = list(l = 60, r = 10, b = 50, t = 40, pad = 4)
+                       ) %>%
+        plotly::config(displayModeBar = TRUE, displaylogo = FALSE)
     })
     
     # Image

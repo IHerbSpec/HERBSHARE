@@ -1,0 +1,93 @@
+/* Button color customization - all buttons use #26413C */
+
+/* Primary buttons */
+.btn-primary {
+  background-color: #26413C !important;
+  border-color: #26413C !important;
+  color: #ffffff !important;
+}
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active {
+  background-color: #1d3129 !important;
+  border-color: #1d3129 !important;
+  color: #ffffff !important;
+}
+
+/* Success buttons (downloads) */
+.btn-success {
+  background-color: #26413C !important;
+  border-color: #26413C !important;
+  color: #ffffff !important;
+}
+
+.btn-success:hover,
+.btn-success:focus,
+.btn-success:active {
+  background-color: #1d3129 !important;
+  border-color: #1d3129 !important;
+  color: #ffffff !important;
+}
+
+/* Info buttons (map tools) */
+.btn-info {
+  background-color: #26413C !important;
+  border-color: #26413C !important;
+  color: #ffffff !important;
+}
+
+.btn-info:hover,
+.btn-info:focus,
+.btn-info:active {
+  background-color: #1d3129 !important;
+  border-color: #1d3129 !important;
+  color: #ffffff !important;
+}
+
+/* Outline buttons */
+.btn-outline-secondary {
+  color: #26413C !important;
+  border-color: #26413C !important;
+  background-color: transparent !important;
+}
+
+.btn-outline-secondary:hover,
+.btn-outline-secondary:focus,
+.btn-outline-secondary:active {
+  background-color: #26413C !important;
+  border-color: #26413C !important;
+  color: #ffffff !important;
+}
+
+/* Download buttons specifically */
+.shiny-download-link,
+a.btn.btn-success,
+button.btn.btn-success {
+  background-color: #26413C !important;
+  border-color: #26413C !important;
+  color: #ffffff !important;
+}
+
+.shiny-download-link:hover,
+a.btn.btn-success:hover,
+button.btn.btn-success:hover {
+  background-color: #1d3129 !important;
+  border-color: #1d3129 !important;
+  color: #ffffff !important;
+}
+
+/* Action buttons */
+.action-button,
+button.btn {
+  background-color: #26413C !important;
+  border-color: #26413C !important;
+  color: #ffffff !important;
+}
+
+.action-button:hover,
+button.btn:hover {
+  background-color: #1d3129 !important;
+  border-color: #1d3129 !important;
+  color: #ffffff !important;
+}

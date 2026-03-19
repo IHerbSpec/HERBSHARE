@@ -54,7 +54,7 @@ engine_panel_ui <- function(id) {
 }
 
 # Server
-engine_panel_server <- function(id) {
+engine_panel_server <- function(id, primary_color = "#26413C") {
   moduleServer(id, function(input, output, session) {
 
     # Upload spectra module
@@ -75,7 +75,8 @@ engine_panel_server <- function(id) {
 
     # Visualization module
     trait_visualization_server("visualization",
-                               predictions_data = predictions_result)
+                               predictions_data = predictions_result,
+                               primary_color = primary_color)
 
   })
 }

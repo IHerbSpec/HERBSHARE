@@ -101,7 +101,7 @@ predictions_output_server <- function(id, spectra_data, selected_traits, trigger
                downloadButton(
                  ns("download_csv"),
                  "Download predictions (CSV)",
-                 class = "btn-success")
+                 class = "btn-primary")
                )
     })
     

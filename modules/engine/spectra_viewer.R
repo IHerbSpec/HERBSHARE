@@ -74,9 +74,23 @@ spectra_viewer_server <- function(id, spectra_data) {
       # Determine y-axis range
       ymax <- suppressWarnings(max(spectra_long$reflectance, na.rm = TRUE))
       yaxis_opts <- if (is.finite(ymax) && ymax <= 1) {
-        list(title = "Reflectance", range = c(0, 1))
+        list(title = "Reflectance",
+             range = c(0, 1),
+             showgrid = FALSE,
+             zeroline = FALSE,
+             linecolor = "black",
+             linewidth = 0.5,
+             ticks="outside",
+             mirror = T)
       } else {
-        list(title = "Reflectance (%)", autorange = TRUE)
+        list(title = "Reflectance",
+             autorange = TRUE,
+             showgrid = FALSE,
+             zeroline = FALSE,
+             linecolor = "black",
+             linewidth = 0.5,
+             ticks="outside",
+             mirror = T)
       }
 
       # Create plot
@@ -98,7 +112,7 @@ spectra_viewer_server <- function(id, spectra_data) {
         )
       ) %>%
         plotly::layout(
-          showlegend = TRUE,
+          showlegend = FALSE,
           legend = list(
             orientation = "v",
             yanchor = "top",
@@ -108,14 +122,18 @@ spectra_viewer_server <- function(id, spectra_data) {
           ),
           xaxis = list(
             title = "Wavelength (nm)",
-            showgrid = TRUE,
-            gridcolor = "#e0e0e0"
+            showgrid = FALSE,
+            linecolor = "black",
+            linewidth = 0.5,
+            mirror = T,
+            ticks="outside"
           ),
           yaxis = yaxis_opts,
           hovermode = "closest",
-          margin = list(l = 60, r = 10, b = 50, t = 10, pad = 4)
+          margin = list(l = 60, r = 10, b = 50, t = 40, pad = 4)
         ) %>%
-        plotly::config(displayModeBar = TRUE, displaylogo = FALSE)
+        plotly::config(displayModeBar = TRUE, 
+                       displaylogo = FALSE)
     })
 
   })
