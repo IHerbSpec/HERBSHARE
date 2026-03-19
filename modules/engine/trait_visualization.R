@@ -146,7 +146,7 @@ create_trait_histogram <- function(data, trait_name, primary_color = "#26413C") 
           line = list(
             color = "#e74c3c",
             width = 2,
-            dash = "dotted"
+            dash = "dot"
           )
         )
       ),
