@@ -183,51 +183,51 @@ get_trait_info <- function(trait_name) {
   trait_labels <- list(
     "LMA" = list(
       label = "Leaf Mass per Area (LMA)",
-      unit = "g/m²"
+      unit = "LMA (g/m²)"
     ),
     "EWT" = list(
       label = "Equivalent Water Thickness (EWT)",
-      unit = "g/m²"
+      unit = "EWT (g/m²)"
     ),
     "LDMC" = list(
       label = "Leaf Dry Matter Content (LDMC)",
-      unit = "fraction"
+      unit = "LDMC (g/g)"
     ),
     "Car" = list(
       label = "Carotenoids (Car)",
-      unit = "μg/cm²"
+      unit = "Car (μg/g)"
     ),
     "Chla" = list(
       label = "Chlorophyll a (Chla)",
-      unit = "μg/cm²"
+      unit = "Chla (μg/g)"
     ),
     "Chlb" = list(
       label = "Chlorophyll b (Chlb)",
-      unit = "μg/cm²"
+      unit = "Chlb (μg/g)"
     ),
     "Chla+b" = list(
       label = "Total Chlorophyll (Chla+b)",
-      unit = "μg/cm²"
+      unit = "Chla+b (μg/g)"
     ),
     "Hemicellulose" = list(
       label = "Hemicellulose",
-      unit = "fraction"
+      unit = "Hemicellulose (g/g)"
     ),
     "Cellulose" = list(
       label = "Cellulose",
-      unit = "fraction"
+      unit = "Cellulose (g/g)"
     ),
     "Lignin" = list(
       label = "Lignin",
-      unit = "fraction"
+      unit = "Lignin (g/g)"
     ),
     "N" = list(
       label = "Nitrogen (N)",
-      unit = "fraction"
+      unit = "Nitrogen (g/g)"
     ),
     "C" = list(
       label = "Carbon (C)",
-      unit = "fraction"
+      unit = "Carbon (g/g)"
     )
   )
 

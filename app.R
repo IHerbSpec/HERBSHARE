@@ -80,7 +80,7 @@ source("modules/engine/trait_selector.R")
 source("modules/engine/spectra_viewer.R")
 source("modules/engine/predictions_output.R")
 source("modules/engine/trait_visualization.R")
-source("modules/auxiliary/predict_traits.R")
+source("modules/engine/predict_traits.R")
 
 ################################################################################
 # Load initial data
