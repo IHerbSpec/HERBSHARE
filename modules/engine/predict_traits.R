@@ -64,8 +64,8 @@ predict_traits_python <- function(reflectance_path,
   # Run Python script
   cmd <- paste(c(python_cmd, args), collapse = " ")
 
-  message("Running prediction model...")
-  message("Command: ", cmd)
+  #message("Running prediction model...")
+  #message("Command: ", cmd)
 
   # Capture both stdout and stderr
   result <- system(cmd, intern = TRUE, ignore.stderr = FALSE)

@@ -11,16 +11,25 @@
 
 ### Module guide
 ## modules
+#     explorer_panel.R
 #     explorer
 #         map.R
-#         data_selection.R
 #         records_summary.R
 #         specimen_selection.R
 #         select_by.R
 #         download.R
+#     engine_panel.R
 #     engine
-#     auxiliarity 
+#         upload_spectra.R
+#         trait_selector.R
+#         spectra_viewer.R
+#         predictions_output.R
+#         trait_visualization.R
+#         predict_traits.R
+#     about_panel.R
+#     auxiliary
 #         read_spectra.R
+#         read_svc.R
 #         herbaria_locations.R
 #         gbif.R
 
@@ -42,6 +51,9 @@ library(tidyr)
 library(shinyjs)
 library(plotly)
 library(DT)
+library(future)
+library(promises)
+plan(multisession)
 
 # library(tidyverse)
 # library(shinyjqui)
@@ -115,13 +127,12 @@ primary_color <- theme_colors["primary"]
 ui <- page_navbar(
 
   theme = app_theme,
+  title = tags$span("HERBSPHERE"),
 
   # Custom CSS for button colors
-  tags$head(
+  header = tags$head(
     tags$link(rel = "stylesheet", type = "text/css", href = "styles.css")
   ),
-
-  title = tags$span("HERBSPHERE"),
   lang = "en",
   
   nav_panel("Explorer",

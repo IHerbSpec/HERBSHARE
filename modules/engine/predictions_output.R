@@ -31,41 +31,35 @@ predictions_output_server <- function(id, spectra_data, selected_traits, trigger
       req(trigger_predict() > 0)
       req(spectra_data())
       req(length(selected_traits()) > 0)
-      
+
       is_predicting(TRUE)
       predictions(NULL)
-      
-      tryCatch({
-        
-        # Create temp file for input
-        temp_input <- tempfile(fileext = ".csv")
-        data.table::fwrite(spectra_data(), temp_input)
-        
-        # Call Python prediction
-        result <- predict_traits_python(reflectance_path = temp_input,
-                                        target_traits = selected_traits())
-        
-        # Store results
+
+      # Capture reactive values before async hand-off
+      current_spectra <- spectra_data()
+      current_traits  <- selected_traits()
+      temp_input <- tempfile(fileext = ".csv")
+      data.table::fwrite(current_spectra, temp_input)
+
+      future({
+        predict_traits_python(reflectance_path = temp_input,
+                              target_traits    = current_traits)
+      }) %...>% (function(result) {
         predictions(result)
         is_predicting(FALSE)
-        
         showNotification("Predictions completed successfully!",
-                         type = "message",
-                         duration = 3)
-        
-        # Clean up
+                         type = "message", duration = 3)
         unlink(temp_input)
-        
-      }, error = function(e) {
-        
+      }) %...!% (function(e) {
         is_predicting(FALSE)
         predictions(NULL)
-        
         showNotification(paste("Prediction error:", e$message),
-                         type = "error",
-                         duration = 10)
-        
+                         type = "error", duration = 10)
+        unlink(temp_input)
       })
+
+      NULL  # Must return NULL so Shiny does not treat the promise as a value
+
     }, ignoreInit = TRUE)
     
     # Status message
@@ -75,7 +69,7 @@ predictions_output_server <- function(id, spectra_data, selected_traits, trigger
         
         tags$div(class = "alert alert-info",
                  icon("spinner", class = "fa-spin"),
-                 "Computing predictions... This may take a few moments.")
+                 "Computing predictions. This may take a few seconds.")
         
       } else if (!is.null(predictions())) {
         
