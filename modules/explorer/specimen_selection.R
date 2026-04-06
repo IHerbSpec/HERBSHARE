@@ -47,7 +47,7 @@ specimen_selection_server <- function(id, click_id, metadata, spectra_compiled) 
       
       data.frame(
         Name  = c("gbifID","institutionName","collectionCode","class",
-                  "order","family","genus","species"),
+                  "order","family","genus","species", "year", "recordedBy"),
         Value = c(
           as.character(row$gbifID[[1]]),
           row$institutionName[[1]],
@@ -56,7 +56,9 @@ specimen_selection_server <- function(id, click_id, metadata, spectra_compiled) 
           row$order[[1]],
           row$family[[1]],
           row$genus[[1]],
-          row$species[[1]]
+          row$species[[1]],
+          row$year[[1]],
+          row$recordedBy[[1]]
         ),
         stringsAsFactors = FALSE
       )

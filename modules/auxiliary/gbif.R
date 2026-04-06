@@ -50,6 +50,7 @@ api_search <- function(catalogNumber = unique(metadata_spectra_file$catalogNumbe
   keep <- c("gbifID","institutionCode","catalogNumber",
             "continent","countryCode", "higherGeography", "stateProvince", "locality", "decimalLatitude","decimalLongitude",
             "species","genus","family","order","class",
+            "eventDate", "year", "month", "day", "recordedBy",
             "references")
   
   gbif_keep <- gbif_downloaded[, ..keep]
@@ -85,7 +86,76 @@ get_coords <- function(gbif_file, herbaria_location) {
     c(x, rep(NA_real_, n - length(x)))
   }
   
-  # pass 1 — city + state + country
+  # pass 1 — higherGeography
+  na_coordinates <- is.na(gbif_file$decimalLatitude)
+  na_gbif_file <- gbif_file[na_coordinates, ]
+  
+  if(nrow(na_gbif_file) > 0) {
+    
+    parts <- strsplit(as.character(na_gbif_file$higherGeography), ";")
+    max_len <- max(lengths(parts))
+    
+    mat <- t(sapply(parts, function(x) {
+      x <- x[x != ""]
+      length(x) <- max_len
+      x
+    }))
+    
+    continent <- mat[, 1]
+    country <- mat[, 2]
+    state <- mat[, 3]
+    county <- mat[, 4]
+    
+    loc_city <- geo(street = na_gbif_file$locality,
+                    county = county,
+                    state = state,
+                    country = country,
+                    method = "osm")
+    
+    # pad to exactly the number of NAs
+    lat1  <- pad_to(loc_city$lat,  sum(na_coordinates))
+    long1 <- pad_to(loc_city$long, sum(na_coordinates))
+    
+    gbif_file$decimalLatitude[na_coordinates]  <- lat1
+    gbif_file$decimalLongitude[na_coordinates] <- long1
+    
+  }
+  
+  # pass 2 — higherGeography
+  na_coordinates <- is.na(gbif_file$decimalLatitude)
+  na_gbif_file <- gbif_file[na_coordinates, ]
+  
+  if(nrow(na_gbif_file) > 0) {
+    
+    parts <- strsplit(as.character(na_gbif_file$higherGeography), ";")
+    max_len <- max(lengths(parts))
+    
+    mat <- t(sapply(parts, function(x) {
+      x <- x[x != ""]
+      length(x) <- max_len
+      x
+    }))
+    
+    continent <- mat[, 1]
+    country <- mat[, 2]
+    state <- mat[, 3]
+    county <- mat[, 4]
+    
+    loc_city <- geo(county = county,
+                    state = state,
+                    country = country,
+                    method = "osm")
+    
+    # pad to exactly the number of NAs
+    lat1  <- pad_to(loc_city$lat,  sum(na_coordinates))
+    long1 <- pad_to(loc_city$long, sum(na_coordinates))
+    
+    gbif_file$decimalLatitude[na_coordinates]  <- lat1
+    gbif_file$decimalLongitude[na_coordinates] <- long1
+    
+  }
+  
+  # pass 3 — city + state + country
   na_coordinates <- is.na(gbif_file$decimalLatitude)
   na_gbif_file <- gbif_file[na_coordinates, ]
   
@@ -105,7 +175,7 @@ get_coords <- function(gbif_file, herbaria_location) {
     
   }
   
-  # pass 2 — state + country for any still-missing rows
+  # pass 4 — state + country for any still-missing rows
   na_coordinates <- is.na(gbif_file$decimalLatitude)
   na_gbif_file <- gbif_file[na_coordinates, ]
   
@@ -113,6 +183,28 @@ get_coords <- function(gbif_file, herbaria_location) {
     
     loc_state <- geo(state = na_gbif_file$stateProvince,
                      country = na_gbif_file$countryCode,
+                     method  = "osm")
+    
+    lat2  <- pad_to(loc_state$lat,  sum(na_coordinates))
+    long2 <- pad_to(loc_state$long, sum(na_coordinates))
+    
+    # Only fill where still NA
+    idx <- which(na_coordinates)
+    fill_lat  <- is.na(gbif_file$decimalLatitude[idx])
+    fill_long <- is.na(gbif_file$decimalLongitude[idx])
+    
+    gbif_file$decimalLatitude[idx[fill_lat]]  <- lat2[fill_lat]
+    gbif_file$decimalLongitude[idx[fill_long]] <- long2[fill_long]
+    
+  }
+  
+  # pass 5 — Country for any still-missing rows
+  na_coordinates <- is.na(gbif_file$decimalLatitude)
+  na_gbif_file <- gbif_file[na_coordinates, ]
+  
+  if(nrow(na_gbif_file) > 0) {
+    
+    loc_state <- geo(country = na_gbif_file$countryCode,
                      method  = "osm")
     
     lat2  <- pad_to(loc_state$lat,  sum(na_coordinates))
@@ -165,31 +257,5 @@ spectra <- spectra[, .SD, .SDcols = c(colnames(spectra)[1], as.character(bands))
 
 # Export file
 fwrite(spectra, "data/02-organized/spectra_compiled.csv")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
