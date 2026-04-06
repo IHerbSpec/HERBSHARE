@@ -1,0 +1,28 @@
+[project]
+name = "HERBSPHERE"
+version = "0.1.0"
+description = "HERBSPHERE: Herbarium Spectral Hub for Research and Exploration"
+authors = [
+    { name = "J. Antonio Guzmán Q." }
+]
+requires-python = ">=3.10"
+
+dependencies = [
+    "numpy>=1.24.0",
+    "scipy>=1.10.0",
+    "torch>=2.0.0",
+    "torchvision>=0.15.0",
+    "polars>=0.18.0",
+    "PyWavelets>=1.4.0",
+]
+
+[project.optional-dependencies]
+gpu = [
+    # For GPU support, visit https://pytorch.org/get-started/locally/
+    # to get the appropriate torch installation command for your system.
+    # Example for CUDA 12.1:
+    # torch>=2.0.0+cu121
+]
+
+[tool.pip]
+index-url = "https://pypi.org/simple"
