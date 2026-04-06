@@ -1,13 +1,27 @@
 # HERBSPHERE
 
-**HERBSPHERE** — Herbarium Spectral Hub for Research and Exploration
+**HERBSPHERE — Herbarium Spectral Hub for Research and Exploration **
 
-A Shiny application for the exploration of reflectance spectroscopy data from herbarium 
-specimens and prediction of leaf traits.
+The digitization of specimen data—the conversion of physical samples into accessible 
+digital content—combined with data science workflows is driving the discovery and 
+use of herbarium collections at an unprecedented scale. **HERBSPHERE**—HERBerbarium 
+SPectral Hub for Research and Exploration—aims to advance the next generation 
+of specimen digitization through the exploration and use of reflectance 
+spectroscopy data from herbarium specimens.
+
+Leaf spectroscopy has emerged as a powerful tool for rapid leaf phenotyping. 
+As a non-destructive technique, it can provide insights into ecological and 
+evolutionary patterns across spatial and temporal scales, enabling the 
+estimation of leaf traits such as cellulose, lignin, and leaf mass per area, 
+among others, as well as uncovering patterns of species diversification 
+through spectral information. Most importantly, the use of spectroscopy on 
+herbarium specimens has the potential to transform these vast plant 
+collections into dynamic laboratories for addressing pressing scientific 
+and environmental challenges.
 
 ---
 
-## Requirements
+### Requirements
 
 | Dependency | Minimum version |
 |------------|----------------|
@@ -16,16 +30,16 @@ specimens and prediction of leaf traits.
 
 ---
 
-## Installation
+### Installation
 
-### 1. Clone the repository
+#### 1. Clone the repository
 
 ```bash
 git clone https://github.com/IHerbSpec/HERBSPHERE.git
 cd HERBSPHERE
 ```
 
-### 2. Install R packages
+#### 2. Install R packages
 
 Open R or RStudio and run:
 
@@ -45,27 +59,21 @@ This installs all required R packages:
 | httr2, jsonlite | Web and API |
 | future, promises | Async execution |
 
-### 3. Install Python dependencies
+#### 3. Install Python dependencies
 
-#### Option A — using `pyproject.toml` (recommended)
+##### Using `pyproject.toml`
 
 ```bash
 pip install .
 ```
 
-#### Option B — using `requirements.txt`
-
-```bash
-pip install -r requirements.txt
-```
-
-#### GPU support (optional)
+##### GPU support (optional)
 
 By default, PyTorch is installed for CPU only. For GPU support, visit [pytorch.org/get-started/locally](https://pytorch.org/get-started/locally/) to get the installation command for your CUDA version, then run it **before** installing the other dependencies.
 
 ---
 
-## Running the app
+### Running the app
 
 Open R or RStudio and run:
 
@@ -77,7 +85,7 @@ Or launch `app.R` directly from RStudio using the **Run App** button.
 
 ---
 
-## Citation
+### Citation
 
 If you use HERBSPHERE in your research, please cite:
 
@@ -90,6 +98,18 @@ If you use HERBSPHERE in your research, please cite:
   url     = {https://github.com/IHerbSpec/HERBSPHERE}
 }
 ```
+
+---
+
+### Funding
+
+The development of **HERBSPHERE** is supported by:
+
+<div align="center">
+  <img src="www/HUH_black.png" height="90px" style="background:#ffffff; padding:8px; border-radius:5px;">
+  &nbsp;&nbsp;&nbsp;
+  <img src="www/HDSI_black.png" height="90px" style="background:#ffffff; padding:8px; border-radius:5px;">
+</div>
 
 ---
 
