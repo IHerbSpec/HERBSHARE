@@ -82,6 +82,9 @@ source("modules/engine/predictions_output.R")
 source("modules/engine/trait_visualization.R")
 source("modules/engine/predict_traits.R")
 
+# Functions for about
+source("modules/about_panel.R")
+
 ################################################################################
 # Load initial data
 
@@ -93,10 +96,10 @@ spectra_compiled <- data.table::fread("data/02-organized/spectra_compiled.csv", 
 
 # Define theme
 app_theme <- bs_theme(bootswatch = "yeti",
-                      navbar_bg = "black",
+                      navbar_bg = "#162623",
                       bg = "#ffffff",
-                      fg = "#03120E",
-                      primary = "#26413C",
+                      fg = "#162623",
+                      primary = "#162623",
                       secondary = "#26413C",
                       success = "#26413C",
                       info = "#26413C",
@@ -132,7 +135,7 @@ ui <- page_navbar(
   nav_spacer(),
 
   nav_panel("About",
-            div("Coming soon")
+            about_panel_ui("about")
             ),
 
   nav_item(tags$a(tags$span(bsicons::bs_icon("github"), "Source code"),
