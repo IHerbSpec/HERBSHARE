@@ -1,6 +1,6 @@
 # HERBSPHERE
 
-**HERBSPHERE — Herbarium Spectral Hub for Research and Exploration **
+**HERBSPHERE — Herbarium Spectral Hub for Research and Exploration**
 
 The digitization of specimen data—the conversion of physical samples into accessible 
 digital content—combined with data science workflows is driving the discovery and 
