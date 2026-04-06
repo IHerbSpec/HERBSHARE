@@ -17,7 +17,6 @@ source("modules/auxiliary/read_spectra.R")
 #-------------------------------------------------------------------------------
 # Read GBIF file and metadata file
 
-# gbif_file <- fread("data/01-gbif/gbif2.csv")
 metadata_spectra_file <- fread("data/01-spectra/HUH_metadata.csv")
 herbaria_location <- fread("data/01-herbaria_locations/hebaria_locations.csv")
 
@@ -29,15 +28,20 @@ metadata_spectra_file <- metadata_spectra_file[!is.na(specimenIdentifier),]
 metadata_spectra_file$catalogNumber <- paste0("barcode-", 
                                               sprintf("%08d", metadata_spectra_file$specimenIdentifier))
 
-api_search <- function(catalogNumber = unique(metadata_spectra_file$catalogNumber)) {
-  
-  p <- pred_in("catalogNumber", metadata_spectra_file$catalogNumber)
-  
-  # Set GBIF_USER / GBIF_PWD / GBIF_EMAIL as env vars, or pass user/pwd/email explicitly.
+api_search <- function(catalogNumber = unique(metadata_spectra_file$catalogNumber),
+                       institutionCode = unique(metadata_spectra_file$institutionCode)) {
+
+  p <- pred_and(pred_in("catalogNumber", catalogNumber),
+                pred_in("institutionCode", institutionCode))
+
+  # Read credentials from key.txt
+  creds <- read.table("key.txt", sep = "=", col.names = c("k", "v"), strip.white = TRUE)
+  creds <- setNames(trimws(creds$v), trimws(creds$k))
+
   key <- occ_download(p,
-                      user  = "antguz",
-                      pwd   = "Tonito_20191107!",
-                      email = "antguz06@gmail.com")
+                      user = creds["user"],
+                      pwd = creds["pwd"],
+                      email = creds["email"])
   
   # Wait for completion
   occ_download_wait(key)
@@ -59,9 +63,9 @@ api_search <- function(catalogNumber = unique(metadata_spectra_file$catalogNumbe
   
 }
 
-
-# Search catalogNumber
-gbif_file <- api_search(catalogNumber = unique(metadata_spectra_file$catalogNumber))
+# Search by catalogNumber and institutionCode
+gbif_file <- api_search(catalogNumber   = unique(metadata_spectra_file$catalogNumber),
+                        institutionCode = unique(metadata_spectra_file$institutionCode))
 
 # Merge metadata of spectra and GBIF
 metadata_and_gbif <- merge(gbif_file,
