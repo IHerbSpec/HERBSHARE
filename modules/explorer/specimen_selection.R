@@ -44,19 +44,25 @@ specimen_selection_server <- function(id, click_id, metadata, spectra_compiled) 
       rows <- clicked_points()
       req(nrow(rows) > 0)
       row <- dplyr::slice(rows, 1)
-      
+
+      get_val <- function(x) {
+        if (is.null(x) || length(x) == 0) NA_character_ else as.character(x[[1]])
+      }
+
       data.frame(
-        Name  = c("gbifID","institutionName","collectionCode","class",
-                  "order","family","genus","species"),
+        Name  = c("gbifID","institutionName","institutionCode","class",
+                  "order","family","genus","species", "year", "recordedBy"),
         Value = c(
-          as.character(row$gbifID[[1]]),
-          row$institutionName[[1]],
-          row$collectionCode[[1]],
-          row$class[[1]],
-          row$order[[1]],
-          row$family[[1]],
-          row$genus[[1]],
-          row$species[[1]]
+          get_val(row$gbifID),
+          get_val(row$institutionName),
+          get_val(row$institutionCode),
+          get_val(row$class),
+          get_val(row$order),
+          get_val(row$family),
+          get_val(row$genus),
+          get_val(row$species),
+          get_val(row$year),
+          get_val(row$recordedBy)
         ),
         stringsAsFactors = FALSE
       )
@@ -69,10 +75,10 @@ specimen_selection_server <- function(id, click_id, metadata, spectra_compiled) 
       filename_selection <- rows$filename
       
       meta_small <- rows %>%
-        dplyr::select(filename, targetTissueClass, backgroundClass) %>%
+        dplyr::select(filename, targetClass, backgroundClass) %>%
         dplyr::mutate(
-          ttc = factor(targetTissueClass, levels = c("AD", "AB")),
-          bg  = factor(backgroundClass, levels = c("BGB", "BGP"))
+          ttc = factor(targetClass, levels = c("AD", "AB")),
+          bg  = factor(backgroundClass, levels = c("B", "P"))
         )
       
       # Subset spectra and pivot to long
@@ -89,31 +95,52 @@ specimen_selection_server <- function(id, click_id, metadata, spectra_compiled) 
       
       ymax <- suppressWarnings(max(spectra_long$reflectance, na.rm = TRUE))
       yaxis_opts <- if (is.finite(ymax) && ymax <= 1) {
-        list(title = "Reflectance", range = c(0, 1))
+        list(title = "Reflectance",
+             range = c(0, 1),
+             showgrid = TRUE,
+             zeroline = FALSE,
+             linecolor = "grey30",
+             linewidth = 0.5,
+             ticks = "outside",
+             mirror = T)
       } else {
-        list(title = "Reflectance", autorange = TRUE)
+        list(title = "Reflectance",
+             autorange = TRUE,
+             showgrid = TRUE,
+             zeroline = FALSE,
+             linecolor = "grey30",
+             linewidth = 0.5,
+             ticks = "outside",
+             mirror = T)
       }
-      
+
       plotly::plot_ly(data = spectra_long,
                       x = ~wavelength,
                       y = ~reflectance,
                       split = ~filename,
                       color = ~bg, colors = c("black", "grey30"),
-                      linetype = ~ttc, 
+                      linetype = ~ttc,
                       linetypes = c("solid", "dot"),
                       type = "scatter",
                       mode = "lines",
                       text = ~paste0("File: ", filename,
-                                     "<br>Tissue: ", targetTissueClass,
+                                     "<br>Tissue: ", targetClass,
                                      "<br>Background: ", backgroundClass
                                      ),
                       hoverinfo = "text+x+y") %>%
         plotly::layout(showlegend = FALSE,
-                       xaxis = list(title = 'Wavelength (nm)'),
+                       xaxis = list(title = 'Wavelength (nm)',
+                                    showgrid = TRUE,
+                                    linecolor = "grey30",
+                                    linewidth = 0.5,
+                                    mirror = T,
+                                    ticks = "outside"),
                        yaxis = yaxis_opts,
+                       hovermode = "closest",
                        autosize = TRUE,
-                       margin = list(l = 0, r = 0, b = 0, t = 0, pad = 0)
-                       )
+                       margin = list(l = 60, r = 10, b = 50, t = 40, pad = 4)
+                       ) %>%
+        plotly::config(displayModeBar = TRUE, displaylogo = FALSE)
     })
     
     # Image
