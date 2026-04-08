@@ -100,7 +100,7 @@ source("modules/about_panel.R")
 ################################################################################
 # Load initial data
 
-metadata_and_gbif <- data.table::fread("data/02-organized/metadata_and_gbif.csv")
+metadata_and_gbif <- data.table::fread("data/02-organized/HERBSPHERE_metadata_locations.csv")
 spectra_compiled <- data.table::fread("data/02-organized/spectra_compiled.csv", header = TRUE)
 
 ################################################################################

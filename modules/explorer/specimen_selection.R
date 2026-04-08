@@ -44,21 +44,25 @@ specimen_selection_server <- function(id, click_id, metadata, spectra_compiled) 
       rows <- clicked_points()
       req(nrow(rows) > 0)
       row <- dplyr::slice(rows, 1)
-      
+
+      get_val <- function(x) {
+        if (is.null(x) || length(x) == 0) NA_character_ else as.character(x[[1]])
+      }
+
       data.frame(
-        Name  = c("gbifID","institutionName","collectionCode","class",
+        Name  = c("gbifID","institutionName","institutionCode","class",
                   "order","family","genus","species", "year", "recordedBy"),
         Value = c(
-          as.character(row$gbifID[[1]]),
-          row$institutionName[[1]],
-          row$collectionCode[[1]],
-          row$class[[1]],
-          row$order[[1]],
-          row$family[[1]],
-          row$genus[[1]],
-          row$species[[1]],
-          row$year[[1]],
-          row$recordedBy[[1]]
+          get_val(row$gbifID),
+          get_val(row$institutionName),
+          get_val(row$institutionCode),
+          get_val(row$class),
+          get_val(row$order),
+          get_val(row$family),
+          get_val(row$genus),
+          get_val(row$species),
+          get_val(row$year),
+          get_val(row$recordedBy)
         ),
         stringsAsFactors = FALSE
       )
@@ -71,10 +75,10 @@ specimen_selection_server <- function(id, click_id, metadata, spectra_compiled) 
       filename_selection <- rows$filename
       
       meta_small <- rows %>%
-        dplyr::select(filename, targetTissueClass, backgroundClass) %>%
+        dplyr::select(filename, targetClass, backgroundClass) %>%
         dplyr::mutate(
-          ttc = factor(targetTissueClass, levels = c("AD", "AB")),
-          bg  = factor(backgroundClass, levels = c("BGB", "BGP"))
+          ttc = factor(targetClass, levels = c("AD", "AB")),
+          bg  = factor(backgroundClass, levels = c("B", "P"))
         )
       
       # Subset spectra and pivot to long
@@ -120,7 +124,7 @@ specimen_selection_server <- function(id, click_id, metadata, spectra_compiled) 
                       type = "scatter",
                       mode = "lines",
                       text = ~paste0("File: ", filename,
-                                     "<br>Tissue: ", targetTissueClass,
+                                     "<br>Tissue: ", targetClass,
                                      "<br>Background: ", backgroundClass
                                      ),
                       hoverinfo = "text+x+y") %>%

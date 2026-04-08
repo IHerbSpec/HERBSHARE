@@ -1,35 +1,70 @@
 ################################################################################
-##### Script to process and retrieve GBIF and create database
+#'@title Script to process and retrieve GBIF and create database
 ################################################################################
 
 #-------------------------------------------------------------------------------
-# Libraries
+#'@Libraries
 
 library(data.table)
 library(rgbif)
 library(tidygeocoder)
 
 #-------------------------------------------------------------------------------
-# Source code
+#'@Source-code
 
 source("modules/auxiliary/read_spectra.R")
 
 #-------------------------------------------------------------------------------
-# Read GBIF file and metadata file
+#'@Compile-file-metadata
 
-metadata_spectra_file <- fread("data/01-spectra/HUH_metadata.csv")
-herbaria_location <- fread("data/01-herbaria_locations/hebaria_locations.csv")
+read_metadata <- function(folder, pattern = "\\.csv$") {
+  
+  files <- list.files(folder, pattern = pattern, full.names = TRUE)
+  
+  # Read all files into a list of data.tables
+  dt_list <- lapply(files, fread)
+  
+  # Get all unique column names across files
+  all_cols <- unique(unlist(lapply(dt_list, names)))
+  
+  # Add missing columns to each data.table
+  dt_list <- lapply(dt_list, function(dt) {
+    missing_cols <- setdiff(all_cols, names(dt))
+    if (length(missing_cols) > 0) {
+      dt[, (missing_cols) := NA]
+    }
+    # Reorder columns so all tables match
+    setcolorder(dt, all_cols)
+    dt
+  })
+  
+  # Combine all aligned tables
+  combined_dt <- rbindlist(dt_list, use.names = TRUE, fill = TRUE)
+  
+  return(combined_dt)
+}
+
+IHerbSpec_metadata <- read_metadata("data/01-spectra/01-metadata")
+IHerbSpec_metadata <- cbind(rowID = 1:nrow(IHerbSpec_metadata), IHerbSpec_metadata)
+IHerbSpec_metadata[IHerbSpec_metadata == ""] <- NA
+fwrite(IHerbSpec_metadata, "data/01-spectra/IHerbSpec_metadata.csv")
+
+# Total
+# - 7560
 
 #-------------------------------------------------------------------------------
-# Merge GBIF and metadata
+#'@GBIF-records-search
 
-# Landmark columns
-metadata_spectra_file <- metadata_spectra_file[!is.na(specimenIdentifier),]
-metadata_spectra_file$catalogNumber <- paste0("barcode-", 
-                                              sprintf("%08d", metadata_spectra_file$specimenIdentifier))
+# Read IHerbSpec metadata
+IHerbSpec_metadata <- fread("data/01-spectra/IHerbSpec_metadata.csv")
+IHerbSpec_metadata[IHerbSpec_metadata == ""] <- NA
 
-api_search <- function(catalogNumber = unique(metadata_spectra_file$catalogNumber),
-                       institutionCode = unique(metadata_spectra_file$institutionCode)) {
+# Read herbaria locations
+herbaria_location <- fread("data/01-herbaria_locations/hebaria_locations.csv")
+
+# API search function
+api_search <- function(catalogNumber,
+                       institutionCode) {
 
   p <- pred_and(pred_in("catalogNumber", catalogNumber),
                 pred_in("institutionCode", institutionCode))
@@ -52,10 +87,12 @@ api_search <- function(catalogNumber = unique(metadata_spectra_file$catalogNumbe
   
   # Keep only columns you want
   keep <- c("gbifID","institutionCode","catalogNumber",
-            "continent","countryCode", "higherGeography", "stateProvince", "locality", "decimalLatitude","decimalLongitude",
+            "continent","countryCode", "higherGeography", "stateProvince", 
+            "locality", "decimalLatitude","decimalLongitude",
             "species","genus","family","order","class",
             "eventDate", "year", "month", "day", "recordedBy",
-            "references")
+            "references",
+            "accessRights", "license", "rightsHolder")
   
   gbif_keep <- gbif_downloaded[, ..keep]
   
@@ -63,30 +100,71 @@ api_search <- function(catalogNumber = unique(metadata_spectra_file$catalogNumbe
   
 }
 
-# Search by catalogNumber and institutionCode
-gbif_file <- api_search(catalogNumber   = unique(metadata_spectra_file$catalogNumber),
-                        institutionCode = unique(metadata_spectra_file$institutionCode))
+# Clean records for API search
+api_file <- unique(IHerbSpec_metadata[, .(catalogNumber, institutionCode)])
+api_file <- api_file[!is.na(catalogNumber)]
+api_file <- api_file[!is.na(institutionCode)]
+
+# Do search
+gbif_file <- api_search(catalogNumber = api_file$catalogNumber,
+                        institutionCode = api_file$institutionCode)
 
 # Merge metadata of spectra and GBIF
-metadata_and_gbif <- merge(gbif_file,
-                           metadata_spectra_file,
-                           by = "catalogNumber")
+HERBSPHERE_metadata <- merge(gbif_file,
+                             IHerbSpec_metadata,
+                             by = c("catalogNumber", "institutionCode"),
+                             all.x = TRUE,
+                             all.y = TRUE)
+
+# Clean and order metadata
+HERBSPHERE_metadata[HERBSPHERE_metadata == ""] <- NA
+setcolorder(HERBSPHERE_metadata, c("rowID", setdiff(names(HERBSPHERE_metadata), "rowID")))
+HERBSPHERE_metadata <- HERBSPHERE_metadata[order(rowID)]
 
 # Export file
-fwrite(metadata_and_gbif, "data/02-organized/metadata_and_gbif.csv")
+fwrite(HERBSPHERE_metadata, "data/02-organized/HERBSPHERE_metadata.csv")
 
 #-------------------------------------------------------------------------------
-# Preprare GBIF file
+#'@Cleaning-HERBSPHERE_metadata
 
-metadata_and_gbif <- fread("data/02-organized/metadata_and_gbif.csv")
-gbif_file <- metadata_and_gbif
+# Select no matching
+HERBSPHERE_missing <- HERBSPHERE_metadata[is.na(rowID)]
+HERBSPHERE_missing <- HERBSPHERE_missing[, -1]
+HERBSPHERE_missing <- HERBSPHERE_missing[, 1:21]
+HERBSPHERE_missing[HERBSPHERE_missing == ""] <- NA
 
-# Get location function if that does not exist
+# Select matching
+HERBSPHERE_metadata <- HERBSPHERE_metadata[!is.na(rowID)]
+HERBSPHERE_metadata[HERBSPHERE_metadata == ""] <- NA
+
+# Columns to fill
+fill_cols <- setdiff(intersect(names(HERBSPHERE_metadata), names(HERBSPHERE_missing)),
+                     c(HERBSPHERE_missing[,-2]))
+
+# Fill missing values
+HERBSPHERE_metadata[HERBSPHERE_missing,
+                    (fill_cols) := Map(fcoalesce,
+                                       mget(fill_cols),
+                                       mget(paste0("i.", fill_cols))
+                                       ),
+                    on = "catalogNumber"]
+
+# Export file
+fwrite(HERBSPHERE_metadata, "data/02-organized/HERBSPHERE_metadata.csv")
+
+#-------------------------------------------------------------------------------
+#'@Search-locations
+
+# Read HERBSPHERE_metadata
+HERBSPHERE_metadata <- fread("data/02-organized/HERBSPHERE_metadata.csv")
+HERBSPHERE_metadata[HERBSPHERE_metadata == ""] <- NA
+gbif_file <- HERBSPHERE_metadata
+
+# Get location function
 get_coords <- function(gbif_file, herbaria_location) {
   
   pad_to <- function(x, n) {
-    # ensures length(x) == n by padding with NA
-    if (length(x) >= n) return(x[seq_len(n)])
+    if(length(x) >= n) return(x[seq_len(n)])
     c(x, rep(NA_real_, n - length(x)))
   }
   
@@ -224,6 +302,10 @@ get_coords <- function(gbif_file, herbaria_location) {
     
   }
   
+  # pass 6 - 0 to 0 coordinates
+  gbif_file[is.na(decimalLatitude), decimalLatitude := 0.0]
+  gbif_file[is.na(decimalLongitude), decimalLongitude := 0.0]
+  
   # Merge herbaria locations
   gbif_file <- merge(gbif_file,
                      herbaria_location,
@@ -236,22 +318,25 @@ get_coords <- function(gbif_file, herbaria_location) {
 }
 
 # Get locations
-gbif_file <- get_coords(metadata_and_gbif, herbaria_location)
+gbif_file <- get_coords(gbif_file, herbaria_location)
+
+# Order
+setcolorder(gbif_file, c("rowID", setdiff(names(gbif_file), "rowID")))
+gbif_file <- gbif_file[order(rowID)]
 
 # Export file
-fwrite(gbif_file, "data/02-organized/metadata_and_gbif.csv")
+fwrite(gbif_file, "data/02-organized/HERBSPHERE_metadata_locations.csv")
 
 #-------------------------------------------------------------------------------
-# Compile spectra data
+#'@Compile-spectra
 
 # Search of paths
 file_paths <- list.files("data/01-spectra",
                          full.names = TRUE, 
-                         recursive = TRUE)
+                         recursive = TRUE,
+                         pattern = "\\.(sed|sig|asd)$",)
 
-# Files to use
-order_files <- match(metadata_spectra_file$filename, basename(file_paths))
-file_paths <- file_paths[order_files]
+# Read spectra
 spectra <- read_spectra(paths = file_paths)
 
 # Order columns
@@ -261,5 +346,20 @@ spectra <- spectra[, .SD, .SDcols = c(colnames(spectra)[1], as.character(bands))
 
 # Export file
 fwrite(spectra, "data/02-organized/spectra_compiled.csv")
+
+# Files to use
+database_names <- c(gbif_file$filename,
+                    gbif_file$backgroundFilename[!is.na(gbif_file$backgroundFilename)],
+                    gbif_file$whiteRefFilename[!is.na(gbif_file$whiteRefFilename)])
+
+spectra_names <- spectra$filename
+
+# Files that are not in spectra_names
+setdiff(database_names, spectra_names)
+
+# Files that are not in database_names
+setdiff(spectra_names, database_names)
+
+
 
 
