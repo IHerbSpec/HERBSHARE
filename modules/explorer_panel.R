@@ -55,7 +55,7 @@ explorer_panel_ui <- function(id) {
 }
 
 # Server
-explorer_panel_server <- function(id, metadata, spectra_compiled) {
+explorer_panel_server <- function(id, metadata, spectra_compiled, citation) {
   moduleServer(id, function(input, output, session) {
     
     # Static sf baseline
@@ -80,13 +80,13 @@ explorer_panel_server <- function(id, metadata, spectra_compiled) {
     clear_signal <- reactive({
       sel$show_all()
     })
-    
+
     # When geometry is manually deleted, trigger "Show all"
     observeEvent(map_out$geom_deleted(), {
       # Trigger show all programmatically
       current_sf(metadata_sf)
     }, ignoreInit = TRUE)
-    
+
     # Clear drawn shapes when "Show all" is pressed
     observeEvent(clear_signal(), {
       # Send message to map to clear drawn shapes
@@ -155,6 +155,7 @@ explorer_panel_server <- function(id, metadata, spectra_compiled) {
     download_server(id = "download",
                     applied_data = reactive(sf::st_drop_geometry(current_sf())),
                     spectra_compiled = spectra_compiled,
+                    citation = citation,
                     on_show = sel$apply,
                     on_hide = sel$show_all)
   })

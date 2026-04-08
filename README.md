@@ -91,7 +91,7 @@ If you use HERBSPHERE in your research, please cite:
 
 ```bibtex
 @software{HERBSPHERE,
-  author  = {Guzmán J.A., White D. and Cavender-Bares J.},
+  author  = {Guzmán J.A., and Cavender-Bares J.},
   title   = {HERBSPHERE: Herbaria Spectral Hub for Research and Exploration},
   year    = {2026},
   version = {0.1},

@@ -102,6 +102,7 @@ source("modules/about_panel.R")
 
 metadata_and_gbif <- data.table::fread("data/02-organized/HERBSPHERE_metadata_locations.csv")
 spectra_compiled <- data.table::fread("data/02-organized/spectra_compiled.csv", header = TRUE)
+citation <- data.table::fread("data/02-organized/citation.csv", header = TRUE, encoding = "UTF-8")
 
 ################################################################################
 # App
@@ -174,7 +175,8 @@ server <- function(input, output, session) {
   # Explorer
   explorer_panel_server("explorer",
                         metadata = metadata_and_gbif,
-                        spectra_compiled = spectra_compiled)
+                        spectra_compiled = spectra_compiled,
+                        citation = citation)
 
   # Engine
   engine_panel_server("engine", primary_color = primary_color)
