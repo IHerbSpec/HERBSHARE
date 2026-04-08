@@ -40,6 +40,9 @@ vignettes/*.pdf
 # R Environment Variables
 .Renviron
 
+# GBIF credentials — never commit this file
+key.txt
+
 # pkgdown site
 docs/
 data/
