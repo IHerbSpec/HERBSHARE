@@ -55,25 +55,6 @@ library(future)
 library(promises)
 plan(multisession)
 
-# library(tidyverse)
-# library(shinyjqui)
-# library(s2)
-# library(magrittr)
-# library(shinycssloaders)
-# library(jsonlite)
-# library(geojsonio)
-# library(kableExtra)
-# library(nominatim)
-# library(leafgl)
-# library(shinybusy)
-
-################################################################################
-# Options 
-
-# # File size upload
-# options(shiny.maxRequestSize= 1000*1024^2)
-# options(shiny.deprecation.messages=FALSE)
-
 ################################################################################
 # Source of helpers 
 
@@ -132,7 +113,8 @@ ui <- page_navbar(
 
   # Custom CSS for button colors
   header = tags$head(
-    tags$link(rel = "stylesheet", type = "text/css", href = "styles.css")
+    tags$link(rel = "stylesheet", type = "text/css", href = "styles.css"),
+    useShinyjs()
   ),
   lang = "en",
   
@@ -152,14 +134,12 @@ ui <- page_navbar(
 
   nav_item(tags$a(tags$span(bsicons::bs_icon("github"), "Source code"),
                   href = "https://github.com/IHerbSpec/HERBSPHERE",
-                  target = "_blank"
-                  )
+                  target = "_blank")
            ),
 
   nav_item(tags$a(tags$span(bsicons::bs_icon("book"), "IHerbSpec"),
                   href = "https://iherbspec.github.io",
-                  target = "_blank"
-                  )
+                  target = "_blank")
            ),
 
   nav_item(input_dark_mode(id = "dark_mode",

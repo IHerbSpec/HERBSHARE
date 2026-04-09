@@ -3,7 +3,7 @@ name = "HERBSPHERE"
 version = "0.1.0"
 description = "HERBSPHERE: Herbarium Spectral Hub for Research and Exploration"
 authors = [
-    { name = "J. Antonio Guzmán Q." }
+    { name = "J. Antonio Guzmán Q. and Jeannine Cavender-Bares" }
 ]
 requires-python = ">=3.10"
 
