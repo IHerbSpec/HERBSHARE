@@ -4,7 +4,83 @@
 # UI
 download_ui <- function(id) {
   ns <- NS(id)
-  uiOutput(ns("btn"))
+  tagList(
+
+    # Full-screen spinner overlay — shown while ZIP is being prepared
+    tags$div(
+      id = ns("zip_overlay"),
+      style = paste(
+        "display:none;",
+        "position:fixed; top:0; left:0; width:100%; height:100%;",
+        "background:rgba(0,0,0,0.55);",
+        "z-index:99999;",
+        "justify-content:center; align-items:center;"
+      ),
+      tags$div(
+        style = "text-align:center; color:#ffffff;",
+        tags$div(
+          class = "spinner-border",
+          style = "width:3.5rem; height:3.5rem; border-width:0.35em;",
+          role  = "status",
+          tags$span(class = "visually-hidden", "Loading...")
+        ),
+        tags$p(
+          style = "margin-top:1rem; font-size:1.1rem; font-weight:600;",
+          "Preparing download\u2026"
+        ),
+        tags$p(
+          style = "font-size:0.85rem; opacity:0.75;",
+          "This may take a few seconds for large selections."
+        )
+      )
+    ),
+
+    # JavaScript: show overlay on click; hide when OS save-dialog is dismissed
+    tags$script(HTML(sprintf("
+      (function() {
+        var overlayId  = '%s';
+        var safetyMs   = 300000; // 5-minute hard timeout
+        var safetyTimer = null;
+
+        function showOverlay() {
+          var el = document.getElementById(overlayId);
+          if (el) el.style.display = 'flex';
+        }
+
+        function hideOverlay() {
+          var el = document.getElementById(overlayId);
+          if (el) el.style.display = 'none';
+          if (safetyTimer) { clearTimeout(safetyTimer); safetyTimer = null; }
+          window.removeEventListener('focus', onWindowFocus);
+        }
+
+        function onWindowFocus() {
+          hideOverlay();
+        }
+
+        // Event delegation: works even though the button is rendered dynamically
+        document.addEventListener('click', function(e) {
+          var t = e.target;
+          // Walk up in case user clicks the icon inside the <a>
+          while (t && t !== document.body) {
+            if (t.id && t.id.match(/download_zip$/)) {
+              showOverlay();
+              safetyTimer = setTimeout(hideOverlay, safetyMs);
+              // Wait briefly before attaching focus listener so the click
+              // itself does not immediately re-trigger it
+              setTimeout(function() {
+                window.addEventListener('focus', onWindowFocus);
+              }, 800);
+              break;
+            }
+            t = t.parentElement;
+          }
+        });
+      })();
+    ", ns("zip_overlay")))),
+
+    uiOutput(ns("btn"))
+  )
 }
 
 # Server
