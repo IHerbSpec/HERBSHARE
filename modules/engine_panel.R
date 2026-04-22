@@ -57,11 +57,14 @@ engine_panel_ui <- function(id) {
 engine_panel_server <- function(id, primary_color = "#26413C") {
   moduleServer(id, function(input, output, session) {
 
+    # Shared predicting state
+    is_predicting <- reactiveVal(FALSE)
+
     # Upload spectra module
     uploaded_data <- upload_spectra_server("upload_spectra")
 
     # Trait selector module
-    trait_selector <- trait_selector_server("trait_selector")
+    trait_selector <- trait_selector_server("trait_selector", is_predicting = is_predicting)
 
     # Spectra viewer module
     spectra_viewer_server("spectra_viewer",
@@ -71,7 +74,8 @@ engine_panel_server <- function(id, primary_color = "#26413C") {
     predictions_result <- predictions_output_server("predictions",
                                                     spectra_data = uploaded_data,
                                                     selected_traits = trait_selector$traits,
-                                                    trigger_predict = trait_selector$predict_trigger)
+                                                    trigger_predict = trait_selector$predict_trigger,
+                                                    is_predicting = is_predicting)
 
     # Visualization module
     trait_visualization_server("visualization",

@@ -1,0 +1,51 @@
+Package: HERBSPHERE
+Title: Herbarium Spectral Hub for Research and Exploration
+Version: 0.1
+Authors@R: c(person(given = "J. Antonio",
+                    family = "Guzmán Q.",
+                    role = c("cre", "aut", "cph"),
+                    email = "aguzman@fas.harvard.edu",
+                    comment = c(ORCID = "0000-0002-0721-148X")),
+             person(given = "Dawson",
+                    family = "White",
+                    role = c("aut"),
+                    email = "dawsonwhite@g.harvard.edu",
+                    comment = c(ORCID = "0000-0002-0670-9390"))
+             person(given = "Jeannine",
+                    family = "Cavender-Bares",
+                    role = c("aut", "cph"),
+                    email = "jcavender@fas.harvard.edu",
+                    comment = c(ORCID = "0000-0003-3375-9630"))))
+Description: A Shiny application for the exploration of reflectance spectroscopy
+    data from herbarium specimens and the prediction of leaf functional traits.
+    HERBSPHERE provides an Explorer module for browsing and downloading specimen
+    records and spectra, and an Engine module for uploading spectra and predicting
+    leaf traits such as cellulose, lignin, and leaf mass per area.
+License: MIT + file LICENSE
+URL: https://github.com/IHerbSpec/HERBSPHERE
+BugReports: https://github.com/IHerbSpec/HERBSPHERE/issues
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.0.0
+Imports:
+    shiny,
+    shinythemes,
+    shinycssloaders,
+    bslib,
+    bsicons,
+    shinyjs,
+    data.table,
+    dplyr,
+    tidyr,
+    plotly,
+    DT,
+    leaflet,
+    leaflet.extras,
+    sf,
+    rgbif,
+    tidygeocoder,
+    httr2,
+    jsonlite,
+    future,
+    promises
+

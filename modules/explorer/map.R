@@ -64,18 +64,18 @@ map_server <- function(id, metadata_sf) {
           function(el, x) {
             var map = this;
             var id = el.id;
-            
+
             // Listen for custom clear message
             Shiny.addCustomMessageHandler('herb-clear-draw', function(msg) {
               if(msg.id !== id) return;
-              
+
               // Remove all layers from the draw group
               map.eachLayer(function(layer) {
                 if (layer instanceof L.Path && layer.options.className === 'drawsel') {
                   map.removeLayer(layer);
                 }
               });
-              
+
               // Alternative method: clear by checking all polygon/rectangle layers
               if (map._layers) {
                 Object.keys(map._layers).forEach(function(layerId) {
@@ -114,7 +114,7 @@ map_server <- function(id, metadata_sf) {
       geom_filter(NULL)
       # Increment counter to trigger reactive
       geom_deleted(geom_deleted() + 1)
-      
+
     })
     
     # Normalize input to a reactive sf

@@ -50,7 +50,7 @@ about_panel_ui <- function(id) {
               </p>"),
              HTML("<div style='background-color: #1f3632; padding: 15px; border-left: 4px solid #c0c0c0; margin: 10px 0; position: relative; border-radius: 5px;'>
               <pre id='citation-text' style='margin: 0; font-family: monospace; padding-right: 50px; font-size: 12px; white-space: pre-wrap; overflow-x: auto; color: white;'>@software{HERBSPHERE,
-  author = {Guzmán J.A., White D. and Cavender-Bares J.},
+  author = {Guzmán J.A., and Cavender-Bares J.},
   title = {HERBSPHERE: Herbaria Spectral Hub for Research and Exploration},
   year = {2026},
   version = {0.1},

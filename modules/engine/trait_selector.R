@@ -56,7 +56,7 @@ trait_selector_ui <- function(id) {
 }
 
 # Server
-trait_selector_server <- function(id) {
+trait_selector_server <- function(id, is_predicting = NULL) {
   moduleServer(id, function(input, output, session) {
 
     # Trigger for prediction
@@ -82,6 +82,25 @@ trait_selector_server <- function(id) {
     observeEvent(input$predict_btn, {
       predict_trigger(predict_trigger() + 1)
     })
+
+    # Update button appearance based on prediction state
+    if (!is.null(is_predicting)) {
+      observeEvent(is_predicting(), {
+        if (is_predicting()) {
+          shinyjs::disable("predict_btn")
+          shinyjs::removeClass("predict_btn", "btn-primary")
+          shinyjs::addClass("predict_btn", "btn-secondary")
+          shinyjs::html("predict_btn",
+                        '<i class="fa fa-spinner fa-spin"></i> Running...')
+        } else {
+          shinyjs::enable("predict_btn")
+          shinyjs::removeClass("predict_btn", "btn-secondary")
+          shinyjs::addClass("predict_btn", "btn-primary")
+          shinyjs::html("predict_btn",
+                        '<i class="fa fa-brain"></i> Predict traits')
+        }
+      }, ignoreInit = TRUE)
+    }
 
     # Return selected traits and trigger
     return(list(traits = reactive(input$traits),

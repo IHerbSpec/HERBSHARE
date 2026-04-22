@@ -19,13 +19,17 @@ predictions_output_ui <- function(id) {
 }
 
 # Server
-predictions_output_server <- function(id, spectra_data, selected_traits, trigger_predict) {
+predictions_output_server <- function(id, spectra_data, selected_traits, trigger_predict, is_predicting = NULL) {
   moduleServer(id, function(input, output, session) {
-    
+
     # Store predictions
     predictions <- reactiveVal(NULL)
-    is_predicting <- reactiveVal(FALSE)
-    
+
+    # Use shared is_predicting if provided, otherwise create local one
+    if (is.null(is_predicting)) {
+      is_predicting <- reactiveVal(FALSE)
+    }
+
     # Run prediction
     observeEvent(trigger_predict(), {
       req(trigger_predict() > 0)
