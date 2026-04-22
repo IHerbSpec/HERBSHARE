@@ -2,7 +2,7 @@
 
 <div align="center">
 
-**A Shiny Application for the Exploration and Trait Prediction of Herbarium Spectral Data**
+**HERBarium SPectral Hub for Research and Exploration**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![GitHub](https://img.shields.io/badge/GitHub-IHerbSpec%2FHERBSPHERE-brightgreen)](https://github.com/IHerbSpec/HERBSPHERE)
