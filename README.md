@@ -24,7 +24,7 @@ HERBSPHERE bridges the gap between large herbarium collections and practical spe
 
 ## Repository Description
 
-This repository contains the complete source code for the HERBSPHERE Shiny application, organized into modular components:
+This repository contains the complete source code for the HERBSPHERE application organized into modular components:
 
 ### Project Structure
 
@@ -82,8 +82,8 @@ The Engine provides a prediction interface for estimating leaf functional traits
 - **Trait selection** — Choose from 12 leaf functional traits (LMA, EWT, LDMC, carotenoids, chlorophyll a/b, total chlorophyll, hemicellulose, cellulose, lignin, nitrogen, carbon), with select/clear all shortcuts
 - **Spectra viewer** — Visualize uploaded spectra before running predictions
 - **Predictions table** — Interactive data table of trait predictions with CSV download
-- **Trait visualization** — Interactive histograms per predicted trait with statistical overlays (mean, median, SD) and PNG/PDF export
-- **Backend** — Inference pipeline: R Shiny → `predict_traits.R` → `engine_predict.py` → PyTorch patch-wise Transformer → denormalized results
+- **Trait visualization** — Interactive histograms per predicted trait
+- **Backend** — Inference pipeline for PyTorch
 
 ---
 
@@ -123,14 +123,14 @@ sample_002,0.06,0.058,0.056,...,0.28,0.29
 
 If you use HERBSPHERE in your research, please cite:
 
-Guzmán J.A., White D., and Cavender-Bares J. (2026). *HERBSPHERE: A Shiny Application for the Exploration and Trait Prediction of Herbarium Spectral Data*. GitHub: IHerbSpec/HERBSPHERE. https://github.com/IHerbSpec/HERBSPHERE
+Guzmán J.A., White D., and Cavender-Bares J. (2026). *HERBSPHERE: HERBarium SPectral Hub for Research and Exploration*. GitHub: IHerbSpec/HERBSPHERE. https://github.com/IHerbSpec/HERBSPHERE
 
 ### BibTeX Entry
 
 ```bibtex
 @software{HERBSPHERE,
   author = {Guzmán J.A., White D., and Cavender-Bares J.},
-  title = {HERBSPHERE: A Shiny Application for the Exploration and Trait Prediction of Herbarium Spectral Data},
+  title = {HERBSPHERE: HERBarium SPectral Hub for Research and Exploration},
   year = {2026},
   version = {0.1},
   publisher = {GitHub},
