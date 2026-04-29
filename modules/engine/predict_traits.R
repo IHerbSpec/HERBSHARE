@@ -43,8 +43,7 @@ predict_traits_python <- function(reflectance_path,
 
   # Build command
   if (is.null(python_path)) {
-    # Default to Windows Python installation
-    python_cmd <- "C:/Users/jog4076/AppData/Local/Python/pythoncore-3.14-64/python.exe"
+    python_cmd <- Sys.getenv("HERBSPHERE_PYTHON", unset = "python3")
   } else {
     python_cmd <- python_path
   }
@@ -102,14 +101,15 @@ predict_traits_python <- function(reflectance_path,
 check_python_environment <- function() {
 
   tryCatch({
-    python_version <- system("python3 --version", intern = TRUE)
+    py <- Sys.getenv("HERBSPHERE_PYTHON", unset = "python3")
+    python_version <- system(paste(py, "--version"), intern = TRUE)
     message("Python found: ", python_version)
 
     # Check for required packages
     required_pkgs <- c("torch", "numpy", "polars", "pywt")
 
     for (pkg in required_pkgs) {
-      check_cmd <- sprintf("python3 -c 'import %s'", pkg)
+      check_cmd <- sprintf("%s -c 'import %s'", py, pkg)
       result <- system(check_cmd, intern = FALSE, ignore.stderr = TRUE)
 
       if (result != 0) {

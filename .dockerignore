@@ -1,0 +1,7 @@
+.git
+.Rproj.user
+*.Rproj
+key.txt
+manifest.json
+data/01-gbif
+modules/auxiliary/pytorh/__pycache__
