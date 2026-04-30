@@ -58,6 +58,8 @@ HERBSPHERE/
 ├── www/                            # Static assets (images, CSS)
 ├── requirements.txt                # Python dependencies
 ├── manifest.json                   # R package manifest (for deployment)
+├── Dockerfile                      # Docker image
+├── shiny-server.conf               # Shiny server call
 ├── LICENSE                         # MIT License
 └── README.md                       # This file
 ```
@@ -103,20 +105,6 @@ All required R packages are listed in [`manifest.json`](manifest.json). They are
 
 All required Python packages and their pinned versions are listed in [`requirements.txt`](requirements.txt). GPU support for PyTorch is optional; see [pytorch.org/get-started/locally](https://pytorch.org/get-started/locally/) for CUDA-specific installation instructions.
 
-### Input Data Format (Engine)
-
-**Spectral Data (`.csv`):**
-- First column: Sample ID (any name; `rowID` is recommended)
-- Remaining columns: Wavelength bands from 450 to 2399 nm as numeric column headers
-- Values: Reflectance (0–1 or 0–100%)
-
-Example:
-```
-rowID,450,451,452,...,2398,2399
-sample_001,0.05,0.052,0.054,...,0.32,0.31
-sample_002,0.06,0.058,0.056,...,0.28,0.29
-```
-
 ---
 
 ## Citation
@@ -128,6 +116,7 @@ Guzmán J.A., White D., and Cavender-Bares J. (2026). *HERBSPHERE: HERBarium SPe
 ### BibTeX Entry
 
 ```bibtex
+
 @software{HERBSPHERE,
   author = {Guzmán J.A., White D., and Cavender-Bares J.},
   title = {HERBSPHERE: HERBarium SPectral Hub for Research and Exploration},
@@ -138,6 +127,7 @@ Guzmán J.A., White D., and Cavender-Bares J. (2026). *HERBSPHERE: HERBarium SPe
   howpublished = {\url{https://github.com/IHerbSpec/HERBSPHERE}},
   url = {https://github.com/IHerbSpec/HERBSPHERE}
 }
+
 ```
 
 ---
@@ -162,7 +152,7 @@ This project is licensed under the MIT License — see the [LICENSE](LICENSE) fi
 
 ## Contact
 
-**Authors:** J. Antonio Guzmán Q.
+**Author:** J. Antonio Guzmán Q.
 **Email:** aguzman@fas.harvard.edu
 **Institution:** Harvard University
 
