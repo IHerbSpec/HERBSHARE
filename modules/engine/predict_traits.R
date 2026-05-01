@@ -50,6 +50,7 @@ predict_traits_python <- function(reflectance_path,
 
   # Prepare arguments
   args <- c(
+    "-B",               # do not write __pycache__ / .pyc files
     shQuote(python_script),
     "--input", shQuote(reflectance_path),
     "--output", shQuote(temp_output),

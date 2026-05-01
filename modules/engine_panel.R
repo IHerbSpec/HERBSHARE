@@ -13,6 +13,23 @@ engine_panel_ui <- function(id) {
                       open = TRUE,
                       width  = "30%",
                       
+                      div(class = "mb-3 px-1",
+                          style = "font-size: 0.85rem; color: #555;",
+                          p(style = "margin-bottom: 0.4rem;",
+                            "The Engine module is designed to predict leaf traits using a model trained and validated 
+                            across multiple leaf conditions (fresh, dry, ground, and preserved), plant growth forms, and 
+                            data acquired from several sensors."),
+                          p(style = "margin-bottom: 0.4rem;",
+                            "Leaf trait predictions are generated using a fine-tuned deep learning model that transforms 
+                            leaf reflectance spectra into scalograms through a Continuous Wavelet Transform, before processing 
+                            them with a regression network."),
+                          p(style = "margin-bottom: 0.4rem;",
+                            "The model estimates 12 functional leaf traits: LMA, EWT, LDMC, chlorophyll a, chlorophyll b, 
+                            carotenoids, cellulose, hemicellulose, lignin, nitrogen (N), and carbon (C)."),
+                          p(style = "margin-bottom: 0.4rem;",
+                            "This module is currently under development and is based on a model that has not yet undergone peer review. Use with caution."),
+                          ),
+
                       bslib::accordion(id = ns("collapse"),
                                        open = c("upload_data", "trait_selection"),
                                        multiple = TRUE,
