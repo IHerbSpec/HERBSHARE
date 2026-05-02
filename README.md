@@ -57,8 +57,6 @@ HERBSPHERE/
 ├── data/                           # Application data
 ├── www/                            # Static assets (images, CSS)
 ├── requirements.txt                # Python dependencies
-├── manifest.json                   # R package manifest (for deployment)
-├── Dockerfile                      # Docker image
 ├── shiny-server.conf               # Shiny server call
 ├── LICENSE                         # MIT License
 └── README.md                       # This file
@@ -99,7 +97,7 @@ The Engine provides a prediction interface for estimating leaf functional traits
 
 ### R Packages
 
-All required R packages are listed in [`manifest.json`](manifest.json). They are installed automatically during deployment or can be installed manually using `install_packages.R`.
+All required R packages are listed in [`DESCRIPTION`](DESCRIPTION). They are installed automatically during deployment.
 
 ### Python Packages
 

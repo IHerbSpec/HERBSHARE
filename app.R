@@ -114,7 +114,8 @@ ui <- page_navbar(
   # Custom CSS for button colors
   header = tags$head(
     tags$link(rel = "stylesheet", type = "text/css", href = "styles.css"),
-    useShinyjs()
+    useShinyjs(),
+    includeHTML("google-analytics.html")
   ),
   lang = "en",
   
