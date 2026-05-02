@@ -57,7 +57,8 @@ HERBSPHERE/
 ├── data/                           # Application data
 ├── www/                            # Static assets (images, CSS)
 ├── requirements.txt                # Python dependencies
-├── shiny-server.conf               # Shiny server call
+├── google-analytics.html           # Google analytics tracker
+├── DESCRIPTION                     # R description project
 ├── LICENSE                         # MIT License
 └── README.md                       # This file
 ```
