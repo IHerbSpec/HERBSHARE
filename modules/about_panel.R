@@ -31,15 +31,11 @@ about_panel_ui <- function(id) {
               spectroscopy data from herbarium specimens.
               </p>"),
              HTML("<p style='text-align: justify; color: white;'>
-              Leaf spectroscopy has emerged as a powerful tool for rapid leaf phenotyping. 
-              As a non-destructive technique, it can provide insights into ecological and 
-              evolutionary patterns across spatial and temporal scales, enabling the 
-              estimation of leaf traits such as cellulose, lignin, and leaf mass per area, 
-              among others, as well as uncovering patterns of species diversification 
-              through spectral information. Most importantly, the use of spectroscopy on 
-              herbarium specimens has the potential to transform these vast plant 
-              collections into dynamic laboratories for addressing pressing scientific 
-              and environmental challenges.
+              Our motivation is to make spectral data from herbarium specimens more accessible, 
+              usable, and impactful. Through <strong>HERBSPHERE</strong>, we aim to facilitate discovery,
+              accelerate research, and unlock the hidden potential of these vast plant collections—transforming 
+              them into dynamic laboratories that can inform our understanding of biodiversity, 
+              environmental change, and the future of plant science.
               </p>"),
              br(),
              
@@ -125,15 +121,26 @@ about_panel_ui <- function(id) {
              # Contribute Section
              HTML("<h5 style='color: #c0c0c0; border-bottom: 1px solid #c0c0c0; padding-bottom: 5px; font-weight: bold;'>Contribute</h5>"),
              HTML("<p style='text-align: justify; color: white;'>
-               HERBSPHERE is a work in progress that relies on the community. Please contribute to this project and help us make better use of spectral information from herbarium specimens.
-               You can contribute in the following ways:
-               </p>
-               <ol style='color: white;'>
-                 <li>Share your specimen spectra data by following the <a href='https://iherbspec.github.io/' target='_blank' style='color: #c0c0c0;'>IHerbSpec</a> guidelines.</li>
-                 <li>Help develop open-source tools that use HERBSPHERE for research purposes.</li>
-                 <li>Report problems and help us identify, debug, and resolve issues.</li>
-               </ol>"),
-             br(),
+                  HERBSPHERE is a community-driven platform that grows through open-science and collaboration. 
+                  The application harvests spectral datasets from publicly available repositories, 
+                  with a focus on standardized, well-documented contributions. To ensure data can be efficiently 
+                  discovered, integrated, and reused, we strongly encourage contributors to follow common data 
+                  standards and workflows.
+                  </p>
+                  <p style='text-align: justify; color: white;'>
+                  HERBSPHERE grow most effectively when contributors adopt the recommended practices developed 
+                  by the <strong>IHerbSpec</strong> initiative, including the use of the IHerbSpec metadata 
+                  spreadsheet, and depositing datasets in the IHerbSpec Dataverse repository. These standards 
+                  enable seamless data harvesting and maximize the visibility and impact of your work.
+                  </p>
+                  <p style='text-align: justify; color: white;'>
+                  You can contribute in the following ways:
+                  </p>
+                  <ol style='color: white;'>
+                  <li>Share your specimen spectra data by following the <a href='https://iherbspec.github.io/' target='_blank' style='color: #c0c0c0;'>IHerbSpec</a> guidelines and depositing your data in the IHerbSpec Dataverse.</li>
+                  <li>Help develop open-source tools and workflows that use HERBSPHERE for research and analysis.</li>
+                  <li>Report problems and help us identify, debug, and resolve issues.</li>
+                  </ol>"),
 
              # Disclaimer Section
              HTML("<h5 style='color: #c0c0c0; border-bottom: 1px solid #c0c0c0; padding-bottom: 5px; font-weight: bold;'>Disclaimer</h5>"),
