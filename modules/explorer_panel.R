@@ -39,7 +39,7 @@ explorer_panel_ui <- function(id) {
         id = ns("right_sb"),
         title = NULL,
         position = "right",
-        width  = "30%",
+        width  = "35%",
         open   = FALSE,
         specimen_selection_ui(ns("spec_sel"))
       ),
@@ -95,7 +95,7 @@ explorer_panel_server <- function(id, metadata, spectra_compiled, citation) {
       ))
     }, ignoreInit = TRUE)
     
-    # Helper: apply attribute filters + geometry, but ONLY when Select is pressed
+    # Helper: apply attribute filters + geometry
     make_filtered_sf <- function(sel_dt, geom) {
       # Start from empty
       if (is.null(sel_dt) || nrow(sel_dt) == 0) return(metadata_sf[0, ])
@@ -132,8 +132,7 @@ explorer_panel_server <- function(id, metadata, spectra_compiled, citation) {
       current_sf(metadata_sf)
     })
     
-    # Summary records: use the APPLIED subset (what's on the map)
-    # This only updates when current_sf() changes (i.e., when "Select" is pressed)
+    # Summary records: use the APPLIED subset
     summary_records_server(
       "summary_records",
       metadata = reactive(sf::st_drop_geometry(current_sf()))
@@ -145,7 +144,7 @@ explorer_panel_server <- function(id, metadata, spectra_compiled, citation) {
       toggle_sidebar(id = "left_sb",  open = FALSE, session = session)
     })
     
-    # Specimen panel: use the APPLIED subset as well
+    # Specimen panel
     specimen_selection_server(id = "spec_sel",
                               click_id = map_out$click_id,
                               metadata = reactive(sf::st_drop_geometry(current_sf())),
