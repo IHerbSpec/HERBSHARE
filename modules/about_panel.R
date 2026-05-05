@@ -102,13 +102,16 @@ about_panel_ui <- function(id) {
              HTML("<p style='text-align: justify; color: white;'>
               The development of <strong>HERBSPHERE</strong> is supported by:
               </p>"),
-             HTML("<div style='display: flex; justify-content: center; align-items: flex-start; margin: 20px 0; gap: 30px;'>
-                <div style='text-align: center;'>
-                  <img src='HUH_white.png' height='90px' style='display: block; margin: 0 auto;'>
-                </div>
-                <div style='text-align: center;'>
-                  <img src='HDSI_white.png' height='90px' style='display: block; margin: 0 auto;'>
-                </div>
+             HTML("<div style='text-align: center; margin: 20px 0;'>
+                <img src='HUH_white.png' height='130px' style='display: inline-block;'>
+              </div>
+              <div style='display: flex; justify-content: center; align-items: center; margin: 20px 0; gap: 40px;'>
+                <img src='HDSI_white.png' height='60px'>
+                <img src='FAS_white.png' height='60px'>
+              </div>
+              <div style='display: flex; justify-content: center; align-items: center; margin: 20px 0; gap: 40px;'>
+                <img src='ASCEND.png' height='120px'>
+                <img src='NSF.png' height='120px'>
               </div>"),
              br(),
              
