@@ -121,7 +121,7 @@ about_panel_ui <- function(id) {
              # Contribute Section
              HTML("<h5 style='color: #c0c0c0; border-bottom: 1px solid #c0c0c0; padding-bottom: 5px; font-weight: bold;'>Contribute</h5>"),
              HTML("<p style='text-align: justify; color: white;'>
-                  <strong>HERBSPHERE<strong> is a community-driven platform that grows through open-science and collaboration. 
+                  <strong>HERBSPHERE</strong> is a community-driven platform that grows through open-science and collaboration. 
                   The application harvests spectral datasets from publicly available repositories, 
                   with a focus on standardized, well-documented contributions. To ensure data can be efficiently 
                   discovered, integrated, and reused, we strongly encourage contributors to follow common data 
