@@ -67,32 +67,26 @@ explorer_panel_server <- function(id, metadata, spectra_compiled, citation) {
     # What the map is currently showing
     current_sf <- reactiveVal(metadata_sf)
     
-    # Map module: get geometry + clicks
-    map_out <- map_server(id = "map",
-                          metadata_sf = reactive(current_sf()))
-    
-    # Select-by module 
+    # Break the circular dependency (map needs sel$show_all; sel needs geom_filter)
+    # by using a proxy reactiveVal for the geometry.
+    geom_proxy <- reactiveVal(NULL)
+
+    # Select-by module receives the proxy (starts NULL, wired up after map_out)
     sel <- select_by_server(id = "select_by",
                             metadata = metadata,
-                            geom_filter = map_out$geom_filter)
-    
-    # A single "clear" signal that fires on Show all
-    clear_signal <- reactive({
-      sel$show_all()
-    })
+                            geom_filter = geom_proxy)
 
-    # When geometry is manually deleted, trigger "Show all"
+    # Map module: gets the real current data + "Show all" as clear trigger
+    map_out <- map_server(id = "map",
+                          metadata_sf = reactive(current_sf()),
+                          clear_draw = sel$show_all)
+
+    # Keep the proxy in sync with the map's actual geometry
+    observe({ geom_proxy(map_out$geom_filter()) })
+
+    # When geometry is manually deleted, reset to full dataset
     observeEvent(map_out$geom_deleted(), {
-      # Trigger show all programmatically
       current_sf(metadata_sf)
-    }, ignoreInit = TRUE)
-
-    # Clear drawn shapes when "Show all" is pressed
-    observeEvent(clear_signal(), {
-      # Send message to map to clear drawn shapes
-      session$sendCustomMessage("herb-clear-draw", list(
-        id = session$ns("map")
-      ))
     }, ignoreInit = TRUE)
     
     # Helper: apply attribute filters + geometry

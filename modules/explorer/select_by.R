@@ -52,7 +52,7 @@ select_by_ui <- function(id) {
           bslib::card_body(
             # Matching records (top)
             div(class = "mb-2 d-flex align-items-baseline gap-2",
-                span(class = "text-muted", "Matching records:"),
+                span(class = "text-muted", "Spectral measurements:"),
                 textOutput(ns("n_matches"), inline = TRUE)
             ),
             # Buttons (below, full width, stacked with a little gap)
@@ -62,7 +62,7 @@ select_by_ui <- function(id) {
                              icon = shiny::icon("check-circle"),
                              class = "btn btn-primary btn-lg"),
                 actionButton(ns("show_all"),
-                             "Show all",
+                             "Clean selection",
                              icon = shiny::icon("broom"),
                              class = "btn btn-outline-secondary")
             )

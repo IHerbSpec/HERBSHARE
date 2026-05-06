@@ -121,16 +121,12 @@ about_panel_ui <- function(id) {
              # Contribute Section
              HTML("<h5 style='color: #c0c0c0; border-bottom: 1px solid #c0c0c0; padding-bottom: 5px; font-weight: bold;'>Contribute</h5>"),
              HTML("<p style='text-align: justify; color: white;'>
-                  HERBSPHERE is a community-driven platform that grows through open-science and collaboration. 
+                  <strong>HERBSPHERE<strong> is a community-driven platform that grows through open-science and collaboration. 
                   The application harvests spectral datasets from publicly available repositories, 
                   with a focus on standardized, well-documented contributions. To ensure data can be efficiently 
                   discovered, integrated, and reused, we strongly encourage contributors to follow common data 
-                  standards and workflows.
-                  </p>
-                  <p style='text-align: justify; color: white;'>
-                  HERBSPHERE grow most effectively when contributors adopt the recommended practices developed 
-                  by the <strong>IHerbSpec</strong> initiative, including the use of the IHerbSpec metadata 
-                  spreadsheet, and depositing datasets in the IHerbSpec Dataverse repository. These standards 
+                  standards from the <strong>IHerbSpec</strong> initiative, including the use of the IHerbSpec metadata 
+                  and depositing datasets in the IHerbSpec-Dataverse repository. These standards 
                   enable seamless data harvesting and maximize the visibility and impact of your work.
                   </p>
                   <p style='text-align: justify; color: white;'>
@@ -168,7 +164,7 @@ about_panel_ui <- function(id) {
              br(),
 
              HTML("<p align='center' style='color: #d0d0d0; font-size: 14px;'>
-              Last updated: 2026-04-01
+              Last updated: 2026-05-05
               </p>")
            )
     )
