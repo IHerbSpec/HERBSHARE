@@ -161,16 +161,22 @@ This project is licensed under the MIT License — see the [LICENSE](LICENSE) fi
 
 The development of **HERBSPHERE** is supported/funded by:
 
-<div align="center">
-  <img src="www/HUH_black.png" height="90px" style="background:#ffffff; padding:8px; border-radius:5px;">
-  &nbsp;&nbsp;&nbsp;
-  <img src="www/HDSI_black.png" height="90px" style="background:#ffffff; padding:8px; border-radius:5px;">
+<div style='text-align: center; margin: 20px 0;'>
+  <img src='www/HUH_black.png' height='130px' style='display: inline-block;'>
+  </div>
+  <div style='display: flex; justify-content: center; align-items: center; margin: 20px 0; gap: 40px;'>
+  <img src='www/HDSI_black.png' height='60px'>
+  <img src='www/FAS_black.png' height='60px'>
+  </div>
+  <div style='display: flex; justify-content: center; align-items: center; margin: 20px 0; gap: 40px;'>
+  <img src='www/ASCEND.png' height='120px'>
+  <img src='www/NSF.png' height='120px'>
 </div>
 
 ---
 
 <div align="center">
 
-**Version 0.1** | **Last Updated:** 2026-04-21
+**Version 0.1** | **Last Updated:** 2026-05-05
 
 </div>
