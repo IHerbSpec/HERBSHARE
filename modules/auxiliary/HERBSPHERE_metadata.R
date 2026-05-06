@@ -70,13 +70,18 @@ api_search <- function(catalogNumber,
                 pred_in("institutionCode", institutionCode))
 
   # Read credentials from key.txt
-  creds <- read.table("key.txt", sep = "=", col.names = c("k", "v"), strip.white = TRUE)
-  creds <- setNames(trimws(creds$v), trimws(creds$k))
+  # creds <- read.table("key.txt", sep = "=", col.names = c("k", "v"), strip.white = TRUE)
+  # creds <- setNames(trimws(creds$v), trimws(creds$k))
 
+  # key <- occ_download(p,
+  #                     user = creds["user"],
+  #                     pwd = creds["pwd"],
+  #                     email = creds["email"])
+  
   key <- occ_download(p,
-                      user = creds["user"],
-                      pwd = creds["pwd"],
-                      email = creds["email"])
+                      user = "antguz",
+                      pwd = "Tonito_20191107!",
+                      email = "antguz06@gmail.com")
   
   # Wait for completion
   occ_download_wait(key)
@@ -87,7 +92,7 @@ api_search <- function(catalogNumber,
   
   # Keep only columns you want
   keep <- c("gbifID","institutionCode","catalogNumber",
-            "continent","countryCode", "higherGeography", "stateProvince", 
+            "continent", "countryCode", "higherGeography", "stateProvince", 
             "locality", "decimalLatitude","decimalLongitude",
             "species","genus","family","order","class",
             "eventDate", "year", "month", "day", "recordedBy",
