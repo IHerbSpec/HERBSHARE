@@ -20,7 +20,13 @@ files = [
   '/README.md',
   '/LICENSE',
   '/DESCRIPTION',
-  '!/data/01-spectra'
+  '/google-analytics.html',
+  '/data/01-spectra/02-spectra/02-MSP_spectra',
+  '/data/01-spectra/02-spectra',
+  '!/data/01-spectra/02-spectra/04-HUH',
+  '!/data/01-spectra/02-spectra/03-Barbara',
+  '!/data/01-spectra/IHerbSpec_metadata.csv',
+  '!/data/01-spectra/archive'
 ]
 title = 'HERBSPHERE'
 
