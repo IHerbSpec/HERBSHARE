@@ -260,12 +260,12 @@ download_server <- function(id, applied_data, spectra_compiled, citation, on_sho
 
         if(nrow(free_md) > 0) {
           # metadata CSV — free rows only
-          data.table::fwrite(free_md, file.path(tmpdir, "metadata_selected.csv"))
+          data.table::fwrite(free_md, file.path(tmpdir, "metadata.csv"))
 
           # spectra summary CSV — free rows only
-          data.table::fwrite(sel_spectra(), file.path(tmpdir, "spectra_selected.csv"))
+          data.table::fwrite(sel_spectra(), file.path(tmpdir, "spectra_aggregated.csv"))
 
-          zip_files <- c(zip_files, "metadata_selected.csv", "spectra_selected.csv")
+          zip_files <- c(zip_files, "metadata.csv", "spectra_aggregated.csv")
 
           # Raw spectra files — free rows only
           spectra_base <- file.path("data", "01-spectra", "02-spectra")
@@ -277,10 +277,10 @@ download_server <- function(id, applied_data, spectra_compiled, citation, on_sho
 
           src_paths <- find_spectra_files(raw_filenames, spectra_base)
           if(length(src_paths) > 0) {
-            spec_dir <- file.path(tmpdir, "spectra_files")
+            spec_dir <- file.path(tmpdir, "raw_spectra_files")
             dir.create(spec_dir)
             file.copy(src_paths, file.path(spec_dir, basename(src_paths)))
-            zip_files <- c(zip_files, "spectra_files")
+            zip_files <- c(zip_files, "raw_spectra_files")
           }
         }
 
