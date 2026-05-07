@@ -31,15 +31,11 @@ about_panel_ui <- function(id) {
               spectroscopy data from herbarium specimens.
               </p>"),
              HTML("<p style='text-align: justify; color: white;'>
-              Leaf spectroscopy has emerged as a powerful tool for rapid leaf phenotyping. 
-              As a non-destructive technique, it can provide insights into ecological and 
-              evolutionary patterns across spatial and temporal scales, enabling the 
-              estimation of leaf traits such as cellulose, lignin, and leaf mass per area, 
-              among others, as well as uncovering patterns of species diversification 
-              through spectral information. Most importantly, the use of spectroscopy on 
-              herbarium specimens has the potential to transform these vast plant 
-              collections into dynamic laboratories for addressing pressing scientific 
-              and environmental challenges.
+              Our motivation is to make spectral data from herbarium specimens more accessible, 
+              usable, and impactful. Through <strong>HERBSPHERE</strong>, we aim to facilitate discovery,
+              accelerate research, and unlock the hidden potential of these vast plant collections—transforming 
+              them into dynamic laboratories that can inform our understanding of biodiversity, 
+              environmental change, and the future of plant science.
               </p>"),
              br(),
              
@@ -50,7 +46,7 @@ about_panel_ui <- function(id) {
               </p>"),
              HTML("<div style='background-color: #1f3632; padding: 15px; border-left: 4px solid #c0c0c0; margin: 10px 0; position: relative; border-radius: 5px;'>
               <pre id='citation-text' style='margin: 0; font-family: monospace; padding-right: 50px; font-size: 12px; white-space: pre-wrap; overflow-x: auto; color: white;'>@software{HERBSPHERE,
-  author = {Guzmán J.A., and Cavender-Bares J.},
+  author = {Guzmán J.A., White D.M., and Cavender-Bares J.},
   title = {HERBSPHERE: Herbaria Spectral Hub for Research and Exploration},
   year = {2026},
   version = {0.1},
@@ -102,13 +98,16 @@ about_panel_ui <- function(id) {
              HTML("<p style='text-align: justify; color: white;'>
               The development of <strong>HERBSPHERE</strong> is supported by:
               </p>"),
-             HTML("<div style='display: flex; justify-content: center; align-items: flex-start; margin: 20px 0; gap: 30px;'>
-                <div style='text-align: center;'>
-                  <img src='HUH_white.png' height='90px' style='display: block; margin: 0 auto;'>
-                </div>
-                <div style='text-align: center;'>
-                  <img src='HDSI_white.png' height='90px' style='display: block; margin: 0 auto;'>
-                </div>
+             HTML("<div style='text-align: center; margin: 20px 0;'>
+                <img src='HUH_white.png' height='130px' style='display: inline-block;'>
+              </div>
+              <div style='display: flex; justify-content: center; align-items: center; margin: 20px 0; gap: 40px;'>
+                <img src='HDSI_white.png' height='60px'>
+                <img src='FAS_white.png' height='60px'>
+              </div>
+              <div style='display: flex; justify-content: center; align-items: center; margin: 20px 0; gap: 40px;'>
+                <img src='ASCEND.png' height='120px'>
+                <img src='NSF.png' height='120px'>
               </div>"),
              br(),
              
@@ -122,15 +121,22 @@ about_panel_ui <- function(id) {
              # Contribute Section
              HTML("<h5 style='color: #c0c0c0; border-bottom: 1px solid #c0c0c0; padding-bottom: 5px; font-weight: bold;'>Contribute</h5>"),
              HTML("<p style='text-align: justify; color: white;'>
-               HERBSPHERE is a work in progress that relies on the community. Please contribute to this project and help us make better use of spectral information from herbarium specimens.
-               You can contribute in the following ways:
-               </p>
-               <ol style='color: white;'>
-                 <li>Share your specimen spectra data by following the <a href='https://iherbspec.github.io/' target='_blank' style='color: #c0c0c0;'>IHerbSpec</a> guidelines.</li>
-                 <li>Help develop open-source tools that use HERBSPHERE for research purposes.</li>
-                 <li>Report problems and help us identify, debug, and resolve issues.</li>
-               </ol>"),
-             br(),
+                  <strong>HERBSPHERE</strong> is a community-driven platform that grows through open-science and collaboration. 
+                  The application harvests spectral datasets from publicly available repositories, 
+                  with a focus on standardized, well-documented contributions. To ensure data can be efficiently 
+                  discovered, integrated, and reused, we strongly encourage contributors to follow common data 
+                  standards from the <strong>IHerbSpec</strong> initiative, including the use of the IHerbSpec metadata 
+                  and depositing datasets in the IHerbSpec-Dataverse repository. These standards 
+                  enable seamless data harvesting and maximize the visibility and impact of your work.
+                  </p>
+                  <p style='text-align: justify; color: white;'>
+                  You can contribute in the following ways:
+                  </p>
+                  <ol style='color: white;'>
+                  <li>Share your specimen spectra data by following the <a href='https://iherbspec.github.io/' target='_blank' style='color: #c0c0c0;'>IHerbSpec</a> guidelines and depositing your data in the IHerbSpec Dataverse.</li>
+                  <li>Help develop open-source tools and workflows that use HERBSPHERE for research and analysis.</li>
+                  <li>Report problems and help us identify, debug, and resolve issues.</li>
+                  </ol>"),
 
              # Disclaimer Section
              HTML("<h5 style='color: #c0c0c0; border-bottom: 1px solid #c0c0c0; padding-bottom: 5px; font-weight: bold;'>Disclaimer</h5>"),
@@ -158,7 +164,7 @@ about_panel_ui <- function(id) {
              br(),
 
              HTML("<p align='center' style='color: #d0d0d0; font-size: 14px;'>
-              Last updated: 2026-04-01
+              Last updated: 2026-05-05
               </p>")
            )
     )

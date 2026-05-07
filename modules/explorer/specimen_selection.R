@@ -10,11 +10,37 @@ specimen_selection_ui <- function(id) {
     multiple = FALSE,
     bslib::accordion_panel(title = "Specimen metadata",
                            id = "specimen_info",
-                           tableOutput(ns("specimen_table"))
+                           uiOutput(ns("specimen_table"))
                            ),
     
     bslib::accordion_panel(title = "Spectra profile",
                            id = "spectra_profile",
+                           tags$div(
+                             style = "display: flex; flex-wrap: wrap; gap: 14px; font-size: 0.78em; color: #444; margin-bottom: 6px; align-items: center;",
+                             tags$span(style = "font-weight: 600;", "Surface:"),
+                             tags$span(
+                               style = "display: inline-flex; align-items: center; gap: 5px;",
+                               tags$span(style = "display: inline-block; width: 26px; border-top: 2px solid #666;"),
+                               "Adaxial"
+                             ),
+                             tags$span(
+                               style = "display: inline-flex; align-items: center; gap: 5px;",
+                               tags$span(style = "display: inline-block; width: 26px; border-top: 2px dotted #666;"),
+                               "Abaxial"
+                             ),
+                             tags$span(style = "color: #ccc; padding: 0 2px;", "|"),
+                             tags$span(style = "font-weight: 600;", "Background:"),
+                             tags$span(
+                               style = "display: inline-flex; align-items: center; gap: 5px;",
+                               tags$span(style = "display: inline-block; width: 26px; border-top: 2px solid #000;"),
+                               "Black"
+                             ),
+                             tags$span(
+                               style = "display: inline-flex; align-items: center; gap: 5px;",
+                               tags$span(style = "display: inline-block; width: 26px; border-top: 2px solid #7f7f7f;"),
+                               "Paper"
+                             )
+                           ),
                            plotlyOutput(ns("spectra_plot"))
                            ),
     bslib::accordion_panel(title = "Specimen image",
@@ -40,7 +66,7 @@ specimen_selection_server <- function(id, click_id, metadata, spectra_compiled) 
     })
     
     # Table
-    output$specimen_table <- renderTable({
+    output$specimen_table <- renderUI({
       rows <- clicked_points()
       req(nrow(rows) > 0)
       row <- dplyr::slice(rows, 1)
@@ -49,24 +75,37 @@ specimen_selection_server <- function(id, click_id, metadata, spectra_compiled) 
         if (is.null(x) || length(x) == 0) NA_character_ else as.character(x[[1]])
       }
 
-      data.frame(
-        Name  = c("gbifID","institutionName","institutionCode","class",
-                  "order","family","genus","species", "year", "recordedBy"),
-        Value = c(
-          get_val(row$gbifID),
-          get_val(row$institutionName),
-          get_val(row$institutionCode),
-          get_val(row$class),
-          get_val(row$order),
-          get_val(row$family),
-          get_val(row$genus),
-          get_val(row$species),
-          get_val(row$year),
-          get_val(row$recordedBy)
-        ),
-        stringsAsFactors = FALSE
+      gbif_id <- get_val(row$gbifID)
+      gbif_cell <- if (!is.na(gbif_id)) {
+        tags$a(href = paste0("https://www.gbif.org/occurrence/", gbif_id),
+               target = "_blank", style = "color: #0d6efd;", gbif_id)
+      } else {
+        NA_character_
+      }
+
+      fields <- list(
+        gbifID          = gbif_cell,
+        institutionName = get_val(row$institutionName),
+        institutionCode = get_val(row$institutionCode),
+        class           = get_val(row$class),
+        order           = get_val(row$order),
+        family          = get_val(row$family),
+        genus           = get_val(row$genus),
+        species         = get_val(row$species),
+        year            = get_val(row$year),
+        recordedBy      = get_val(row$recordedBy)
       )
-    }, striped = TRUE, bordered = TRUE, rownames = FALSE)
+
+      table_rows <- lapply(names(fields), function(nm) {
+        tags$tr(tags$td(tags$strong(nm)), tags$td(fields[[nm]]))
+      })
+
+      tags$table(
+        class = "table table-striped table-bordered table-sm",
+        style = "width: 100%; font-size: 0.85em;",
+        tags$tbody(table_rows)
+      )
+    })
     
     # Spectra
     output$spectra_plot <- plotly::renderPlotly({
@@ -118,7 +157,7 @@ specimen_selection_server <- function(id, click_id, metadata, spectra_compiled) 
                       x = ~wavelength,
                       y = ~reflectance,
                       split = ~filename,
-                      color = ~bg, colors = c("black", "grey30"),
+                      color = ~bg, colors = c("black", "grey50"),
                       linetype = ~ttc,
                       linetypes = c("solid", "dot"),
                       type = "scatter",

@@ -52,6 +52,7 @@ library(plotly)
 library(DT)
 library(future)
 library(promises)
+library(bit64)
 plan(multisession)
 
 ################################################################################
@@ -81,6 +82,7 @@ source("modules/about_panel.R")
 # Load initial data
 
 metadata_and_gbif <- data.table::fread("data/02-organized/HERBSPHERE_metadata_locations.csv")
+metadata_and_gbif <- metadata_and_gbif[decimalLatitude != 0 & decimalLongitude != 0,]
 spectra_compiled <- data.table::fread("data/02-organized/spectra_compiled.csv", header = TRUE)
 citation <- data.table::fread("data/02-organized/citation.csv", header = TRUE, encoding = "UTF-8")
 
@@ -113,7 +115,8 @@ ui <- page_navbar(
   # Custom CSS for button colors
   header = tags$head(
     tags$link(rel = "stylesheet", type = "text/css", href = "styles.css"),
-    useShinyjs()
+    useShinyjs(),
+    includeHTML("google-analytics.html")
   ),
   lang = "en",
   

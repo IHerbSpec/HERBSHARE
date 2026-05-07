@@ -10,12 +10,12 @@ Authors@R: c(person(given = "J. Antonio",
                     family = "White",
                     role = c("aut"),
                     email = "dawsonwhite@g.harvard.edu",
-                    comment = c(ORCID = "0000-0002-0670-9390"))
+                    comment = c(ORCID = "0000-0002-0670-9390")),
              person(given = "Jeannine",
                     family = "Cavender-Bares",
                     role = c("aut", "cph"),
                     email = "jcavender@fas.harvard.edu",
-                    comment = c(ORCID = "0000-0003-3375-9630"))))
+                    comment = c(ORCID = "0000-0003-3375-9630")))
 Description: A Shiny application for the exploration of reflectance spectroscopy
     data from herbarium specimens and the prediction of leaf functional traits.
     HERBSPHERE provides an Explorer module for browsing and downloading specimen
@@ -48,4 +48,3 @@ Imports:
     jsonlite,
     future,
     promises
-

@@ -53,3 +53,6 @@ po/*~
 # RStudio Connect folder
 rsconnect/
 *.sig
+
+# Posit Publisher auto-generated manifest — do not commit
+manifest.json

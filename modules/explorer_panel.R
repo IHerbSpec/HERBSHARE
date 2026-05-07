@@ -39,7 +39,7 @@ explorer_panel_ui <- function(id) {
         id = ns("right_sb"),
         title = NULL,
         position = "right",
-        width  = "30%",
+        width  = "35%",
         open   = FALSE,
         specimen_selection_ui(ns("spec_sel"))
       ),
@@ -67,35 +67,29 @@ explorer_panel_server <- function(id, metadata, spectra_compiled, citation) {
     # What the map is currently showing
     current_sf <- reactiveVal(metadata_sf)
     
-    # Map module: get geometry + clicks
-    map_out <- map_server(id = "map",
-                          metadata_sf = reactive(current_sf()))
-    
-    # Select-by module 
+    # Break the circular dependency (map needs sel$show_all; sel needs geom_filter)
+    # by using a proxy reactiveVal for the geometry.
+    geom_proxy <- reactiveVal(NULL)
+
+    # Select-by module receives the proxy (starts NULL, wired up after map_out)
     sel <- select_by_server(id = "select_by",
                             metadata = metadata,
-                            geom_filter = map_out$geom_filter)
-    
-    # A single "clear" signal that fires on Show all
-    clear_signal <- reactive({
-      sel$show_all()
-    })
+                            geom_filter = geom_proxy)
 
-    # When geometry is manually deleted, trigger "Show all"
+    # Map module: gets the real current data + "Show all" as clear trigger
+    map_out <- map_server(id = "map",
+                          metadata_sf = reactive(current_sf()),
+                          clear_draw = sel$show_all)
+
+    # Keep the proxy in sync with the map's actual geometry
+    observe({ geom_proxy(map_out$geom_filter()) })
+
+    # When geometry is manually deleted, reset to full dataset
     observeEvent(map_out$geom_deleted(), {
-      # Trigger show all programmatically
       current_sf(metadata_sf)
     }, ignoreInit = TRUE)
-
-    # Clear drawn shapes when "Show all" is pressed
-    observeEvent(clear_signal(), {
-      # Send message to map to clear drawn shapes
-      session$sendCustomMessage("herb-clear-draw", list(
-        id = session$ns("map")
-      ))
-    }, ignoreInit = TRUE)
     
-    # Helper: apply attribute filters + geometry, but ONLY when Select is pressed
+    # Helper: apply attribute filters + geometry
     make_filtered_sf <- function(sel_dt, geom) {
       # Start from empty
       if (is.null(sel_dt) || nrow(sel_dt) == 0) return(metadata_sf[0, ])
@@ -132,8 +126,7 @@ explorer_panel_server <- function(id, metadata, spectra_compiled, citation) {
       current_sf(metadata_sf)
     })
     
-    # Summary records: use the APPLIED subset (what's on the map)
-    # This only updates when current_sf() changes (i.e., when "Select" is pressed)
+    # Summary records: use the APPLIED subset
     summary_records_server(
       "summary_records",
       metadata = reactive(sf::st_drop_geometry(current_sf()))
@@ -145,7 +138,7 @@ explorer_panel_server <- function(id, metadata, spectra_compiled, citation) {
       toggle_sidebar(id = "left_sb",  open = FALSE, session = session)
     })
     
-    # Specimen panel: use the APPLIED subset as well
+    # Specimen panel
     specimen_selection_server(id = "spec_sel",
                               click_id = map_out$click_id,
                               metadata = reactive(sf::st_drop_geometry(current_sf())),

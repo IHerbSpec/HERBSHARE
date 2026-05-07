@@ -8,20 +8,23 @@ map_ui <- function(id) {
 }
 
 # Server
-map_server <- function(id, metadata_sf) {
+map_server <- function(id, metadata_sf, clear_draw = NULL) {
   moduleServer(id, function(input, output, session) {
-    
+
     group_name <- "specimens"
     draw_group <- "drawsel"
-    
+
     # Store the drawn geometry
     geom_filter <- reactiveVal(NULL)
-    
+
     # Track geometry deletion
     geom_deleted <- reactiveVal(0)
-    
+
     # Track if initial load
     initial_load <- reactiveVal(TRUE)
+
+    # Flag to suppress fitBounds after a "Show all" reset
+    skip_fit <- reactiveVal(FALSE)
     
     output$map <- renderLeaflet({
       leaflet(options = leafletOptions(minZoom = 2)) %>%
@@ -69,30 +72,38 @@ map_server <- function(id, metadata_sf) {
             Shiny.addCustomMessageHandler('herb-clear-draw', function(msg) {
               if(msg.id !== id) return;
 
-              // Remove all layers from the draw group
-              map.eachLayer(function(layer) {
-                if (layer instanceof L.Path && layer.options.className === 'drawsel') {
-                  map.removeLayer(layer);
-                }
-              });
-
-              // Alternative method: clear by checking all polygon/rectangle layers
-              if (map._layers) {
-                Object.keys(map._layers).forEach(function(layerId) {
-                  var layer = map._layers[layerId];
+              // Primary: clear via the draw control's feature group
+              if (map.drawControl &&
+                  map.drawControl.options &&
+                  map.drawControl.options.edit &&
+                  map.drawControl.options.edit.featureGroup) {
+                map.drawControl.options.edit.featureGroup.clearLayers();
+              } else {
+                // Fallback: remove polygon/rectangle layers added by drawing
+                var toRemove = [];
+                map.eachLayer(function(layer) {
                   if (layer instanceof L.Polygon || layer instanceof L.Rectangle) {
-                    // Check if it belongs to our draw group
-                    if (layer.options && !layer.options.interactive) {
-                      map.removeLayer(layer);
-                    }
+                    toRemove.push(layer);
                   }
                 });
+                toRemove.forEach(function(l) { map.removeLayer(l); });
               }
             });
           }
         ")
     })
     
+    # "Show all": reset geometry, view, and clear drawn shapes
+    if (!is.null(clear_draw)) {
+      observeEvent(clear_draw(), {
+        geom_filter(NULL)
+        skip_fit(TRUE)
+        leafletProxy("map", session = session) %>%
+          setView(lng = 0, lat = 20, zoom = 2)
+        session$sendCustomMessage("herb-clear-draw", list(id = session$ns("map")))
+      }, ignoreInit = TRUE)
+    }
+
     # Capture drawn shapes
     observeEvent(input$map_draw_new_feature, {
       feature <- input$map_draw_new_feature
@@ -144,8 +155,8 @@ map_server <- function(id, metadata_sf) {
                    group = group_name,
                    layerId = ~gbifID)
       
-      # Fit bounds to current data
-      if (!is_initial) {
+      # Fit bounds to current data (skipped after a "Show all" reset)
+      if (!is_initial && !isolate(skip_fit())) {
         bx <- sf::st_bbox(x)
         if (all(is.finite(bx))) {
           proxy %>% fitBounds(
@@ -156,6 +167,7 @@ map_server <- function(id, metadata_sf) {
           )
         }
       }
+      isolate(skip_fit(FALSE))
     })
     
     # Click handler
