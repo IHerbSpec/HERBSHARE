@@ -11,8 +11,8 @@ id = '019de4ba-ed35-9b97-5d88-95e58d5ad298'
 dashboard_url = 'https://connect.posit.cloud/antguz/content/019de4ba-ed35-9b97-5d88-95e58d5ad298'
 direct_url = 'https://019de4ba-ed35-9b97-5d88-95e58d5ad298.share.connect.posit.cloud'
 logs_url = 'https://connect.posit.cloud/antguz/content/019de4ba-ed35-9b97-5d88-95e58d5ad298/history'
-deployed_at = '2026-05-06T21:05:37-04:00'
-bundle_id = '019dfff7-b5ef-7417-bb16-ba187aaf82af'
+deployed_at = '2026-05-06T21:43:43-04:00'
+bundle_id = '019e001a-6be1-9a02-cbbd-c59306db6dbd'
 files = [
   '.posit/publish/HERBSPHERE-47B5.toml',
   '.posit/publish/deployments/deployment-KAH6.toml',
