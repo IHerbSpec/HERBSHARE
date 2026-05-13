@@ -1,5 +1,5 @@
 ################################################################################
-### Select by (HERBSPHERE)
+### Select by (HERBSHARE)
 
 # UI
 select_by_ui <- function(id) {

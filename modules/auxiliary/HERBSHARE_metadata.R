@@ -115,39 +115,39 @@ gbif_file <- api_search(catalogNumber = api_file$catalogNumber,
                         institutionCode = api_file$institutionCode)
 
 # Merge metadata of spectra and GBIF
-HERBSPHERE_metadata <- merge(gbif_file,
+HERBSHARE_metadata <- merge(gbif_file,
                              IHerbSpec_metadata,
                              by = c("catalogNumber", "institutionCode"),
                              all.x = TRUE,
                              all.y = TRUE)
 
 # Clean and order metadata
-HERBSPHERE_metadata[HERBSPHERE_metadata == ""] <- NA
-setcolorder(HERBSPHERE_metadata, c("rowID", setdiff(names(HERBSPHERE_metadata), "rowID")))
-HERBSPHERE_metadata <- HERBSPHERE_metadata[order(rowID)]
+HERBSHARE_metadata[HERBSHARE_metadata == ""] <- NA
+setcolorder(HERBSHARE_metadata, c("rowID", setdiff(names(HERBSHARE_metadata), "rowID")))
+HERBSHARE_metadata <- HERBSHARE_metadata[order(rowID)]
 
 # Export file
-fwrite(HERBSPHERE_metadata, "data/02-organized/HERBSPHERE_metadata.csv")
+fwrite(HERBSHARE_metadata, "data/02-organized/HERBSHARE_metadata.csv")
 
 #-------------------------------------------------------------------------------
-#'@Cleaning-HERBSPHERE_metadata
+#'@Cleaning-HERBSHARE_metadata
 
 # Select no matching
-HERBSPHERE_missing <- HERBSPHERE_metadata[is.na(rowID)]
-HERBSPHERE_missing <- HERBSPHERE_missing[, -1]
-HERBSPHERE_missing <- HERBSPHERE_missing[, 1:21]
-HERBSPHERE_missing[HERBSPHERE_missing == ""] <- NA
+HERBSHARE_missing <- HERBSHARE_metadata[is.na(rowID)]
+HERBSHARE_missing <- HERBSHARE_missing[, -1]
+HERBSHARE_missing <- HERBSHARE_missing[, 1:21]
+HERBSHARE_missing[HERBSHARE_missing == ""] <- NA
 
 # Select matching
-HERBSPHERE_metadata <- HERBSPHERE_metadata[!is.na(rowID)]
-HERBSPHERE_metadata[HERBSPHERE_metadata == ""] <- NA
+HERBSHARE_metadata <- HERBSHARE_metadata[!is.na(rowID)]
+HERBSHARE_metadata[HERBSHARE_metadata == ""] <- NA
 
 # Columns to fill
-fill_cols <- setdiff(intersect(names(HERBSPHERE_metadata), names(HERBSPHERE_missing)),
-                     c(HERBSPHERE_missing[,-2]))
+fill_cols <- setdiff(intersect(names(HERBSHARE_metadata), names(HERBSHARE_missing)),
+                     c(HERBSHARE_missing[,-2]))
 
 # Fill missing values
-HERBSPHERE_metadata[HERBSPHERE_missing,
+HERBSHARE_metadata[HERBSHARE_missing,
                     (fill_cols) := Map(fcoalesce,
                                        mget(fill_cols),
                                        mget(paste0("i.", fill_cols))
@@ -155,15 +155,15 @@ HERBSPHERE_metadata[HERBSPHERE_missing,
                     on = "catalogNumber"]
 
 # Export file
-fwrite(HERBSPHERE_metadata, "data/02-organized/HERBSPHERE_metadata.csv")
+fwrite(HERBSHARE_metadata, "data/02-organized/HERBSHARE_metadata.csv")
 
 #-------------------------------------------------------------------------------
 #'@Search-locations
 
-# Read HERBSPHERE_metadata
-HERBSPHERE_metadata <- fread("data/02-organized/HERBSPHERE_metadata.csv")
-HERBSPHERE_metadata[HERBSPHERE_metadata == ""] <- NA
-gbif_file <- HERBSPHERE_metadata
+# Read HERBSHARE_metadata
+HERBSHARE_metadata <- fread("data/02-organized/HERBSHARE_metadata.csv")
+HERBSHARE_metadata[HERBSHARE_metadata == ""] <- NA
+gbif_file <- HERBSHARE_metadata
 
 # Get location function
 get_coords <- function(gbif_file, herbaria_location) {
@@ -330,7 +330,7 @@ setcolorder(gbif_file, c("rowID", setdiff(names(gbif_file), "rowID")))
 gbif_file <- gbif_file[order(rowID)]
 
 # Export file
-fwrite(gbif_file, "data/02-organized/HERBSPHERE_metadata_locations.csv")
+fwrite(gbif_file, "data/02-organized/HERBSHARE_metadata_locations.csv")
 
 #-------------------------------------------------------------------------------
 #'@Compile-spectra

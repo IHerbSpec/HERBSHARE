@@ -147,12 +147,12 @@ download_server <- function(id, applied_data, spectra_compiled, citation, on_sho
     # has_embargo — TRUE if any row in the selection is embargoed
     build_citeme <- function(md, citation_df, has_embargo) {
       herbsphere <- paste(
-        "Guzman J.A., White D. and Cavender-Bares J. 2026. HERBSPHERE: Herbaria Spectral Hub for Research and Exploration. Version 0.1. URL: https://github.com/IHerbSpec/HERBSPHERE",
+        "Guzman J.A., White D. and Cavender-Bares J. 2026. HERBSHARE: Herbaria Spectral Hub for Advancing Research and Exploration. Version 0.1. URL: https://github.com/IHerbSpec/HERBSHARE",
         sep = "\n"
       )
 
       lines <- c(
-        "HERBSPHERE - Data Citation File",
+        "HERBSHARE - Data Citation File",
         "================================",
         paste0("Generated: ", format(Sys.time(), "%Y-%m-%d %H:%M:%S")),
         "",
@@ -236,7 +236,7 @@ download_server <- function(id, applied_data, spectra_compiled, citation, on_sho
     # ── ZIP handler ────────────────────────────────────────────────────────────
     output$download_zip <- downloadHandler(
       filename = function() {
-        paste0("HERBSPHERE_data-selection_", format(Sys.time(), "%Y%m%d_%H%M%S"), ".zip")
+        paste0("HERBSHARE_data-selection_", format(Sys.time(), "%Y%m%d_%H%M%S"), ".zip")
       },
       
       content = function(file) {

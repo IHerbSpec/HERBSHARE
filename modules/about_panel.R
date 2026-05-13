@@ -6,7 +6,7 @@ about_panel_ui <- function(id) {
   fluidRow(
     column(width = 8, offset = 2,
            br(),
-           HTML("<h1 align='center' style='color:#ffffff; font-weight:bold;'>About HERBSPHERE</h1>"),
+           HTML("<h1 align='center' style='color:#ffffff; font-weight:bold;'>About HERBSHARE</h1>"),
            br(),
            
            wellPanel(
@@ -14,7 +14,7 @@ about_panel_ui <- function(id) {
              
              # Version and Links
              HTML("<p align='center' style='font-size: 16px; color: white;'>
-              <strong>HERBSPHERE Version 0.1 (Beta)</strong> |
+              <strong>HERBSHARE Version 0.1 (Beta)</strong> |
               <img src='github.png' width='20px' height='auto' style='vertical-align: middle;'>
               <a target='_blank' rel='noopener noreferrer' href='https://github.com/ASCEND-BII/SpecTraits' style='color: #c0c0c0; text-decoration: none;'>GitHub</a>
              </p>"),
@@ -25,14 +25,14 @@ about_panel_ui <- function(id) {
              HTML("<p style='text-align: justify; color: white;'>
               The digitization of specimen data—the conversion of physical samples into accessible 
               digital content—combined with data science workflows is driving the discovery and 
-              use of herbarium collections at an unprecedented scale. <strong>HERBSPHERE</strong>—HERBerbarium 
-              SPectral Hub for Research and Exploration—aims to advance the next generation 
+              use of herbarium collections at an unprecedented scale. <strong>HERBSHARE</strong>—HERBarium 
+              Spectral Hub for Advancing Research and Exploration—is a platform designed to support the next generation
               of specimen digitization through the exploration and use of reflectance 
               spectroscopy data from herbarium specimens.
               </p>"),
              HTML("<p style='text-align: justify; color: white;'>
               Our motivation is to make spectral data from herbarium specimens more accessible, 
-              usable, and impactful. Through <strong>HERBSPHERE</strong>, we aim to facilitate discovery,
+              usable, and impactful. Through <strong>HERBSHARE</strong>, we aim to facilitate discovery,
               accelerate research, and unlock the hidden potential of these vast plant collections—transforming 
               them into dynamic laboratories that can inform our understanding of biodiversity, 
               environmental change, and the future of plant science.
@@ -42,15 +42,15 @@ about_panel_ui <- function(id) {
              # Citation Section
              HTML("<h5 style='color: #c0c0c0; border-bottom: 1px solid #c0c0c0; padding-bottom: 5px; font-weight: bold;'>Citation</h5>"),
              HTML("<p style='text-align: justify; color: white;'>
-              If you use <strong>HERBSPHERE</strong> in your research, please cite:
+              If you use <strong>HERBSHARE</strong> in your research, please cite:
               </p>"),
              HTML("<div style='background-color: #1f3632; padding: 15px; border-left: 4px solid #c0c0c0; margin: 10px 0; position: relative; border-radius: 5px;'>
-              <pre id='citation-text' style='margin: 0; font-family: monospace; padding-right: 50px; font-size: 12px; white-space: pre-wrap; overflow-x: auto; color: white;'>@software{HERBSPHERE,
+              <pre id='citation-text' style='margin: 0; font-family: monospace; padding-right: 50px; font-size: 12px; white-space: pre-wrap; overflow-x: auto; color: white;'>@software{HERBSHARE,
   author = {Guzmán J.A., White D.M., and Cavender-Bares J.},
-  title = {HERBSPHERE: Herbaria Spectral Hub for Research and Exploration},
+  title = {HERBSHARE: Herbaria Spectral Hub for Advancing Research and Exploration},
   year = {2026},
   version = {0.1},
-  url = {https://github.com/IHerbSpec/HERBSPHERE}
+  url = {https://github.com/IHerbSpec/HERBSHARE}
 }</pre>
               <button id='copy-citation-btn' onclick='copyCitation()'
                       style='position: absolute; top: 10px; right: 10px;
@@ -96,7 +96,7 @@ about_panel_ui <- function(id) {
              # Funding Section
              HTML("<h5 style='color: #c0c0c0; border-bottom: 1px solid #c0c0c0; padding-bottom: 5px; font-weight: bold;'>Funding</h5>"),
              HTML("<p style='text-align: justify; color: white;'>
-              The development of <strong>HERBSPHERE</strong> is supported by:
+              The development of <strong>HERBSHARE</strong> is supported by:
               </p>"),
              HTML("<div style='text-align: center; margin: 20px 0;'>
                 <img src='HUH_white.png' height='130px' style='display: inline-block;'>
@@ -114,14 +114,14 @@ about_panel_ui <- function(id) {
              # Licence Section
              HTML("<h5 style='color: #c0c0c0; border-bottom: 1px solid #c0c0c0; padding-bottom: 5px; font-weight: bold;'>Licence</h5>"),
              HTML("<p style='text-align: justify; color: white;'>
-              HERBSPHERE is released under the <a href='https://opensource.org/licenses/MIT' target='_blank' style='color: #c0c0c0;'>MIT License</a>.
+              HERBSHARE is released under the <a href='https://opensource.org/licenses/MIT' target='_blank' style='color: #c0c0c0;'>MIT License</a>.
               </p>"),
              br(),
              
              # Contribute Section
              HTML("<h5 style='color: #c0c0c0; border-bottom: 1px solid #c0c0c0; padding-bottom: 5px; font-weight: bold;'>Contribute</h5>"),
              HTML("<p style='text-align: justify; color: white;'>
-                  <strong>HERBSPHERE</strong> is a community-driven platform that grows through open-science and collaboration. 
+                  <strong>HERBSHARE</strong> is a community-driven platform that grows through open-science and collaboration. 
                   The application harvests spectral datasets from publicly available repositories, 
                   with a focus on standardized, well-documented contributions. To ensure data can be efficiently 
                   discovered, integrated, and reused, we strongly encourage contributors to follow common data 
@@ -134,22 +134,22 @@ about_panel_ui <- function(id) {
                   </p>
                   <ol style='color: white;'>
                   <li>Share your specimen spectra data by following the <a href='https://iherbspec.github.io/' target='_blank' style='color: #c0c0c0;'>IHerbSpec</a> guidelines and depositing your data in the IHerbSpec Dataverse.</li>
-                  <li>Help develop open-source tools and workflows that use HERBSPHERE for research and analysis.</li>
+                  <li>Help develop open-source tools and workflows that use HERBSHARE for research and analysis.</li>
                   <li>Report problems and help us identify, debug, and resolve issues.</li>
                   </ol>"),
 
              # Disclaimer Section
              HTML("<h5 style='color: #c0c0c0; border-bottom: 1px solid #c0c0c0; padding-bottom: 5px; font-weight: bold;'>Disclaimer</h5>"),
              HTML("<p style='text-align: justify; color: white;'>
-               All information made available on HERBSPHERE, including any information, outputs, or materials generated 
-               by HERBSPHERE, is provided on an “as is” and “as available” basis, in good faith, and without representations 
+               All information made available on HERBSHARE, including any information, outputs, or materials generated 
+               by HERBSHARE, is provided on an “as is” and “as available” basis, in good faith, and without representations 
                or warranties of any kind, whether express, implied, or statutory, including, without limitation, warranties of 
                accuracy, completeness, reliability, adequacy, validity, availability, merchantability, fitness for a particular 
-               purpose, or non-infringement. To the fullest extent permitted by applicable law, HERBSPHERE and its affiliates, 
+               purpose, or non-infringement. To the fullest extent permitted by applicable law, HERBSHARE and its affiliates, 
                contributors, and operators disclaim any and all liability for any loss, damage, claim, cost, or expense of any 
                kind, whether direct, indirect, incidental, consequential, special, exemplary, or punitive, arising out of or 
-               in connection with your access to, use of, or reliance on HERBSPHERE or any information made available on or 
-               generated by HERBSPHERE. Your use of HERBSPHERE and any reliance on its content, outputs, or materials is solely 
+               in connection with your access to, use of, or reliance on HERBSHARE or any information made available on or 
+               generated by HERBSHARE. Your use of HERBSHARE and any reliance on its content, outputs, or materials is solely 
                at your own risk.
               </p>"),
              br(),
@@ -158,7 +158,7 @@ about_panel_ui <- function(id) {
              HTML("<h5 style='color: #c0c0c0; border-bottom: 1px solid #c0c0c0; padding-bottom: 5px; font-weight: bold;'>Contact</h5>"),
              HTML("<p style='text-align: justify; color: white;'>
               For questions, bug reports, or feature requests, please visit our
-              <a href='https://github.com/IHerbSpec/HERBSPHERE/issues' target='_blank' style='color: #c0c0c0; text-decoration: none;'>GitHub Issues page</a>
+              <a href='https://github.com/IHerbSpec/HERBSHARE/issues' target='_blank' style='color: #c0c0c0; text-decoration: none;'>GitHub Issues page</a>
               or contact the development team.
               </p>"),
              br(),

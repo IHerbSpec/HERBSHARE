@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Engine prediction script for HERBSPHERE
+Engine prediction script for HERBSHARE
 Simplified wrapper for trait prediction from spectral data
 """
 

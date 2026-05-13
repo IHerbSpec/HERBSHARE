@@ -43,7 +43,7 @@ predict_traits_python <- function(reflectance_path,
 
   # Build command
   if (is.null(python_path)) {
-    python_cmd <- Sys.getenv("HERBSPHERE_PYTHON", unset = "python3")
+    python_cmd <- Sys.getenv("HERBSHARE_PYTHON", unset = "python3")
   } else {
     python_cmd <- python_path
   }
@@ -102,7 +102,7 @@ predict_traits_python <- function(reflectance_path,
 check_python_environment <- function() {
 
   tryCatch({
-    py <- Sys.getenv("HERBSPHERE_PYTHON", unset = "python3")
+    py <- Sys.getenv("HERBSHARE_PYTHON", unset = "python3")
     python_version <- system(paste(py, "--version"), intern = TRUE)
     message("Python found: ", python_version)
 
