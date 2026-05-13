@@ -1,5 +1,5 @@
-Package: HERBSPHERE
-Title: Herbarium Spectral Hub for Research and Exploration
+Package: HERBSHARE
+Title: Herbarium Spectral Hub for Advancing Research and Exploration
 Version: 0.1
 Authors@R: c(person(given = "J. Antonio",
                     family = "Guzmán Q.",
@@ -18,12 +18,12 @@ Authors@R: c(person(given = "J. Antonio",
                     comment = c(ORCID = "0000-0003-3375-9630")))
 Description: A Shiny application for the exploration of reflectance spectroscopy
     data from herbarium specimens and the prediction of leaf functional traits.
-    HERBSPHERE provides an Explorer module for browsing and downloading specimen
+    HERBSHARE provides an Explorer module for browsing and downloading specimen
     records and spectra, and an Engine module for uploading spectra and predicting
     leaf traits such as cellulose, lignin, and leaf mass per area.
 License: MIT + file LICENSE
-URL: https://github.com/IHerbSpec/HERBSPHERE
-BugReports: https://github.com/IHerbSpec/HERBSPHERE/issues
+URL: https://github.com/IHerbSpec/HERBSHARE
+BugReports: https://github.com/IHerbSpec/HERBSHARE/issues
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.0.0
