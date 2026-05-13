@@ -1,11 +1,11 @@
-# HERBSPHERE
+# HERBSHARE
 
 <div align="center">
 
-**HERBarium SPectral Hub for Research and Exploration**
+**HERBarium Spectral Hub for Advancing Research and Exploration**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![GitHub](https://img.shields.io/badge/GitHub-IHerbSpec%2FHERBSPHERE-brightgreen)](https://github.com/IHerbSpec/HERBSPHERE)
+[![GitHub](https://img.shields.io/badge/GitHub-IHerbSpec%2FHERBSHARE-brightgreen)](https://github.com/IHerbSpec/HERBSHARE)
 
 </div>
 
@@ -13,23 +13,23 @@
 
 ## Summary
 
-**HERBSPHERE** — HERBarium SPectral Hub for Research and Exploration — is an interactive web application designed to advance the next generation of herbarium specimen digitization through reflectance spectroscopy. The application provides a user-friendly interface for taxonomists, botanists, and ecologists to:
+**HERBSHARE** — HERBarium Spectral Hub for Advancing Research and Exploration — is an interactive web application designed to advance the next generation of herbarium specimen digitization through reflectance spectroscopy. The application provides a user-friendly interface for taxonomists, botanists, and ecologists to:
 
 - **Explore** the IHerbSpec database of herbarium spectral records through an interactive map, filter specimens by taxonomy, geography, and collection metadata, and visualize individual spectra and specimen images
 - **Predict** leaf functional traits from uploaded spectral reflectance data using an universal deep-learning model trained and validated on herbarium spectra
 
-HERBSPHERE bridges the gap between large herbarium collections and practical spectral analysis, making trait estimation from museum specimens accessible without extensive programming knowledge.
+HERBSHARE bridges the gap between large herbarium collections and practical spectral analysis, making trait estimation from museum specimens accessible without extensive programming knowledge.
 
 ---
 
 ## Repository Description
 
-This repository contains the complete source code for the HERBSPHERE application organized into modular components:
+This repository contains the complete source code for the HERBSHARE application organized into modular components:
 
 ### Project Structure
 
 ```
-HERBSPHERE/
+HERBSHARE/
 ├── app.R                           # Main application file
 ├── modules/                        # Application modules
 │   ├── explorer_panel.R            # Explorer panel (UI + server)
@@ -51,7 +51,7 @@ HERBSPHERE/
 │   └── auxiliary/                  # Shared utility functions and model files
 │       ├── engine_predict.py       # Python inference script (PyTorch)
 │       ├── herbaria_locations.R    # Herbaria location data loader
-│       ├── HERBSPHERE_metadata.R   # Metadata loader
+│       ├── HERBSHARE_metadata.R   # Metadata loader
 │       ├── read_spectra.R          # Spectra reader
 │       └── pytorh/                 # Pretrained model weights and stats
 ├── data/                           # Application data
@@ -108,23 +108,23 @@ All required Python packages and their pinned versions are listed in [`requireme
 
 ## Citation
 
-If you use HERBSPHERE in your research, please cite:
+If you use HERBSHARE in your research, please cite:
 
-Guzmán J.A., White D., and Cavender-Bares J. (2026). *HERBSPHERE: HERBarium SPectral Hub for Research and Exploration*. GitHub: IHerbSpec/HERBSPHERE. https://github.com/IHerbSpec/HERBSPHERE
+Guzmán J.A., White D., and Cavender-Bares J. (2026). *HERBSHARE: HERBarium Spectral Hub for Advancing Research and Exploration*. GitHub: IHerbSpec/HERBSHARE. https://github.com/IHerbSpec/HERBSHARE
 
 ### BibTeX Entry
 
 ```bibtex
 
-@software{HERBSPHERE,
+@software{HERBSHARE,
   author = {Guzmán J.A., White D., and Cavender-Bares J.},
-  title = {HERBSPHERE: HERBarium SPectral Hub for Research and Exploration},
+  title = {HERBSHARE: HERBarium Spectral Hub for Advancing Research and Exploration},
   year = {2026},
   version = {0.1},
   publisher = {GitHub},
   journal = {GitHub repository},
-  howpublished = {\url{https://github.com/IHerbSpec/HERBSPHERE}},
-  url = {https://github.com/IHerbSpec/HERBSPHERE}
+  howpublished = {\url{https://github.com/IHerbSpec/HERBSHARE}},
+  url = {https://github.com/IHerbSpec/HERBSHARE}
 }
 
 ```
@@ -139,7 +139,7 @@ Contributions are welcome! Please feel free to submit issues or pull requests.
 
 ## Reporting Issues
 
-If you encounter bugs or have feature requests, please open an issue on the [GitHub Issues page](https://github.com/IHerbSpec/HERBSPHERE/issues).
+If you encounter bugs or have feature requests, please open an issue on the [GitHub Issues page](https://github.com/IHerbSpec/HERBSHARE/issues).
 
 ---
 
@@ -159,7 +159,7 @@ This project is licensed under the MIT License — see the [LICENSE](LICENSE) fi
 
 ## Acknowledgements
 
-The development of **HERBSPHERE** is supported/funded by:
+The development of **HERBSHARE** is supported/funded by:
 
 <div align="center">
 

@@ -11,8 +11,8 @@ id = '019de4ba-ed35-9b97-5d88-95e58d5ad298'
 dashboard_url = 'https://connect.posit.cloud/antguz/content/019de4ba-ed35-9b97-5d88-95e58d5ad298'
 direct_url = 'https://019de4ba-ed35-9b97-5d88-95e58d5ad298.share.connect.posit.cloud'
 logs_url = 'https://connect.posit.cloud/antguz/content/019de4ba-ed35-9b97-5d88-95e58d5ad298/history'
-deployed_at = '2026-05-06T21:43:43-04:00'
-bundle_id = '019e001a-6be1-9a02-cbbd-c59306db6dbd'
+deployed_at = '2026-05-12T21:37:17-04:00'
+bundle_id = '019e1efa-d326-1006-47c2-78590d207e8d'
 files = [
   '.posit/publish/HERBSPHERE-47B5.toml',
   '.posit/publish/deployments/deployment-KAH6.toml',
@@ -2174,13 +2174,13 @@ files = [
   'data/01-spectra/02-spectra/02-MSP_spectra/PIMSP_SN202404241221_BGB_HCMIN_SIMIN98705_TCAB_TN1_0001.sig',
   'data/01-spectra/02-spectra/02-MSP_spectra/PIMSP_SN202404241221_BGB_HCMIN_SIMIN98705_TCAD_TN1_0000.sig',
   'data/01-spectra/02-spectra/02-MSP_spectra/PIMSP_SN202404241221_TCWC_0000.sig',
-  'data/02-organized/HERBSPHERE_metadata.csv',
-  'data/02-organized/HERBSPHERE_metadata_locations.csv',
+  'data/02-organized/HERBSHARE_metadata.csv',
+  'data/02-organized/HERBSHARE_metadata_locations.csv',
   'data/02-organized/citation.csv',
   'data/02-organized/spectra_compiled.csv',
   'google-analytics.html',
   'modules/about_panel.R',
-  'modules/auxiliary/HERBSPHERE_metadata.R',
+  'modules/auxiliary/HERBSHARE_metadata.R',
   'modules/auxiliary/engine_predict.py',
   'modules/auxiliary/herbaria_locations.R',
   'modules/auxiliary/pytorh/boxcox_utils.py',
@@ -2203,7 +2203,6 @@ files = [
   'modules/explorer/select_by.R',
   'modules/explorer/specimen_selection.R',
   'modules/explorer_panel.R',
-  'renv.lock',
   'requirements.txt',
   'www/ASCEND.png',
   'www/FAS_black.png',
@@ -2365,7 +2364,7 @@ author = 'Brian Ripley [aut, cre, cph], Bill Venables [aut, cph], Douglas M. Bat
 
 [renv.packages.Matrix]
 package = 'Matrix'
-version = '1.7-4'
+version = '1.7-5'
 source = 'Repository'
 repository = 'CRAN'
 depends = ['R (>= 4.4)', 'methods']
@@ -2422,7 +2421,7 @@ author = 'Erich Neuwirth [aut, cre]'
 
 [renv.packages.Rcpp]
 package = 'Rcpp'
-version = '1.1.1'
+version = '1.1.1-1.1'
 source = 'Repository'
 repository = 'CRAN'
 depends = ['R (>= 3.5.0)']
@@ -2444,7 +2443,7 @@ author = 'Dirk Eddelbuettel [aut, cre] (ORCID: <https://orcid.org/0000-0001-6419
 
 [renv.packages.S7]
 package = 'S7'
-version = '0.2.1'
+version = '0.2.2'
 source = 'Repository'
 repository = 'CRAN'
 depends = ['R (>= 3.5.0)']
@@ -2527,24 +2526,25 @@ author = 'Michael Chirico [aut, cre], Jens Oehlschlägel [aut], Brian Ripley [ct
 
 [renv.packages.bit64]
 package = 'bit64'
-version = '4.6.0-1'
+version = '4.8.0'
 source = 'Repository'
 repository = 'CRAN'
-depends = ['R (>= 3.4.0)', 'bit (>= 4.0.0)']
+depends = ['R (>= 3.5.0)']
 hash = ''
 title = 'A S3 Class for Vectors of 64bit Integers'
-'authors@r' = 'c( person("Michael", "Chirico", email = "michaelchirico4@gmail.com", role = c("aut", "cre")), person("Jens", "Oehlschlägel", role = "aut"), person("Leonardo", "Silvestri", role = "ctb"), person("Ofek", "Shilon", role = "ctb") )'
+'authors@r' = 'c( person("Michael", "Chirico", email="michaelchirico4@gmail.com", role=c("aut", "cre")), person("Jens", "Oehlschlägel", role="aut"), person("Leonardo", "Silvestri", role="ctb"), person("Ofek", "Shilon", role="ctb"), person("Christian", "Ullerich", role="ctb") )'
 maintainer = 'Michael Chirico <michaelchirico4@gmail.com>'
 description = "Package 'bit64' provides serializable S3 atomic 64bit (signed) integers. These are useful for handling database keys and exact counting in +-2^63. WARNING: do not use them as replacement for 32bit integers, integer64 are not supported for subscripting by R-core and they have different semantics when combined with double, e.g. integer64 + double => integer64. Class integer64 can be used in vectors, matrices, arrays and data.frames. Methods are available for coercion from and to logicals, integers, doubles, characters and factors as well as many elementwise and summary functions. Many fast algorithmic operations such as 'match' and 'order' support inter- active data exploration and manipulation and optionally leverage caching."
-url = 'https://github.com/r-lib/bit64'
+url = 'https://github.com/r-lib/bit64, https://bit64.r-lib.org'
 license = 'GPL-2 | GPL-3'
-imports = ['graphics', 'methods', 'stats', 'utils']
-suggests = ['testthat (>= 3.0.3)', 'withr']
-roxygennote = '7.3.2'
+imports = ['bit (>= 4.0.0)', 'graphics', 'methods', 'stats', 'utils']
+suggests = ['patrick (>= 0.3.0)', 'testthat (>= 3.3.0)', 'withr']
+roxygennote = '7.3.3'
 encoding = 'UTF-8'
 needscompilation = 'yes'
-author = 'Michael Chirico [aut, cre], Jens Oehlschlägel [aut], Leonardo Silvestri [ctb], Ofek Shilon [ctb]'
+author = 'Michael Chirico [aut, cre], Jens Oehlschlägel [aut], Leonardo Silvestri [ctb], Ofek Shilon [ctb], Christian Ullerich [ctb]'
 'config/testthat/edition' = '3'
+'config/needs/website' = 'tidyverse/tidytemplate'
 
 [renv.packages.boot]
 package = 'boot'
@@ -2832,7 +2832,7 @@ author = 'Scott Chamberlain [aut, cre] (ORCID: <https://orcid.org/0000-0003-1444
 
 [renv.packages.curl]
 package = 'curl'
-version = '7.0.0'
+version = '7.1.0'
 source = 'Repository'
 repository = 'CRAN'
 depends = ['R (>= 3.0.0)']
@@ -3042,7 +3042,7 @@ author = 'R Core Team [aut, cph, cre] (ROR: <https://ror.org/02zz1nj61>), Roger 
 
 [renv.packages.fs]
 package = 'fs'
-version = '2.0.1'
+version = '2.1.0'
 source = 'Repository'
 repository = 'CRAN'
 depends = ['R (>= 4.1)']
@@ -3112,7 +3112,7 @@ author = 'Hadley Wickham [aut, cre] (ORCID: <https://orcid.org/0000-0003-4757-11
 
 [renv.packages.ggplot2]
 package = 'ggplot2'
-version = '4.0.2'
+version = '4.0.3'
 source = 'Repository'
 repository = 'CRAN'
 depends = ['R (>= 4.1)']
@@ -3156,25 +3156,25 @@ author = 'Henrik Bengtsson [aut, cre, cph], Davis Vaughan [ctb]'
 
 [renv.packages.glue]
 package = 'glue'
-version = '1.8.0'
+version = '1.8.1'
 source = 'Repository'
 repository = 'CRAN'
-depends = ['R (>= 3.6)']
+depends = ['R (>= 4.1)']
 hash = ''
 title = 'Interpreted String Literals'
-'authors@r' = 'c( person("Jim", "Hester", role = "aut", comment = c(ORCID = "0000-0002-2739-7082")), person("Jennifer", "Bryan", , "jenny@posit.co", role = c("aut", "cre"), comment = c(ORCID = "0000-0002-6983-2759")), person("Posit Software, PBC", role = c("cph", "fnd")) )'
+'authors@r' = 'c( person("Jim", "Hester", role = "aut", comment = c(ORCID = "0000-0002-2739-7082")), person("Jennifer", "Bryan", , "jenny@posit.co", role = c("aut", "cre"), comment = c(ORCID = "0000-0002-6983-2759")), person("Posit Software, PBC", role = c("cph", "fnd"), comment = c(ROR = "03wc8by49")) )'
 maintainer = 'Jennifer Bryan <jenny@posit.co>'
 description = "An implementation of interpreted string literals, inspired by Python's Literal String Interpolation <https://www.python.org/dev/peps/pep-0498/> and Docstrings <https://www.python.org/dev/peps/pep-0257/> and Julia's Triple-Quoted String Literals <https://docs.julialang.org/en/v1.3/manual/strings/#Triple-Quoted-String-Literals-1>."
 url = 'https://glue.tidyverse.org/, https://github.com/tidyverse/glue'
 bugreports = 'https://github.com/tidyverse/glue/issues'
 license = 'MIT + file LICENSE'
 imports = ['methods']
-suggests = ['crayon', 'DBI (>= 1.2.0)', 'dplyr', 'knitr', 'magrittr', 'rlang', 'rmarkdown', 'RSQLite', 'testthat (>= 3.2.0)', 'vctrs (>= 0.3.0)', 'waldo (>= 0.5.3)', 'withr']
+suggests = ['crayon', 'DBI (>= 1.2.0)', 'dplyr', 'knitr', 'rlang', 'rmarkdown', 'RSQLite', 'testthat (>= 3.2.0)', 'vctrs (>= 0.3.0)', 'waldo (>= 0.5.3)', 'withr']
 vignettebuilder = 'knitr'
-roxygennote = '7.3.2'
+roxygennote = '7.3.3'
 encoding = 'UTF-8'
 needscompilation = 'yes'
-author = 'Jim Hester [aut] (<https://orcid.org/0000-0002-2739-7082>), Jennifer Bryan [aut, cre] (<https://orcid.org/0000-0002-6983-2759>), Posit Software, PBC [cph, fnd]'
+author = 'Jim Hester [aut] (ORCID: <https://orcid.org/0000-0002-2739-7082>), Jennifer Bryan [aut, cre] (ORCID: <https://orcid.org/0000-0002-6983-2759>), Posit Software, PBC [cph, fnd] (ROR: <https://ror.org/03wc8by49>)'
 'config/testthat/edition' = '3'
 'config/needs/website' = 'bench, forcats, ggbeeswarm, ggplot2, R.utils, rprintf, tidyr, tidyverse/tidytemplate'
 
@@ -3749,7 +3749,7 @@ author = 'Yihui Xie [aut, cre] (<https://orcid.org/0000-0003-0645-5666>, https:/
 
 [renv.packages.nlme]
 package = 'nlme'
-version = '3.1-168'
+version = '3.1-169'
 source = 'Repository'
 repository = 'CRAN'
 depends = ['R (>= 3.6.0)']
@@ -3765,7 +3765,7 @@ imports = ['graphics', 'stats', 'utils', 'lattice']
 suggests = ['MASS', 'SASmixed']
 encoding = 'UTF-8'
 needscompilation = 'yes'
-author = 'José Pinheiro [aut] (S version), Douglas Bates [aut] (up to 2007), Saikat DebRoy [ctb] (up to 2002), Deepayan Sarkar [ctb] (up to 2005), EISPACK authors [ctb] (src/rs.f), Siem Heisterkamp [ctb] (Author fixed sigma), Bert Van Willigen [ctb] (Programmer fixed sigma), Johannes Ranke [ctb] (varConstProp()), R Core Team [aut, cre] (02zz1nj61)'
+author = 'José Pinheiro [aut] (S version), Douglas Bates [aut] (up to 2007), Saikat DebRoy [ctb] (up to 2002), Deepayan Sarkar [ctb] (up to 2005), EISPACK authors [ctb] (src/rs.f), Siem Heisterkamp [ctb] (Author fixed sigma), Bert Van Willigen [ctb] (Programmer fixed sigma), Johannes Ranke [ctb] (varConstProp()), R Core Team [aut, cre] (ROR: <https://ror.org/02zz1nj61>)'
 
 [renv.packages.nnet]
 package = 'nnet'
@@ -3808,7 +3808,7 @@ author = 'Scott Chamberlain [aut], Michal Bojanowski [aut, cre] (<https://orcid.
 
 [renv.packages.openssl]
 package = 'openssl'
-version = '2.3.5'
+version = '2.4.0'
 source = 'Repository'
 repository = 'CRAN'
 hash = ''
@@ -3853,7 +3853,7 @@ author = 'Gábor Csárdi [aut, cre]'
 
 [renv.packages.parallelly]
 package = 'parallelly'
-version = '1.46.1'
+version = '1.47.0'
 source = 'Repository'
 repository = 'CRAN'
 hash = ''
@@ -4224,13 +4224,13 @@ systemrequirements = 'pandoc (>= 1.14) - http://pandoc.org'
 
 [renv.packages.rpart]
 package = 'rpart'
-version = '4.1.24'
+version = '4.1.27'
 source = 'Repository'
 repository = 'CRAN'
 depends = ['R (>= 2.15.0)', 'graphics', 'stats', 'grDevices']
 hash = ''
 title = 'Recursive Partitioning and Regression Trees'
-'authors@r' = 'c(person("Terry", "Therneau", role = "aut", email = "therneau@mayo.edu"), person("Beth", "Atkinson", role = c("aut", "cre"), email = "atkinson@mayo.edu"), person("Brian", "Ripley", role = "trl", email = "ripley@stats.ox.ac.uk", comment = "producer of the initial R port, maintainer 1999-2017"))'
+'authors@r' = 'c(person("Terry", "Therneau", role = "aut", email = "therneau@mayo.edu"), person("Beth", "Atkinson", role = c("aut", "cre"), email = "atkinson@mayo.edu"), person("Brian", "Ripley", role = "trl", email = "Brian.Ripley@R-project.org", comment = "producer of the initial R port, maintainer 1999-2017"))'
 maintainer = 'Beth Atkinson <atkinson@mayo.edu>'
 description = 'Recursive partitioning for classification,  regression and survival trees.  An implementation of most of the  functionality of the 1984 book by Breiman, Friedman, Olshen and Stone.'
 url = 'https://github.com/bethatkinson/rpart, https://cran.r-project.org/package=rpart'

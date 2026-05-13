@@ -1,7 +1,7 @@
 ################################################################################
 #               ___________________________________________________            #
-#                                   HERBSPHERE                                 #
-#      HERBSPHERE: Herbarium Spectral Hub for Research and Exploration         #
+#                                    HERBSHARE                                 #
+#    HERBSHARE: Herbarium Spectral Hub for Advancing Research and Exploration  #
 #                  A Shiny Application for the exploration of spectroscopy     #
 #            data from herbarium specimens and prediction of leaf traits       #
 #                             Author: J. Antonio Guzmán Q.                     #
@@ -81,7 +81,7 @@ source("modules/about_panel.R")
 ################################################################################
 # Load initial data
 
-metadata_and_gbif <- data.table::fread("data/02-organized/HERBSPHERE_metadata_locations.csv")
+metadata_and_gbif <- data.table::fread("data/02-organized/HERBSHARE_metadata_locations.csv")
 metadata_and_gbif <- metadata_and_gbif[decimalLatitude != 0 & decimalLongitude != 0,]
 spectra_compiled <- data.table::fread("data/02-organized/spectra_compiled.csv", header = TRUE)
 citation <- data.table::fread("data/02-organized/citation.csv", header = TRUE, encoding = "UTF-8")
@@ -110,7 +110,7 @@ primary_color <- theme_colors["primary"]
 ui <- page_navbar(
 
   theme = app_theme,
-  title = tags$span("HERBSPHERE"),
+  title = tags$span("HERBSHARE"),
 
   # Custom CSS for button colors
   header = tags$head(
@@ -135,7 +135,7 @@ ui <- page_navbar(
             ),
 
   nav_item(tags$a(tags$span(bsicons::bs_icon("github"), "Source code"),
-                  href = "https://github.com/IHerbSpec/HERBSPHERE",
+                  href = "https://github.com/IHerbSpec/HERBSHARE",
                   target = "_blank")
            ),
 
