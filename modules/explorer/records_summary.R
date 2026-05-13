@@ -51,7 +51,7 @@ summary_records_server <- function(id, metadata) {
       collections  <- n_unique_safe(x, "institutionCode")
       
       institutions_summary <- bslib::value_box("RECORDS FROM",
-                                               paste(institutions, "owner institutions"),
+                                               paste(institutions, "institutions"),
                                                paste("and", collections, "collections"),
                                                showcase = bsicons::bs_icon("buildings"))
       
