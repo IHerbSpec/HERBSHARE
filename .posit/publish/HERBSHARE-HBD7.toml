@@ -9,8 +9,7 @@ validate = true
 files = [
   '/app.R',
   '/requirements.txt',
-  '/.posit/publish/HERBSPHERE-47B5.toml',
-  '/.posit/publish/deployments/deployment-KAH6.toml',
+  '/.posit/publish/HERBSHARE-7C5L.toml',
   '/data',
   '!/data/01-gbif',
   '!/data/01-herbaria_locations',
@@ -26,9 +25,11 @@ files = [
   '!/data/01-spectra/02-spectra/04-HUH',
   '!/data/01-spectra/02-spectra/03-Barbara',
   '!/data/01-spectra/IHerbSpec_metadata.csv',
-  '!/data/01-spectra/archive'
+  '!/data/01-spectra/archive',
+  '/renv.lock',
+  '!/data/spectra_aggregated.csv'
 ]
-title = 'HERBSPHERE'
+title = 'HERBSHARE'
 
 [python]
 version = '3.12'

@@ -106,7 +106,7 @@ about_panel_ui <- function(id) {
                 <img src='FAS_white.png' height='60px'>
               </div>
               <div style='display: flex; justify-content: center; align-items: center; margin: 20px 0; gap: 40px;'>
-                <img src='ASCEND.png' height='120px'>
+                <img src='ASCEND.png' height='140px'>
                 <img src='NSF.png' height='120px'>
               </div>"),
              br(),
@@ -126,16 +126,16 @@ about_panel_ui <- function(id) {
                   with a focus on standardized, well-documented contributions. To ensure data can be efficiently 
                   discovered, integrated, and reused, we strongly encourage contributors to follow common data 
                   standards from the <strong>IHerbSpec</strong> initiative, including the use of the IHerbSpec metadata 
-                  and depositing datasets in the IHerbSpec-Dataverse repository. These standards 
+                  and depositing datasets in the <a href='https://dataverse.harvard.edu/dataverse/iherbspec/' target='_blank' style='color: #c0c0c0;'>IHerbSpec-Dataverse repository</a>. These standards 
                   enable seamless data harvesting and maximize the visibility and impact of your work.
                   </p>
                   <p style='text-align: justify; color: white;'>
                   You can contribute in the following ways:
                   </p>
                   <ol style='color: white;'>
-                  <li>Share your specimen spectra data by following the <a href='https://iherbspec.github.io/' target='_blank' style='color: #c0c0c0;'>IHerbSpec</a> guidelines and depositing your data in the IHerbSpec Dataverse.</li>
+                  <li>Share your specimen spectra data by following the <a href='https://iherbspec.github.io/' target='_blank' style='color: #c0c0c0;'>IHerbSpec</a> guidelines and depositing your data in the <a href='https://dataverse.harvard.edu/dataverse/iherbspec/' target='_blank' style='color: #c0c0c0;'>IHerbSpec dataverse</a>.</li>
                   <li>Help develop open-source tools and workflows that use HERBSHARE for research and analysis.</li>
-                  <li>Report problems and help us identify, debug, and resolve issues.</li>
+                  <li>Report problems and help us identify, debug, and resolve issues (e.g., <a href='https://github.com/IHerbSpec/HERBSHARE/issues' target='_blank' style='color: #c0c0c0; text-decoration: none;'>GitHub Issues page</a>).</li>
                   </ol>"),
 
              # Disclaimer Section

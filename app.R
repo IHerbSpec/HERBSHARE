@@ -103,6 +103,7 @@ app_theme <- bs_theme(bootswatch = "yeti",
 
 # Extract primary color from theme
 theme_colors <- bs_get_variables(app_theme, c("primary"))
+
 primary_color <- theme_colors["primary"]
 
 # ------------------------------------------------------------------------------
