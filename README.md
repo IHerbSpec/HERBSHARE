@@ -168,7 +168,7 @@ The development of **HERBSHARE** is supported/funded by:
   <img src="www/HDSI_black.png" height="60px">
   <img src="www/FAS_black.png" height="60px"><br><br>
 
-  <img src="www/ASCEND.png" height="120px">
+  <img src="www/ASCEND.png" height="140px">
   <img src="www/NSF.png" height="120px">
 
 </div>
