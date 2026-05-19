@@ -4,6 +4,7 @@
 
 **HERBarium Spectral Hub for Advancing Research and Exploration**
 
+<a href="https://doi.org/10.5281/zenodo.20278893"><img src="https://zenodo.org/badge/1016310857.svg" alt="DOI"></a>
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![GitHub](https://img.shields.io/badge/GitHub-IHerbSpec%2FHERBSHARE-brightgreen)](https://github.com/IHerbSpec/HERBSHARE)
 
@@ -110,7 +111,7 @@ All required Python packages and their pinned versions are listed in [`requireme
 
 If you use HERBSHARE in your research, please cite:
 
-Guzmán J.A., White D., and Cavender-Bares J. (2026). *HERBSHARE: HERBarium Spectral Hub for Advancing Research and Exploration*. GitHub: IHerbSpec/HERBSHARE. https://github.com/IHerbSpec/HERBSHARE
+Guzmán J.A., White D., and Cavender-Bares J. (2026). *HERBSHARE: HERBarium Spectral Hub for Advancing Research and Exploration*. Zenodo. https://doi.org/10.5281/zenodo.20278894
 
 ### BibTeX Entry
 
@@ -120,11 +121,10 @@ Guzmán J.A., White D., and Cavender-Bares J. (2026). *HERBSHARE: HERBarium Spec
   author = {Guzmán J.A., White D., and Cavender-Bares J.},
   title = {HERBSHARE: HERBarium Spectral Hub for Advancing Research and Exploration},
   year = {2026},
-  version = {0.1},
-  publisher = {GitHub},
-  journal = {GitHub repository},
-  howpublished = {\url{https://github.com/IHerbSpec/HERBSHARE}},
-  url = {https://github.com/IHerbSpec/HERBSHARE}
+  version = {v0.1-beta},
+  publisher = {Zenodo},
+  url = {https://github.com/IHerbSpec/HERBSHARE},
+  doi = {https://doi.org/10.5281/zenodo.20278894}
 }
 
 ```
