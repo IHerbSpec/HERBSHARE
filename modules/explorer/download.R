@@ -147,7 +147,7 @@ download_server <- function(id, applied_data, spectra_compiled, citation, on_sho
     # has_embargo — TRUE if any row in the selection is embargoed
     build_citeme <- function(md, citation_df, has_embargo) {
       herbsphere <- paste(
-        "Guzman J.A., White D. and Cavender-Bares J. 2026. HERBSHARE: Herbaria Spectral Hub for Advancing Research and Exploration. Version 0.1. URL: https://github.com/IHerbSpec/HERBSHARE",
+        "Guzman J.A., White D. and Cavender-Bares J. 2026. HERBSHARE: Herbaria Spectral Hub for Advancing Research and Exploration. Version 0.1-beta. Zenodo. DOI: https://doi.org/10.5281/zenodo.20278894",
         sep = "\n"
       )
 

@@ -49,8 +49,9 @@ about_panel_ui <- function(id) {
   author = {Guzmán J.A., White D.M., and Cavender-Bares J.},
   title = {HERBSHARE: Herbaria Spectral Hub for Advancing Research and Exploration},
   year = {2026},
-  version = {0.1},
-  url = {https://github.com/IHerbSpec/HERBSHARE}
+  publisher = {Zenodo},
+  version = {v0.1-beta},
+  url = {https://doi.org/10.5281/zenodo.20278894}
 }</pre>
               <button id='copy-citation-btn' onclick='copyCitation()'
                       style='position: absolute; top: 10px; right: 10px;
